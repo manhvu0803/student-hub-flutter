@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/context_extension.dart';
-import 'package:student_hub_flutter/screens/home_page.dart';
 import 'package:student_hub_flutter/screens/login_page.dart';
+import 'package:student_hub_flutter/screens/student_sign_up_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 
@@ -69,7 +69,7 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
         ),
         const SizedBox(height: 24),
         FilledButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage())),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentSignUpPage())),
           child: const Text(
             "Create account",
             textScaler: TextScaler.linear(1.1),
