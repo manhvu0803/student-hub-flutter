@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/login_page.dart';
-import 'package:student_hub_flutter/widgets/screen_page.dart';
+import 'package:student_hub_flutter/screens/login_page.dart';
+import 'package:student_hub_flutter/widgets/page_screen.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
 
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key, this.title = "StudentHub"});
 
   @override
   Widget build(BuildContext context) {
-    return ScreenPage(
+    return PageScreen(
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            const _UserTypeButton(Icons.person, "Student"),
+            const _UserTypeButton(Icons.school, "Student"),
             const _UserTypeButton(Icons.apartment, "Company"),
             const SizedBox(height: 32),
             Text(
@@ -57,10 +57,15 @@ class _UserTypeButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).secondaryHeaderColor),
         child: SizedBox(
           height: 60,
-          width: 180,
-          child: ListTile(
-            leading: Icon(icon),
-            title: Text(text),
+          width: 160,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon),
+              const SizedBox(width: 8),
+              Text(text),
+              const SizedBox(width: 12)
+            ],
           ),
         )
       ),

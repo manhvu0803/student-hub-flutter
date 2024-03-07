@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ScreenPage extends StatelessWidget {
+class PageScreen extends StatelessWidget {
   final String title;
 
   final Widget child;
 
   final Widget? bottomNavigationBar;
 
-  const ScreenPage({
+  const PageScreen({
     super.key,
     this.title = "StudentHub",
     required this.child,
