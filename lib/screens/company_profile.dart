@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CompanyProfile extends StatefulWidget {
   const CompanyProfile({super.key, required this.firstCreate});
@@ -9,24 +10,39 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfile extends State<CompanyProfile> {
-  int radioChoice = 0;
-  String name = "";
-  String website = "";
-  String desc = "";
+  TextEditingController? nameController;
+  TextEditingController? websiteController;
+  TextEditingController? descController;
+  int? radioChoice;
 
   @override
   void initState() {
     super.initState();
-    if (!widget.firstCreate) {}
+    if (widget.firstCreate) {
+      nameController = TextEditingController();
+      websiteController = TextEditingController();
+      descController = TextEditingController();
+      radioChoice = 0;
+    } else {
+      nameController = TextEditingController(text: "val");
+      websiteController = TextEditingController(text: "val");
+      descController = TextEditingController(text: "val");
+      radioChoice = 1;
+    }
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text("walcome"),
-        Text("Tell us"),
-        Text("How many"),
+        const Text("walcome"),
+        const Text("Tell us"),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("How many"),
+        ),
         ListTile(
           title: const Text('Option 1'),
           leading: Radio<int>(
@@ -87,37 +103,48 @@ class _CompanyProfile extends State<CompanyProfile> {
             },
           ),
         ),
-        Text("Company"),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("Company"),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Company name',
             ),
+            controller: nameController,
           ),
         ),
-        Text("Website"),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("Website"),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Website url',
             ),
-            
+            controller: websiteController,
           ),
         ),
-        Text("Description"),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("Description"),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
             minLines: 3,
             maxLines: 5,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Describe company',
             ),
+            controller: descController,
           ),
         ),
       ],
