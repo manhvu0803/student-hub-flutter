@@ -33,121 +33,188 @@ class _CompanyProfile extends State<CompanyProfile> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
+  List<Widget> buildChildren() {
+    List<Widget> builder = List.empty();
+    if (widget.firstCreate) {
+      builder.addAll([
         const Text("walcome"),
         const Text("Tell us"),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("How many"),
+      ]);
+    }
+    builder.addAll([
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: Text("How many"),
+      ),
+      ListTile(
+        title: const Text('Option 1'),
+        leading: Radio<int>(
+          value: 0,
+          groupValue: radioChoice,
+          onChanged: (value) {
+            setState(() {
+              radioChoice = value!;
+            });
+          },
         ),
-        ListTile(
-          title: const Text('Option 1'),
-          leading: Radio<int>(
-            value: 0,
-            groupValue: radioChoice,
-            onChanged: (value) {
-              setState(() {
-                radioChoice = value!;
-              });
-            },
+      ),
+      ListTile(
+        title: const Text('Option 1'),
+        leading: Radio<int>(
+          value: 1,
+          groupValue: radioChoice,
+          onChanged: (value) {
+            setState(() {
+              radioChoice = value!;
+            });
+          },
+        ),
+      ),
+      ListTile(
+        title: const Text('Option 1'),
+        leading: Radio<int>(
+          value: 2,
+          groupValue: radioChoice,
+          onChanged: (value) {
+            setState(() {
+              radioChoice = value!;
+            });
+          },
+        ),
+      ),
+      ListTile(
+        title: const Text('Option 1'),
+        leading: Radio<int>(
+          value: 3,
+          groupValue: radioChoice,
+          onChanged: (value) {
+            setState(() {
+              radioChoice = value!;
+            });
+          },
+        ),
+      ),
+      ListTile(
+        title: const Text('Option 1'),
+        leading: Radio<int>(
+          value: 4,
+          groupValue: radioChoice,
+          onChanged: (value) {
+            setState(() {
+              radioChoice = value!;
+            });
+          },
+        ),
+      ),
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: Text("Company"),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: TextField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Company name',
           ),
+          controller: nameController,
         ),
-        ListTile(
-          title: const Text('Option 1'),
-          leading: Radio<int>(
-            value: 1,
-            groupValue: radioChoice,
-            onChanged: (value) {
-              setState(() {
-                radioChoice = value!;
-              });
-            },
+      ),
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: Text("Website"),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: TextField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Website url',
           ),
+          controller: websiteController,
         ),
-        ListTile(
-          title: const Text('Option 1'),
-          leading: Radio<int>(
-            value: 2,
-            groupValue: radioChoice,
-            onChanged: (value) {
-              setState(() {
-                radioChoice = value!;
-              });
-            },
+      ),
+      const Align(
+        alignment: Alignment.centerLeft,
+        child: Text("Description"),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: TextField(
+          minLines: 3,
+          maxLines: 5,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Describe company',
           ),
+          controller: descController,
         ),
-        ListTile(
-          title: const Text('Option 1'),
-          leading: Radio<int>(
-            value: 3,
-            groupValue: radioChoice,
-            onChanged: (value) {
-              setState(() {
-                radioChoice = value!;
-              });
-            },
-          ),
-        ),
-        ListTile(
-          title: const Text('Option 1'),
-          leading: Radio<int>(
-            value: 4,
-            groupValue: radioChoice,
-            onChanged: (value) {
-              setState(() {
-                radioChoice = value!;
-              });
-            },
-          ),
-        ),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("Company"),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Company name',
+      ),
+    ]);
+    if (widget.firstCreate) {
+      builder.add(Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                padding: const EdgeInsets.all(15)),
+            child: const Text("Continue"),
+          )));
+    } else {
+      builder.add(Align(
+        alignment: Alignment.centerRight,
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  padding: const EdgeInsets.all(15)),
+              child: const Text("Edit"),
             ),
-            controller: nameController,
-          ),
-        ),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("Website"),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Website url',
+            const SizedBox(
+              width: 20,
             ),
-            controller: websiteController,
+            TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  padding: const EdgeInsets.all(15)),
+              child: const Text("Cancel"),
+            )
+          ],
+        ),
+      ));
+    }
+    return builder;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text("Student hub"),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Save'),
+              ),
+            )
+          ],
+        ),
+        body: Center(
+            child: FractionallySizedBox(
+          widthFactor: 0.9,
+          heightFactor: .9,
+          child: Column(
+            children: buildChildren(),
           ),
-        ),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text("Description"),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-            minLines: 3,
-            maxLines: 5,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Describe company',
-            ),
-            controller: descController,
-          ),
-        ),
-      ],
-    );
+        )));
   }
 }
