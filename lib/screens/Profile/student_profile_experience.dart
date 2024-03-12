@@ -1,23 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/models/project.dart';
+import 'package:student_hub_flutter/models/student_user.dart';
 
 class StudentProfileExperience extends StatefulWidget {
-  const StudentProfileExperience({super.key});
-
+  const StudentProfileExperience({super.key, required this.studentUser});
+  final StudentUser studentUser;
   @override
   State<StudentProfileExperience> createState() => _StudentProfileExperience();
 }
 
-class Project {
-  String name = '';
-  DateTime timeStart = DateTime.now();
-  DateTime timeEnd = DateTime.now();
-  String desc = '';
-  List<String> skillset = List.empty();
-
-  Project(this.name, this.timeStart, this.timeEnd, this.desc, this.skillset);
-}
 
 class _StudentProfileExperience extends State<StudentProfileExperience> {
   List<Project> list = [

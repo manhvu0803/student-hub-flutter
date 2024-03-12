@@ -41,9 +41,9 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              Text("Welcome"),
-              Text("Tell us"),
-              Text("Techstack"),
+              const Text("Welcome"),
+              const Text("Tell us"),
+              const Text("Techstack"),
               DropdownButton<String>(
                 value: techstackChoice,
                 icon: const Icon(Icons.arrow_downward),
@@ -66,48 +66,48 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
                   );
                 }).toList(),
               ),
-              Text("Skillset"),
+              const Text("Skillset"),
               TextButton(
                   onPressed: () {},
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     child: Wrap(
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(12.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.green,
                           ),
-                          child: Text("Sql"),
+                          child: const Text("Sql"),
                         )
                       ],
                     ),
                   )),
               Row(children: <Widget>[
-                Text("Language"),
-                Spacer(),
+                const Text("Language"),
+                const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
-              Text("English and other"),
+              const Text("English and other"),
               Row(children: <Widget>[
-                Text("Education"),
-                Spacer(),
+                const Text("Education"),
+                const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
               Row(children: <Widget>[
-                Column(
+                const Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[Text("Education"), Text("infomation")],
                 ),
-                Spacer(),
+                const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
               Align(
                 alignment: Alignment.centerRight,
-                child: TextButton(onPressed: () {}, child: Text("Next")),
+                child: TextButton(onPressed: () {}, child: const Text("Next")),
               )
             ],
           ),

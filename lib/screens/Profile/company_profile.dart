@@ -10,10 +10,10 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfile extends State<CompanyProfile> {
-  TextEditingController? nameController;
-  TextEditingController? websiteController;
-  TextEditingController? descController;
-  int? radioChoice;
+  late TextEditingController nameController;
+  late TextEditingController websiteController;
+  late TextEditingController descController;
+  late String noEmployee;
 
   @override
   void initState() {
@@ -22,12 +22,12 @@ class _CompanyProfile extends State<CompanyProfile> {
       nameController = TextEditingController();
       websiteController = TextEditingController();
       descController = TextEditingController();
-      radioChoice = 0;
+      noEmployee = "It's just me";
     } else {
       nameController = TextEditingController(text: "val");
       websiteController = TextEditingController(text: "val");
       descController = TextEditingController(text: "val");
-      radioChoice = 1;
+      noEmployee = "2-9 employees";
     }
 
     setState(() {});
@@ -47,61 +47,61 @@ class _CompanyProfile extends State<CompanyProfile> {
         child: Text("How many"),
       ),
       ListTile(
-        title: const Text('Option 1'),
-        leading: Radio<int>(
-          value: 0,
-          groupValue: radioChoice,
+        title: const Text("It's just me"),
+        leading: Radio<String>(
+          value: "It's just me",
+          groupValue: noEmployee,
           onChanged: (value) {
             setState(() {
-              radioChoice = value!;
+              noEmployee = value!;
             });
           },
         ),
       ),
       ListTile(
-        title: const Text('Option 1'),
-        leading: Radio<int>(
-          value: 1,
-          groupValue: radioChoice,
+        title: const Text("2-9 employees"),
+        leading: Radio<String>(
+          value: "2-9 employees",
+          groupValue: noEmployee,
           onChanged: (value) {
             setState(() {
-              radioChoice = value!;
+              noEmployee = value!;
             });
           },
         ),
       ),
       ListTile(
-        title: const Text('Option 1'),
-        leading: Radio<int>(
-          value: 2,
-          groupValue: radioChoice,
+        title: const Text("10-99 employees"),
+        leading: Radio<String>(
+          value: "10-99 employees",
+          groupValue: noEmployee,
           onChanged: (value) {
             setState(() {
-              radioChoice = value!;
+              noEmployee = value!;
             });
           },
         ),
       ),
       ListTile(
-        title: const Text('Option 1'),
-        leading: Radio<int>(
-          value: 3,
-          groupValue: radioChoice,
+        title: const Text("100-1000 employees"),
+        leading: Radio<String>(
+          value: "100-1000 employees",
+          groupValue: noEmployee,
           onChanged: (value) {
             setState(() {
-              radioChoice = value!;
+              noEmployee = value!;
             });
           },
         ),
       ),
       ListTile(
-        title: const Text('Option 1'),
-        leading: Radio<int>(
-          value: 4,
-          groupValue: radioChoice,
+        title: const Text("More than 1000 employees"),
+        leading: Radio<String>(
+          value: "More than 1000 employees",
+          groupValue: noEmployee,
           onChanged: (value) {
             setState(() {
-              radioChoice = value!;
+              noEmployee = value!;
             });
           },
         ),
