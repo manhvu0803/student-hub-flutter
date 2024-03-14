@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/models/post.dart';
+import 'package:student_hub_flutter/screens/Post/post_project_confirm.dart';
 
 class PostProjectDesc extends StatefulWidget {
   const PostProjectDesc({super.key, required this.post});
@@ -49,8 +50,8 @@ class _PostProjectDesc extends State<PostProjectDesc> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              const Text("3/4"),
-              const Text("this help"),
+                Text("3/4", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+                Text("this help", style: Theme.of(context).textTheme.bodyMedium),
               TextField(
                 controller: descController,
                 autofocus: true,
@@ -58,7 +59,9 @@ class _PostProjectDesc extends State<PostProjectDesc> {
               Align(
                 alignment: Alignment.centerRight,
                 child:
-                    TextButton(onPressed: () {}, child: const Text("Review")),
+                    TextButton(onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>PostProjectConfirm(post: widget.post)));
+                    }, child: const Text("Review")),
               )
             ],
           ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/models/student_user.dart';
+import 'package:student_hub_flutter/screens/Profile/student_profile_experience.dart';
 
 class StudentProfileBasic extends StatefulWidget {
   const StudentProfileBasic({super.key});
@@ -8,13 +10,15 @@ class StudentProfileBasic extends StatefulWidget {
 }
 
 class _StudentProfileBasic extends State<StudentProfileBasic> {
+  late StudentUser user;
   List<String> list = ["Fullstack", "Backend"];
-  String techstackChoice = '';
+  late String? techstackChoice;
 
   @override
   void initState() {
     super.initState();
-    techstackChoice = list.first;
+    // fetch user
+    techstackChoice = user.techStack;
   }
 
   @override
@@ -41,9 +45,17 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              const Text("Welcome"),
-              const Text("Tell us"),
-              const Text("Techstack"),
+              Text("Welcome",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text("Tell us", style: Theme.of(context).textTheme.bodyMedium),
+              Text("Techstack",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               DropdownButton<String>(
                 value: techstackChoice,
                 icon: const Icon(Icons.arrow_downward),
@@ -62,11 +74,16 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
                 items: list.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Text(value,
+                        style: Theme.of(context).textTheme.bodyMedium),
                   );
                 }).toList(),
               ),
-              const Text("Skillset"),
+              Text("Skillset",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               TextButton(
                   onPressed: () {},
                   child: SizedBox(
@@ -79,27 +96,42 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.green,
                           ),
-                          child: const Text("Sql"),
+                          child: Text("Sql",
+                              style: Theme.of(context).textTheme.bodyMedium),
                         )
                       ],
                     ),
                   )),
               Row(children: <Widget>[
-                const Text("Language"),
+                Text("Language",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
-              const Text("English and other"),
+              Text("English and other",
+                  style: Theme.of(context).textTheme.bodyMedium),
               Row(children: <Widget>[
-                const Text("Education"),
+                Text("Education",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
               Row(children: <Widget>[
-                const Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[Text("Education"), Text("infomation")],
+                  children: <Widget>[
+                    Text("Education",
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text("infomation",
+                        style: Theme.of(context).textTheme.bodySmall)
+                  ],
                 ),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
@@ -107,7 +139,14 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
               ]),
               Align(
                 alignment: Alignment.centerRight,
-                child: TextButton(onPressed: () {}, child: const Text("Next")),
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return StudentProfileExperience(studentUser: user);
+                      }));
+                    },
+                    child: const Text("Next")),
               )
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
+import 'package:student_hub_flutter/screens/Profile/student_profile_files.dart';
 
 class StudentProfileExperience extends StatefulWidget {
   const StudentProfileExperience({super.key, required this.studentUser});
@@ -9,15 +10,15 @@ class StudentProfileExperience extends StatefulWidget {
   State<StudentProfileExperience> createState() => _StudentProfileExperience();
 }
 
-
 class _StudentProfileExperience extends State<StudentProfileExperience> {
   List<Project> list = [
     Project("name", DateTime.now(), DateTime.now(), "desc", ["SQL", "Node"])
   ];
-
-  List<Widget> populateSkills(Project proj) {
+  
+  List<Widget> populateSkills(List<String> skillset) {
+  
     List<Widget> builder = [];
-    for (String e in proj.skillset) {
+    for (String e in skillset) {
       builder.add(Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
@@ -29,6 +30,8 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
     }
     return builder;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +57,18 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              const Text("Welcome"),
-              const Text("Tell us"),
+              Text("Welcome",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text("Tell us", style: Theme.of(context).textTheme.bodyMedium),
               Row(children: <Widget>[
-                const Text("Projects"),
+                Text("Projects",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 const Spacer(),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
               ]),
@@ -72,9 +83,15 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(proj.name),
+                                  Text(proj.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium),
                                   Text(
-                                      "${proj.timeStart.month}/${proj.timeStart.year} - ${proj.timeEnd.month}/${proj.timeEnd.year}")
+                                      "${proj.timeStart.month}/${proj.timeStart.year} - ${proj.timeEnd.month}/${proj.timeEnd.year}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium)
                                 ],
                               ),
                               const Spacer(),
@@ -86,19 +103,26 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
                                   icon: const Icon(Icons.abc)),
                             ]),
                             Text(proj.desc),
-                            const Text("Skillset"),
+                            Text("Skillset",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold)),
                             TextButton(
                                 onPressed: () {},
                                 child: SizedBox(
                                   height: 50,
-                                  child: Wrap(children: populateSkills(proj)),
+                                  child: Wrap(
+                                      children: populateSkills(proj.skillset)),
                                 )),
                           ],
                         );
                       })),
               Align(
                 alignment: Alignment.centerRight,
-                child: TextButton(onPressed: () {}, child: const Text("Next")),
+                child: TextButton(onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentProfileFiles(studentUser: widget.studentUser)));
+                }, child: const Text("Next")),
               )
             ],
           ),

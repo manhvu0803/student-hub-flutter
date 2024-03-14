@@ -33,22 +33,29 @@ class _PostProjectConfirm extends State<PostProjectConfirm> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              Text("4/4"),
-              Text("Title"),
-              Divider(
+              Text("4/4",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text("Title", style: Theme.of(context).textTheme.bodyMedium),
+              const Divider(
                 height: 5,
               ),
-              Text("desc"),
-              Divider(
+              Text("desc", style: Theme.of(context).textTheme.bodyMedium),
+              const Divider(
                 height: 5,
               ),
-              Text("Scope"),
-              Text("Students required"),
+              Text("Scope", style: Theme.of(context).textTheme.bodyMedium),
+              Text("Students required",
+                  style: Theme.of(context).textTheme.bodyMedium),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
-                  child: Text("Post job"),
+                  onPressed: () {
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: const Text("Post job"),
                 ),
               )
             ],

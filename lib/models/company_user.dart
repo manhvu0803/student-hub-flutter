@@ -3,4 +3,5 @@ class CompanyUser{
   String website = '';
   String desc = '';
   String noEmployee = '';
+
 }

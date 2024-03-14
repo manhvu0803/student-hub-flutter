@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/models/company_user.dart';
+import 'package:student_hub_flutter/models/student_user.dart';
+import 'package:student_hub_flutter/screens/Profile/company_profile.dart';
+import 'package:student_hub_flutter/screens/Profile/student_profile_basic.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -20,69 +24,81 @@ column
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Student hub"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 6),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Save'),
-              ),
-            )
-          ],
-        ),
-        body: Center(
-            child: FractionallySizedBox(
-                widthFactor: 0.9,
-                heightFactor: .9,
-                child: Column(
+    return Center(
+        child: FractionallySizedBox(
+            widthFactor: 0.9,
+            heightFactor: .9,
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text("current acc",
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  subtitle: Text("Company",
+                      style: Theme.of(context).textTheme.bodySmall),
+                  onTap: () {},
+                ),
+                ExpansionTile(
+                  title: Text("other accc",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold)),
                   children: <Widget>[
                     ListTile(
-                      title: Text("current acc"),
-                      subtitle: Text("Company"),
+                      title: Text("acc1",
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      subtitle: Text("Student",
+                          style: Theme.of(context).textTheme.bodySmall),
                       onTap: () {},
                     ),
-                    ExpansionTile(
-                      title: Text("other accc"),
-                      children: <Widget>[
-                        ListTile(
-                          title: Text("acc1"),
-                          subtitle: Text("Student"),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          title: Text("acc2"),
-                          subtitle: Text("Student"),
-                          onTap: () {},
-                        )
-                      ],
-                    ),
-                    const Divider(
-                      height: 10,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: const Text("Profile"),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          title: const Text("Settings"),
-                          onTap: () {},
-                        ),
-                        ListTile(
-                          title: const Text("Logout"),
-                          onTap: () {},
-                          tileColor: Colors.red,
-                        ),
-                      ],
+                    ListTile(
+                      title: Text("acc2",
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      subtitle: Text("Student",
+                          style: Theme.of(context).textTheme.bodySmall),
+                      onTap: () {},
                     )
                   ],
-                ))));
+                ),
+                const Divider(
+                  height: 10,
+                ),
+                Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text("Profile",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          // return CompanyProfile();
+                          return const StudentProfileBasic();
+                        }));
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Settings",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      title: Text("Logout",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      onTap: () {},
+                      tileColor: Colors.red,
+                    ),
+                  ],
+                )
+              ],
+            )));
   }
 }

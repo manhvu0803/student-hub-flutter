@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:student_hub_flutter/models/post.dart';
+import 'package:student_hub_flutter/screens/Post/post_project_scope.dart';
 
 class PostProjectTitle extends StatefulWidget {
   const PostProjectTitle({super.key, this.post});
@@ -11,14 +11,18 @@ class PostProjectTitle extends StatefulWidget {
 
 class _PostProjectTitle extends State<PostProjectTitle> {
   late TextEditingController titleController;
-
+  Post _post = Post();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     titleController = TextEditingController();
     if (widget.post != null) {
-      titleController.text = widget.post!.title;
+      _post.title = widget.post!.title;
+      _post.length = widget.post!.length;
+      _post.noStudent = widget.post!.noStudent;
+      _post.desc = widget.post!.desc;
+
+      titleController.text = _post.title;
     }
   }
 
@@ -53,18 +57,20 @@ class _PostProjectTitle extends State<PostProjectTitle> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              const Text("1/4"),
-              const Text("this help"),
+               Text("1/4", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+               Text("this help", style: Theme.of(context).textTheme.bodyMedium),
               TextField(
                 controller: titleController,
                 autofocus: true,
               ),
-              const Text("Example"),
-              const Text("ex1, ex2"),
+              Text("Example", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),),
+              Text("ex1, ex2", style: Theme.of(context).textTheme.bodyMedium),
               Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                      onPressed: () {}, child: const Text("Next: Scope")))
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PostProjectScope(post: _post)));
+                      }, child: const Text("Next: Scope")))
             ],
           ),
         )));

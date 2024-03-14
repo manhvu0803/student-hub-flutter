@@ -1,5 +1,6 @@
 class Post {
   String title = '';
-  String scope = '1 - 3 months';
+  String length = '1 - 3 months';
+  int noStudent = 0;
   String desc = '';
 }

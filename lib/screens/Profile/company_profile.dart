@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:student_hub_flutter/models/company_user.dart';
 
 class CompanyProfile extends StatefulWidget {
-  const CompanyProfile({super.key, required this.firstCreate});
-  final bool firstCreate;
-
+  const CompanyProfile({super.key});
   @override
   State<CompanyProfile> createState() => _CompanyProfile();
 }
@@ -15,39 +13,48 @@ class _CompanyProfile extends State<CompanyProfile> {
   late TextEditingController descController;
   late String noEmployee;
 
+  late CompanyUser user;
+
+  late bool firstCreate;
   @override
   void initState() {
     super.initState();
-    if (widget.firstCreate) {
-      nameController = TextEditingController();
-      websiteController = TextEditingController();
-      descController = TextEditingController();
-      noEmployee = "It's just me";
-    } else {
-      nameController = TextEditingController(text: "val");
-      websiteController = TextEditingController(text: "val");
-      descController = TextEditingController(text: "val");
-      noEmployee = "2-9 employees";
-    }
+    // fetch user
+    firstCreate = false;
+    // if(user.id = -1) firstCreate = true;
+
+    nameController = TextEditingController(text: user.name);
+    websiteController = TextEditingController(text: user.website);
+    descController = TextEditingController(text: user.desc);
+    noEmployee = user.noEmployee;
 
     setState(() {});
   }
 
   List<Widget> buildChildren() {
     List<Widget> builder = List.empty();
-    if (widget.firstCreate) {
+    if (firstCreate) {
       builder.addAll([
-        const Text("walcome"),
-        const Text("Tell us"),
+        Text("walcome",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
+        Text("Tell us", style: Theme.of(context).textTheme.bodyMedium),
       ]);
     }
     builder.addAll([
-      const Align(
+      Align(
         alignment: Alignment.centerLeft,
-        child: Text("How many"),
+        child: Text("How many",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
       ),
       ListTile(
-        title: const Text("It's just me"),
+        title:
+            Text("It's just me", style: Theme.of(context).textTheme.bodyMedium),
         leading: Radio<String>(
           value: "It's just me",
           groupValue: noEmployee,
@@ -59,7 +66,8 @@ class _CompanyProfile extends State<CompanyProfile> {
         ),
       ),
       ListTile(
-        title: const Text("2-9 employees"),
+        title: Text("2-9 employees",
+            style: Theme.of(context).textTheme.bodyMedium),
         leading: Radio<String>(
           value: "2-9 employees",
           groupValue: noEmployee,
@@ -71,7 +79,8 @@ class _CompanyProfile extends State<CompanyProfile> {
         ),
       ),
       ListTile(
-        title: const Text("10-99 employees"),
+        title: Text("10-99 employees",
+            style: Theme.of(context).textTheme.bodyMedium),
         leading: Radio<String>(
           value: "10-99 employees",
           groupValue: noEmployee,
@@ -83,7 +92,8 @@ class _CompanyProfile extends State<CompanyProfile> {
         ),
       ),
       ListTile(
-        title: const Text("100-1000 employees"),
+        title: Text("100-1000 employees",
+            style: Theme.of(context).textTheme.bodyMedium),
         leading: Radio<String>(
           value: "100-1000 employees",
           groupValue: noEmployee,
@@ -95,7 +105,8 @@ class _CompanyProfile extends State<CompanyProfile> {
         ),
       ),
       ListTile(
-        title: const Text("More than 1000 employees"),
+        title: Text("More than 1000 employees",
+            style: Theme.of(context).textTheme.bodyMedium),
         leading: Radio<String>(
           value: "More than 1000 employees",
           groupValue: noEmployee,
@@ -106,9 +117,13 @@ class _CompanyProfile extends State<CompanyProfile> {
           },
         ),
       ),
-      const Align(
+      Align(
         alignment: Alignment.centerLeft,
-        child: Text("Company"),
+        child: Text("Company",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -120,9 +135,13 @@ class _CompanyProfile extends State<CompanyProfile> {
           controller: nameController,
         ),
       ),
-      const Align(
+      Align(
         alignment: Alignment.centerLeft,
-        child: Text("Website"),
+        child: Text("Website",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -134,9 +153,13 @@ class _CompanyProfile extends State<CompanyProfile> {
           controller: websiteController,
         ),
       ),
-      const Align(
+      Align(
         alignment: Alignment.centerLeft,
-        child: Text("Description"),
+        child: Text("Description",
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold)),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -151,7 +174,7 @@ class _CompanyProfile extends State<CompanyProfile> {
         ),
       ),
     ]);
-    if (widget.firstCreate) {
+    if (firstCreate) {
       builder.add(Align(
           alignment: Alignment.centerRight,
           child: TextButton(
@@ -167,7 +190,9 @@ class _CompanyProfile extends State<CompanyProfile> {
         child: Row(
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   padding: const EdgeInsets.all(15)),
@@ -177,7 +202,9 @@ class _CompanyProfile extends State<CompanyProfile> {
               width: 20,
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   padding: const EdgeInsets.all(15)),

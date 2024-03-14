@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:student_hub_flutter/models/post.dart';
+import 'package:student_hub_flutter/screens/Post/post_project_desc.dart';
 
 class PostProjectScope extends StatefulWidget {
   const PostProjectScope({super.key, required this.post});
@@ -16,8 +17,9 @@ class _PostProjectScope extends State<PostProjectScope> {
   @override
   void initState() {
     super.initState();
-    scopeController = TextEditingController(text: widget.post.scope);
-    projectLength = widget.post.scope;
+    scopeController =
+        TextEditingController(text: widget.post.noStudent.toString());
+    projectLength = widget.post.length;
   }
 
   @override
@@ -51,14 +53,23 @@ class _PostProjectScope extends State<PostProjectScope> {
           heightFactor: .9,
           child: Column(
             children: <Widget>[
-              const Text("2/4"),
-              const Text("this help"),
-              const Align(
+              Text("2/4",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text("this help", style: Theme.of(context).textTheme.bodyMedium),
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text("How Long"),
+                child: Text("How Long",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
               ),
               ListTile(
-                title: const Text("1 - 3 months"),
+                title: Text("1 - 3 months",
+                    style: Theme.of(context).textTheme.bodyMedium),
                 leading: Radio<String>(
                   value: "1 - 3 months",
                   groupValue: projectLength,
@@ -70,7 +81,8 @@ class _PostProjectScope extends State<PostProjectScope> {
                 ),
               ),
               ListTile(
-                title: const Text("3 - 6 months"),
+                title: Text("3 - 6 months",
+                    style: Theme.of(context).textTheme.bodyMedium),
                 leading: Radio<String>(
                   value: "3 - 6 months",
                   groupValue: projectLength,
@@ -81,14 +93,24 @@ class _PostProjectScope extends State<PostProjectScope> {
                   },
                 ),
               ),
-              Text("How many"),
+              Text("How many",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               TextField(
                 controller: scopeController,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
               ),
               Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                      onPressed: () {}, child: const Text("Next: Desc")))
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PostProjectDesc(post: widget.post)));
+                      }, child: const Text("Next: Desc")))
             ],
           ),
         )));
