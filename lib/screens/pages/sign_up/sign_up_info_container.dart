@@ -1,43 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/context_extension.dart';
-import 'package:student_hub_flutter/screens/home_page.dart';
-import 'package:student_hub_flutter/widgets/extra_option_container.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
 
-class StudentSignUpPage extends StatelessWidget {
-  const StudentSignUpPage({super.key});
+class SignUpInfoContainer extends StatefulWidget {
+  final void Function()? onCreateAccount;
+
+  const SignUpInfoContainer({
+    super.key,
+    this.onCreateAccount
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return PageScreen(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _SignUpInfoContainer(),
-              const SizedBox(height: 165),
-              BottomExtraOption.materialRoute(
-                text: "Looking for a project?",
-                buttonText: "Sign up for companies",
-                builder: (context) => const HomePage()
-              )
-            ]
-          )
-        )
-      )
-    );
-  }
+  State<SignUpInfoContainer> createState() => _SignUpInfoContainerState();
 }
 
-class _SignUpInfoContainer extends StatefulWidget {
-  @override
-  State<_SignUpInfoContainer> createState() => _SignUpInfoContainerState();
-}
 
-class _SignUpInfoContainerState extends State<_SignUpInfoContainer> {
+class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
   String _fullName = "";
 
   String _email = "";
@@ -52,12 +30,6 @@ class _SignUpInfoContainerState extends State<_SignUpInfoContainer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
-          Text(
-            "Signing up for students",
-            style: context.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
@@ -77,6 +49,7 @@ class _SignUpInfoContainerState extends State<_SignUpInfoContainer> {
                 IconTextField(
                   icon: Icons.lock,
                   hintText: "Password",
+                  obscureText: true,
                   onChange: (value) => _password = value,
                 ),
               ],
@@ -100,24 +73,28 @@ class _SignUpInfoContainerState extends State<_SignUpInfoContainer> {
           ),
           const SizedBox(height: 26),
           FilledButton(
-            onPressed: _signUp,
+            onPressed: () => _signUp(context),
             child: const Text("Create account")
-          ),
-          const SizedBox(height: 170),
-          BottomExtraOption.materialRoute(
-            text: "Looking for a project?",
-            buttonText: "Sign up for companies",
-            builder: (context) => const HomePage()
           )
         ]
       ),
     );
   }
 
-  void _signUp() {
+  void _signUp(BuildContext context) {
     if (_agreedToTerms) {
       print("Sign up $_fullName $_email $_password");
+      widget.onCreateAccount?.call();
       return;
     }
+
+    ScaffoldMessenger
+      .of(context)
+      .showSnackBar(const SnackBar(
+        content: Text(
+          "You are required to agree to the Terms of Service",
+          textAlign: TextAlign.center,
+        )
+      ));
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/context_extension.dart';
-import 'package:student_hub_flutter/screens/login_page.dart';
-import 'package:student_hub_flutter/screens/student_sign_up_page.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
+import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
+
+import 'company_sign_up_page.dart';
+import 'student_sign_up_page.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -69,7 +72,7 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
         ),
         const SizedBox(height: 24),
         FilledButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StudentSignUpPage())),
+          onPressed: () => _onCreateAccountPressed(context),
           child: const Text(
             "Create account",
             textScaler: TextScaler.linear(1.1),
@@ -77,6 +80,15 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
         )
       ]
     );
+  }
+
+  void _onCreateAccountPressed(BuildContext context) {
+    if (_accountType == AccountType.student) {
+      context.pushRoute((context) => const StudentSignUpPage());
+      return;
+    }
+
+    context.pushRoute((context) => const CompanySignUpPage());
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/context_extension.dart';
-import 'package:student_hub_flutter/screens/sign_up_page.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
+import 'package:student_hub_flutter/screens/pages/home_page.dart';
+import 'package:student_hub_flutter/screens/pages/sign_up/sign_up_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
@@ -60,7 +61,7 @@ class _LogInContainerState extends State<_LogInContainer> {
         ),
         const SizedBox(height: 32),
         FilledButton(
-          onPressed: () => print("Login: $_username $_password"),
+          onPressed: () => _onLogInPressed(context),
           child: const Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
             child: Text("Log in", style: TextStyle(fontSize: 18))
@@ -68,5 +69,10 @@ class _LogInContainerState extends State<_LogInContainer> {
         )
       ]
     );
+  }
+
+  void _onLogInPressed(BuildContext context) {
+    print("Log in: $_username $_password");
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(isStudentUser: false)));
   }
 }
