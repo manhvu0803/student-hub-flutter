@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/context_extension.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/login_page.dart';
 import 'package:student_hub_flutter/screens/student_sign_up_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';

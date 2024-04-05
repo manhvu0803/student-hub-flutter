@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/screens/company/project_page.dart';
 import 'package:student_hub_flutter/screens/home_page.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           fontSizeFactor: 1.05
         )
       ),
-      home: const HomePage(title: 'StudentHub'),
+      home: const ProjectPage(projectName: "projectName"),
     );
   }
 }
