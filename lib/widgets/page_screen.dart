@@ -11,6 +11,8 @@ class PageScreen extends StatelessWidget {
 
   final bool hasBackButton;
 
+  final Widget? floatingActionButton;
+
   final void Function()? customBackButtonCallback;
 
   const PageScreen({
@@ -20,7 +22,8 @@ class PageScreen extends StatelessWidget {
     this.bottomNavigationBar,
     this.appBarBottom,
     bool? hasBackButton,
-    this.customBackButtonCallback
+    this.customBackButtonCallback,
+    this.floatingActionButton
   }) : hasBackButton = hasBackButton ?? false;
 
   @override
@@ -32,6 +35,7 @@ class PageScreen extends StatelessWidget {
         leading: _getBackButton(context),
         bottom: appBarBottom,
       ),
+      floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(child: child),
     );
