@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/company/student_info_list_tile.dart';
+import 'package:student_hub_flutter/widgets/student_info_list_tile.dart';
 
 class ProposalCard extends StatelessWidget {
   final Widget? top;

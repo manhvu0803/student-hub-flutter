@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/company/proposal_card.dart';
+import 'package:student_hub_flutter/widgets/proposal_card.dart';
 
 class ProjectProposalView extends StatelessWidget {
   const ProjectProposalView({super.key});
