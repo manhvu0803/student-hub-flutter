@@ -64,10 +64,11 @@ class ProposalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.secondaryContainer,
-      child: InkWell(
-        onTap: onTap,
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        color: Theme.of(context).colorScheme.tertiaryContainer,
         child: Column(
           children: _getColumnChildren()
         ),
