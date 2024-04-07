@@ -37,7 +37,14 @@ class _ScheduleInterviewViewState extends State<ScheduleInterviewView> {
             time: _endTime,
             onSelectTime: (selectedTime) => setState(() => _endTime = selectedTime)
           ),
-          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 8),
+            child: Text(
+              (_startTime == null || _endTime == null) ? "" : "Duration: ${_startTime!.difference(_endTime!).inMinutes} minutes",
+              style: context.textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.italic)
+            ),
+          ),
+          const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -92,18 +99,27 @@ class _TimePickerRowState extends State<_TimePickerRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TextButton(
-          onPressed: () => _pickDate(context),
-          child: Text((_date == null) ? "__/__/__" : _date!.toDateString())
-        ),
-        const Icon(Icons.calendar_month),
-        TextButton(
-          onPressed: () => _pickTime(context),
-          child: Text((_timeOfDay == null) ? "__:__": _timeOfDay!.to12HString())
-        ),
-      ],
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 20)
+          )
+        )
+      ),
+      child: Row(
+        children: [
+          TextButton(
+            onPressed: () => _pickDate(context),
+            child: Text((_date == null) ? "__/__/____" : _date!.toDateString())
+          ),
+          const Icon(Icons.calendar_month),
+          TextButton(
+            onPressed: () => _pickTime(context),
+            child: Text((_timeOfDay == null) ? "__:__": _timeOfDay!.to12HString())
+          ),
+        ],
+      ),
     );
   }
 
