@@ -22,6 +22,7 @@ class _CompanyProfile extends State<CompanyProfile> {
     // fetch user
     firstCreate = false;
     // if(user.id = -1) firstCreate = true;
+    user = CompanyUser();
 
     nameController = TextEditingController(text: user.name);
     websiteController = TextEditingController(text: user.website);
@@ -32,7 +33,7 @@ class _CompanyProfile extends State<CompanyProfile> {
   }
 
   List<Widget> buildChildren() {
-    List<Widget> builder = List.empty();
+    List<Widget> builder = [];
     if (firstCreate) {
       builder.addAll([
         Text("walcome",

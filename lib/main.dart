@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/company/project_page.dart';
-import 'package:student_hub_flutter/screens/home_page.dart';
+import 'package:student_hub_flutter/screens/pages/landing_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,13 +14,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'StudentHub',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         textTheme: Theme.of(context).textTheme.apply(
           fontSizeFactor: 1.05
         )
       ),
-      home: const ProjectPage(projectName: "projectName"),
+      home: const LandingPage()
     );
   }
 }

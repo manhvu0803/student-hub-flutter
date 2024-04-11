@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/screens/Profile/profile_page.dart';
 
 class PageScreen extends StatelessWidget {
   final String title;
@@ -9,9 +11,11 @@ class PageScreen extends StatelessWidget {
 
   final PreferredSizeWidget? appBarBottom;
 
-  final bool hasBackButton;
+  final bool? hasBackButton;
 
   final Widget? floatingActionButton;
+
+  final bool useTrailingButton;
 
   final void Function()? customBackButtonCallback;
 
@@ -21,10 +25,11 @@ class PageScreen extends StatelessWidget {
     required this.child,
     this.bottomNavigationBar,
     this.appBarBottom,
-    bool? hasBackButton,
+    this.hasBackButton,
     this.customBackButtonCallback,
-    this.floatingActionButton
-  }) : hasBackButton = hasBackButton ?? false;
+    this.floatingActionButton,
+    this.useTrailingButton = true
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,12 @@ class PageScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
         leading: _getBackButton(context),
+        actions: [
+          if (useTrailingButton) IconButton(
+            onPressed: () => context.pushRoute((context) => const ProfilePage()),
+            icon: const Icon(Icons.person)
+          )
+        ],
         bottom: appBarBottom,
       ),
       floatingActionButton: floatingActionButton,
@@ -42,7 +53,7 @@ class PageScreen extends StatelessWidget {
   }
 
   IconButton? _getBackButton(BuildContext context) {
-    if (!hasBackButton) {
+    if (!(hasBackButton ?? false) && !Navigator.canPop(context)) {
       return null;
     }
 

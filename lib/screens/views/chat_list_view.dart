@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
-import 'package:student_hub_flutter/screens/chat_page.dart';
+import 'package:student_hub_flutter/screens/pages/chat_page.dart';
 
 class ChatListView extends StatelessWidget {
   const ChatListView({super.key});

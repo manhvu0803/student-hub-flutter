@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/widgets/proposal_card.dart';
 
 class ProjectProposalView extends StatelessWidget {
@@ -68,7 +69,8 @@ class _HireProposalCard extends StatelessWidget {
         data: Theme.of(context).copyWith(
           outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
-              fixedSize: const Size(130, 0)
+              fixedSize: const Size(130, 0),
+              backgroundColor: context.colorScheme.surfaceVariant
             )
           )
         ),

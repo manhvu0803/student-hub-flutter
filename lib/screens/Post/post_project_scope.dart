@@ -24,7 +24,6 @@ class _PostProjectScope extends State<PostProjectScope> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     scopeController.dispose();
     super.dispose();
   }

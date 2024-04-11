@@ -68,7 +68,7 @@ class ProposalCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 4,
-        color: Theme.of(context).colorScheme.tertiaryContainer,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         child: Column(
           children: _getColumnChildren()
         ),

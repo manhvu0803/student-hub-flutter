@@ -18,6 +18,7 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
   void initState() {
     super.initState();
     // fetch user
+    user = StudentUser()..techStack = list[0];
     techstackChoice = user.techStack;
   }
 

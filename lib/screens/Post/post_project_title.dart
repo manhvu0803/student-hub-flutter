@@ -28,7 +28,6 @@ class _PostProjectTitle extends State<PostProjectTitle> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     titleController.dispose();
     super.dispose();
   }

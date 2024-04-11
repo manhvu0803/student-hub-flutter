@@ -14,14 +14,12 @@ class _PostProjectDesc extends State<PostProjectDesc> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     descController = TextEditingController(text: widget.post.desc);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     descController.dispose();
     super.dispose();
   }

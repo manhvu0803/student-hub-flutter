@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/screens/home_page.dart';
+import 'package:student_hub_flutter/screens/pages/landing_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
@@ -22,7 +22,7 @@ class StudentSignUpPage extends StatelessWidget {
               BottomExtraOption.materialRoute(
                 text: "Looking for a project?",
                 buttonText: "Sign up for companies",
-                builder: (context) => const HomePage()
+                builder: (context) => const LandingPage()
               )
             ]
           )
@@ -107,7 +107,7 @@ class _SignUpInfoContainerState extends State<_SignUpInfoContainer> {
           BottomExtraOption.materialRoute(
             text: "Looking for a project?",
             buttonText: "Sign up for companies",
-            builder: (context) => const HomePage()
+            builder: (context) => const LandingPage()
           )
         ]
       ),
