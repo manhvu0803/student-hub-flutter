@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 
@@ -26,9 +24,7 @@ class CompanySignUpPage extends StatelessWidget {
                 style: context.textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-              SignUpInfoContainer(
-                onCreateAccount: () => context.pushRoute((context) => const HomePage(isStudentUser: false))
-              ),
+              const SignUpInfoContainer(isStudent: false),
               const SizedBox(height: 165),
               BottomExtraOption(
                 text: "Looking for a project?",

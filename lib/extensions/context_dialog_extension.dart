@@ -6,6 +6,10 @@ extension ContextDialogExtension on BuildContext {
     Navigator.push(this, MaterialPageRoute(builder: builder));
   }
 
+  void pushReplacement(Widget Function(BuildContext context) builder) {
+    Navigator.pushReplacement(this, MaterialPageRoute(builder: builder));
+  }
+
   Future<T?> showScheduleInterviewDialog<T>() {
     return showDialog<T>(
       context: this,
@@ -13,7 +17,28 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
-  showLoadingDialog() {
+  Future<void> showRequestLoad<T>({
+    required Future<T> Function() request,
+    void Function()? onRequestDone
+  }) async {
+    try {
+      showLoadingDialog();
+      await request();
+
+      if (mounted) {
+        Navigator.pop(this);
+        onRequestDone?.call();
+      }
+    }
+    on Exception catch (e) {
+      if (mounted) {
+        Navigator.pop(this);
+        showTextSnackBar(e.toString());
+      }
+    }
+  }
+
+  void showLoadingDialog() {
     showDialog(
       barrierDismissible: false,
       context: this,

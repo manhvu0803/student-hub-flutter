@@ -75,20 +75,9 @@ class _LogInContainerState extends State<_LogInContainer> {
   }
 
   void _onLogInPressed(BuildContext context) async {
-    try {
-      context.showLoadingDialog();
-      await client.signIn(_username, _password);
-
-      if (context.mounted) {
-        Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(isStudentUser: false)));
-      }
-    }
-    on Exception catch (e) {
-      if (context.mounted) {
-        Navigator.pop(context);
-        context.showTextSnackBar(e.toString());
-      }
-    }
+    context.showRequestLoad(
+      request: () => client.signIn(_username, _password),
+      onRequestDone: () => context.pushReplacement((context) => const HomePage(isStudentUser: false))
+    );
   }
 }
