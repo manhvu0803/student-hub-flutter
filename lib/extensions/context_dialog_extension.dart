@@ -13,6 +13,39 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
+  showLoadingDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: this,
+      builder: (BuildContext context) => const AlertDialog(
+        content: SizedBox(
+          height: 100,
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text("Loading..." ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showTextSnackBar(String text) {
+    showSnackBar(Text(
+      text,
+      textAlign: TextAlign.center
+    ));
+  }
+
+  void showSnackBar(Widget content) {
+    ScaffoldMessenger
+      .of(this)
+      .showSnackBar(SnackBar(content: content));
+  }
+
   Dialog _buildDialog(Widget child, {double insetPadding = 16, double childPadding = 24}) {
     return Dialog(
       insetPadding: EdgeInsets.all(insetPadding),

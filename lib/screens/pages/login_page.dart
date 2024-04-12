@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/sign_up/sign_up_page.dart';
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
+import 'package:student_hub_flutter/client/client.dart' as client;
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -58,6 +60,7 @@ class _LogInContainerState extends State<_LogInContainer> {
           icon: Icons.lock,
           onChange: (value) => _password = value,
           hintText: "Password",
+          obscureText: true,
         ),
         const SizedBox(height: 32),
         FilledButton(
@@ -71,8 +74,21 @@ class _LogInContainerState extends State<_LogInContainer> {
     );
   }
 
-  void _onLogInPressed(BuildContext context) {
-    print("Log in: $_username $_password");
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(isStudentUser: false)));
+  void _onLogInPressed(BuildContext context) async {
+    try {
+      context.showLoadingDialog();
+      await client.signIn(_username, _password);
+
+      if (context.mounted) {
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(isStudentUser: false)));
+      }
+    }
+    on Exception catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context);
+        context.showTextSnackBar(e.toString());
+      }
+    }
   }
 }
