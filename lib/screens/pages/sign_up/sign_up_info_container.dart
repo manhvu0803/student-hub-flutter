@@ -49,6 +49,7 @@ class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
                 IconTextField(
                   icon: Icons.lock,
                   hintText: "Password",
+                  obscureText: true,
                   onChange: (value) => _password = value,
                 ),
               ],

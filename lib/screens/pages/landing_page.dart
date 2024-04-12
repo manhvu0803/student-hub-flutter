@@ -8,6 +8,7 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageScreen(
+      hasBackButton: false,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

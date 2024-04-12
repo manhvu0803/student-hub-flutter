@@ -30,10 +30,10 @@ class CompanySignUpPage extends StatelessWidget {
                 onCreateAccount: () => context.pushRoute((context) => const HomePage(isStudentUser: false))
               ),
               const SizedBox(height: 165),
-              BottomExtraOption.materialRoute(
+              BottomExtraOption(
                 text: "Looking for a project?",
                 buttonText: "Sign up for students",
-                builder: (context) => const StudentSignUpPage()
+                onButtonClick: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const StudentSignUpPage()))
               )
             ]
           )
