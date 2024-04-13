@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/category.dart';
+import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
 import 'client.dart';
 
@@ -71,6 +72,24 @@ Future<void> updateProfile(StudentUser newStudent) async {
   ]);
 
   user!.student = newStudent;
+}
+
+Future<List<Project>> searchProject({String? projectTitle, int page = 1, int pageLimit = 5}) async {
+  _checkLogInState();
+  var urlBuilder = StringBuffer("$baseUrl/api/project?page=$page&perPage=$pageLimit");
+
+  if (projectTitle != null && projectTitle.isNotEmpty) {
+    urlBuilder.write("&title=$projectTitle");
+  }
+
+  var response = await http.get(Uri.parse(urlBuilder.toString()), headers: authHeaders);
+  var json = handleResponse(response);
+  var list = json["result"] ?? json["results"] ?? json;
+  return (list as List).mapToList((innerJson) => Project.fromJson(innerJson));
+}
+
+Future<void> setFavorite(Project project, bool value) async {
+  // TODO: Toggle favorite API
 }
 
 _checkLogInState() {

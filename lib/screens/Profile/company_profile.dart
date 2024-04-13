@@ -40,7 +40,7 @@ class _CompanyProfile extends State<CompanyProfile> {
   Widget build(BuildContext context) {
     return PageScreen(
       title: "Company profile",
-      customActions: [
+      actions: [
         TextButton(
           onPressed: () => _saveChanges(context),
           child: const Text("Save changes")

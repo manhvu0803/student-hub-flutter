@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/extensions/date_time_extension.dart';
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/screens/post_project_page.dart';
-import 'package:student_hub_flutter/screens/company/project_page.dart';
 import 'package:student_hub_flutter/client/company_client.dart' as client;
+import 'package:student_hub_flutter/widgets/project_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
 class CompanyDashboard extends StatelessWidget {
@@ -35,12 +35,15 @@ class CompanyDashboard extends StatelessWidget {
                   ]
                 ),
                 Expanded(
-                  child: TabBarView(
-                    children: [
-                      _DashboardProjectListView(),
-                      _DashboardProjectListView(),
-                      _DashboardProjectListView(),
-                    ]
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: TabBarView(
+                      children: [
+                        _DashboardProjectListView(),
+                        _DashboardProjectListView(),
+                        _DashboardProjectListView(),
+                      ]
+                    ),
                   ),
                 )
               ]
@@ -59,102 +62,61 @@ class _DashboardProjectListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshableFutureBuilder(
       fetcher: client.getProjects,
-      builder: (context, data) => ListView(children: _getProjectCard(data))
+      builder: (context, data) => ListView(
+        children: data.mapToList((project) => _DashboardProjectCard(project))
+      )
     );
-  }
-
-  List<Widget> _getProjectCard(List<Project> projects) {
-    var cards = <Widget>[];
-
-    for (var project in projects) {
-      cards.add(_DashboardProjectCard(
-        title: project.title,
-        createTime: project.createdAt,
-        requests: const [],
-        proposalCount: project.proposalCount,
-        messageCount: 0,
-        hireCount: 0
-      ));
-    }
-
-    return cards;
   }
 }
 
 class _DashboardProjectCard extends StatelessWidget {
-  final String title;
+  final Project project;
 
-  final DateTime createTime;
-
-  final List<String> requests;
-
-  final int proposalCount;
-
-  final int messageCount;
-
-  final int hireCount;
-
-  const _DashboardProjectCard({
-    required this.title,
-    required this.createTime,
-    required this.requests,
-    required this.proposalCount,
-    required this.messageCount,
-    required this.hireCount
-  });
+  const _DashboardProjectCard(this.project);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      child: InkWell(
-        onTap: () => context.pushRoute((context) => ProjectPage(projectName: title)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    title,
-                    style: context.textTheme.titleMedium,
-                  ),
-                  Text(
-                    "Created ${createTime.toDateString()}",
-                    style: TextStyle(color: context.textTheme.titleMedium!.color!.withAlpha(255 ~/ 1.5)),
-                  ),
-                  const SizedBox(height: 8),
-                  if (requests.isNotEmpty) Text(
-                    "Student are looking for",
-                    style: context.textTheme.titleMedium,
-                  ),
-                  ..._getRequestTexts(context),
-                ]
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("$proposalCount proposal(s)"),
-                Text("$messageCount message(s)"),
-                Text("$hireCount hired")
-              ]
-            ),
-            const SizedBox(height: 12),
-          ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4.0),
+      child: ProjectCard.fromProject(
+        project,
+        contentBottom: _getRequestWidget(context),
+        bottom: Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("${project.proposalCount} proposal(s)"),
+              Text("${project.messageCount} message(s)"),
+              Text("${project.hireCount} hired")
+            ]
+          ),
         ),
-      ),
+      )
     );
   }
 
-  Iterable<Widget> _getRequestTexts(BuildContext context) {
-    return requests.map((request) => Text(
-      " - $request",
-      style: context.textTheme.bodyMedium,
-    ));
+  Widget? _getRequestWidget(BuildContext context) {
+    if (project.requests.isEmpty) {
+      return null;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 4),
+          Text(
+            "Student are looking for",
+            style: context.textTheme.titleMedium,
+          ),
+          ...project.requests.map((request) => Text(
+            " - $request",
+            style: context.textTheme.bodyMedium,
+          ))
+        ],
+      ),
+    );
   }
 }

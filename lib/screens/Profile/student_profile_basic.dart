@@ -32,7 +32,7 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
   Widget build(BuildContext context) {
     return PageScreen(
       title: "Student profile",
-      customActions: [
+      actions: [
         TextButton(
           onPressed: () => _saveChanges(context),
           child: const Text("Save changes")

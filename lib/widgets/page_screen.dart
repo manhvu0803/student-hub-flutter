@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
-import 'package:student_hub_flutter/screens/profile/profile_page.dart';
+import 'package:student_hub_flutter/widgets/account_menu_button.dart';
 
 class PageScreen extends StatelessWidget {
   final String title;
@@ -15,11 +14,9 @@ class PageScreen extends StatelessWidget {
 
   final Widget? floatingActionButton;
 
-  final bool useTrailingButton;
-
   final void Function()? customBackButtonCallback;
 
-  final List<Widget>? customActions;
+  final List<Widget>? actions;
 
   const PageScreen({
     super.key,
@@ -30,19 +27,22 @@ class PageScreen extends StatelessWidget {
     this.hasBackButton,
     this.customBackButtonCallback,
     this.floatingActionButton,
-    this.useTrailingButton = true,
-    this.customActions
+    this.actions
   });
+
+  PageScreen.account({
+    super.key,
+    this.title = "StudentHub",
+    required this.child,
+    this.bottomNavigationBar,
+    this.appBarBottom,
+    this.hasBackButton,
+    this.customBackButtonCallback,
+    this.floatingActionButton,
+  }) : actions = [const AccountMenuButton()];
 
   @override
   Widget build(BuildContext context) {
-    var actions = customActions ?? [
-      if (useTrailingButton) IconButton(
-        onPressed: () => context.pushRoute((context) => const ProfilePage()),
-        icon: const Icon(Icons.person)
-      )
-    ];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

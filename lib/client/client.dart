@@ -11,7 +11,11 @@ const String baseUrl = "https://api.studenthub.dev";
 
 String token = "";
 User? user;
-late final SharedPreferences prefs;
+late SharedPreferences prefs;
+
+Map<String, String> get authHeaders => {
+  "Authorization": "Bearer $token",
+};
 
 Map<String, String> get authJsonHeaders => {
   "Content-Type": "application/json",

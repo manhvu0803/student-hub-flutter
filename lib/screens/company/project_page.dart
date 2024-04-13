@@ -31,7 +31,7 @@ class ProjectPage extends StatelessWidget {
             Tab(text: "Hired"),
           ]
         ),
-        customActions: [
+        actions: [
           MenuBar(children: [
             SubmenuButton(
               menuChildren: [

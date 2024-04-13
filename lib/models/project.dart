@@ -15,7 +15,10 @@ class Project {
   int numberOfStudent = -1;
   int type = -1;
   int proposalCount = -1;
+  int hireCount = -1;
+  int messageCount = -1;
   bool isFavorite = false;
+  List<String> requests = [];
 
   Project();
 
@@ -32,7 +35,10 @@ class Project {
     numberOfStudent = json["numberOfStudent"] ?? -1,
     type = json["type"] ?? -1,
     proposalCount = json["countProposals"] ?? -1,
+    hireCount = json["countMessages"] ?? -1,
+    messageCount = json["countHired"] ?? -1,
     isFavorite = json["isFavorite"] ?? false;
+    // TODO: Parse requests/proposals
 
   @override
   bool operator==(Object other) {
