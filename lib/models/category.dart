@@ -10,7 +10,7 @@ class Category {
   Category.fromJson(Map<String, dynamic> json) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
     name = json["name"] ?? json["Name"],
-    createdAt = DateTime.tryParse(json["createdAt"]) ?? DateTime.now(),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
     updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
     deletedAt = DateTime.tryParse(json["deletedAt"] ?? "");
 }

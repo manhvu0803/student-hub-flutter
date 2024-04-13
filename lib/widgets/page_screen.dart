@@ -19,6 +19,8 @@ class PageScreen extends StatelessWidget {
 
   final void Function()? customBackButtonCallback;
 
+  final List<Widget>? customActions;
+
   const PageScreen({
     super.key,
     this.title = "StudentHub",
@@ -28,22 +30,25 @@ class PageScreen extends StatelessWidget {
     this.hasBackButton,
     this.customBackButtonCallback,
     this.floatingActionButton,
-    this.useTrailingButton = true
+    this.useTrailingButton = true,
+    this.customActions
   });
 
   @override
   Widget build(BuildContext context) {
+    var actions = customActions ?? [
+      if (useTrailingButton) IconButton(
+        onPressed: () => context.pushRoute((context) => const ProfilePage()),
+        icon: const Icon(Icons.person)
+      )
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
         leading: _getBackButton(context),
-        actions: [
-          if (useTrailingButton) IconButton(
-            onPressed: () => context.pushRoute((context) => const ProfilePage()),
-            icon: const Icon(Icons.person)
-          )
-        ],
+        actions: actions,
         bottom: appBarBottom,
       ),
       floatingActionButton: floatingActionButton,

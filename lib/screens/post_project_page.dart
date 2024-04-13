@@ -4,24 +4,18 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
-import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/client/company_client.dart' as client;
 
-class PostProjectTitle extends StatefulWidget {
+class PostProjectPage extends StatefulWidget {
   final Project? project;
 
-  const PostProjectTitle({super.key, this.project});
+  const PostProjectPage({super.key, this.project});
 
   @override
-  State<PostProjectTitle> createState() => _PostProjectTitle();
+  State<PostProjectPage> createState() => _PostProjectTitle();
 }
 
-class _PostProjectTitle extends State<PostProjectTitle> {
-  static const List<String> durationStrings = [
-    "1 - 3 months",
-    "3 - 6 months",
-    "6 - 12 months",
-  ];
-
+class _PostProjectTitle extends State<PostProjectPage> {
   late final Project _project;
 
   @override
@@ -36,9 +30,9 @@ class _PostProjectTitle extends State<PostProjectTitle> {
       child: Center(
         child: FractionallySizedBox(
           widthFactor: 0.875,
-          heightFactor: 0.9,
           child: ListView(
             children: [
+              const SizedBox(height: 30),
               Text(
                 "Create a new project",
                 style: context.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -92,15 +86,15 @@ class _PostProjectTitle extends State<PostProjectTitle> {
   List<Widget> _getDurationWidgets() {
     var widgets = <Widget>[];
 
-    for (int i = 0; i < durationStrings.length; ++i) {
+    for (var scope in ProjectScope.values) {
       widgets.add(ListTile(
         leading: Radio(
-          value: i,
+          value: scope,
           groupValue: _project.projectScope,
-          onChanged: (value) => setState(() => _project.projectScope = value ?? -1),
+          onChanged: (value) => setState(() => _project.projectScope = value ?? ProjectScope.short),
         ),
         title: Text(
-          durationStrings[i],
+          scope.description,
           style: Theme.of(context).textTheme.bodyLarge
         )
       ));
@@ -110,11 +104,6 @@ class _PostProjectTitle extends State<PostProjectTitle> {
   }
 
   void _onPostProjet(BuildContext context) {
-    if (_project.projectScope < 0) {
-      context.showTextSnackBar("Please choose a duration");
-      return;
-    }
-
     if (_project.numberOfStudent <= 0) {
       context.showTextSnackBar("Please specify the number of student needed");
       return;

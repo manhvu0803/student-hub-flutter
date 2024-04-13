@@ -1,3 +1,7 @@
+import 'project_scope.dart';
+
+export 'project_scope.dart';
+
 class Project {
   int id = -1;
   String title = '';
@@ -7,7 +11,7 @@ class Project {
   String description = '';
   String companyId = "";
   String companyName = "";
-  int projectScope = -1;
+  ProjectScope projectScope = ProjectScope.short;
   int numberOfStudent = -1;
   int type = -1;
   int proposalCount = -1;
@@ -17,16 +21,16 @@ class Project {
 
   Project.fromJson(Map<String, dynamic> json) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    createdAt = json["createdAt"] ?? DateTime.now(),
-    updatedAt = json["updatedAt"],
-    deletedAt = json["deletedAt"],
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
     description = json["description"] ?? json["desc"],
-    companyId = json["companyId"],
-    companyName = json["companyName"],
-    projectScope = json["projectScopeFlag"],
-    title = json["title"],
-    numberOfStudent = json["numberOfStudent"],
-    type = json["type"],
-    proposalCount = json["countProposals"],
+    companyId = json["companyId"] ?? "",
+    companyName = json["companyName"] ?? "",
+    projectScope = ProjectScope.fromFlag(json["projectScopeFlag"] ?? -1),
+    title = json["title"] ?? -1,
+    numberOfStudent = json["numberOfStudent"] ?? -1,
+    type = json["type"] ?? -1,
+    proposalCount = json["countProposals"] ?? -1,
     isFavorite = json["isFavorite"] ?? false;
 }

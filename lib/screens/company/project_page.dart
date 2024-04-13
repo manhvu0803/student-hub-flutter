@@ -31,6 +31,23 @@ class ProjectPage extends StatelessWidget {
             Tab(text: "Hired"),
           ]
         ),
+        customActions: [
+          MenuBar(children: [
+            SubmenuButton(
+              menuChildren: [
+                MenuItemButton(
+                  onPressed: () {},
+                  child: const Text("Delete project")
+                ),
+                MenuItemButton(
+                  onPressed: () {},
+                  child: const Text("Update info")
+                )
+              ],
+              child: const Icon(Icons.more_vert),
+            ),
+          ])
+        ],
         child: const TabBarView(
           children: [
             ProjectProposalView(),
@@ -38,7 +55,7 @@ class ProjectPage extends StatelessWidget {
             ChatListView(),
             ProjectHiredView(),
           ],
-        )
+        ),
       ),
     );
   }

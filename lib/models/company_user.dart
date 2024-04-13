@@ -1,9 +1,13 @@
+import 'company_size.dart';
+
+export 'company_size.dart';
+
 class CompanyUser{
   int id = -1;
   String name = '';
   String website = '';
   String description = '';
-  int size = 0;
+  CompanySize size = CompanySize.veryLarge;
 
   CompanyUser();
 
@@ -12,5 +16,5 @@ class CompanyUser{
     name = json["companyName"] ?? json["name"] ?? json["Name"],
     website = json["website"] ?? json["Website"] ?? "",
     description = json["description"] ?? json["Description"] ?? "",
-    size = json["size"] ?? json["Size"];
+    size = CompanySize.fromFlag(json["size"] ?? json["Size"] ?? -1);
 }

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
+import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/screens/post_project_page.dart';
 import 'package:student_hub_flutter/screens/company/project_page.dart';
+import 'package:student_hub_flutter/client/company_client.dart' as client;
+import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
 class CompanyDashboard extends StatelessWidget {
   const CompanyDashboard({super.key});
@@ -15,7 +18,7 @@ class CompanyDashboard extends StatelessWidget {
       children: [
         Center(
           child: ElevatedButton(
-            onPressed: () => context.pushRoute((context) => const PostProjectTitle()),
+            onPressed: () => context.pushRoute((context) => const PostProjectPage()),
             child: const Text("Post a project")
           ),
         ),
@@ -54,21 +57,27 @@ class _DashboardProjectListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        _DashboardProjectCard(
-          title: "Senior frontend developer (Fintech)",
-          createTime: DateTime.now().subtract(const Duration(days: 3)),
-          requests: const [
-            "Clear expectation about your project or deliverables",
-            "Detail tasks"
-          ],
-          proposalCount: 2,
-          messageCount: 4,
-          hireCount: 1
-        )
-      ]
+    return RefreshableFutureBuilder(
+      fetcher: client.getProjects,
+      builder: (context, data) => ListView(children: _getProjectCard(data))
     );
+  }
+
+  List<Widget> _getProjectCard(List<Project> projects) {
+    var cards = <Widget>[];
+
+    for (var project in projects) {
+      cards.add(_DashboardProjectCard(
+        title: project.title,
+        createTime: project.createdAt,
+        requests: const [],
+        proposalCount: project.proposalCount,
+        messageCount: 0,
+        hireCount: 0
+      ));
+    }
+
+    return cards;
   }
 }
 
@@ -99,7 +108,7 @@ class _DashboardProjectCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: InkWell(
-        onTap: () => context.pushRoute((context) => const ProjectPage(projectName: "projectName")),
+        onTap: () => context.pushRoute((context) => ProjectPage(projectName: title)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -118,7 +127,7 @@ class _DashboardProjectCard extends StatelessWidget {
                     style: TextStyle(color: context.textTheme.titleMedium!.color!.withAlpha(255 ~/ 1.5)),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  if (requests.isNotEmpty) Text(
                     "Student are looking for",
                     style: context.textTheme.titleMedium,
                   ),

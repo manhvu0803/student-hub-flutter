@@ -5,7 +5,6 @@ import './account_client.dart';
 import 'package:student_hub_flutter/models/user.dart';
 
 export './account_client.dart';
-export './company_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
 

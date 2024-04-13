@@ -46,3 +46,4 @@ macos/
 linux/
 web/
 ios/
+main_*.dart
