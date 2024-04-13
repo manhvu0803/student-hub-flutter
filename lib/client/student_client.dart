@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/category.dart';
-import 'package:student_hub_flutter/models/language.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
 import 'client.dart';
 

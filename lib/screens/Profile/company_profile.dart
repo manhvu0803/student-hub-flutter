@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/company_user.dart';
+import 'package:student_hub_flutter/widgets/page_screen.dart';
+import 'package:student_hub_flutter/widgets/title_text.dart';
+import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/client/company_client.dart' as client;
 
 class CompanyProfile extends StatefulWidget {
   const CompanyProfile({super.key});
@@ -8,241 +14,116 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfile extends State<CompanyProfile> {
-  late TextEditingController nameController;
-  late TextEditingController websiteController;
-  late TextEditingController descController;
-  late String noEmployee;
+  late CompanyUser _company;
+  late TextEditingController _nameTextController;
+  late TextEditingController _websiteTextController;
+  late TextEditingController _descriptionTextController;
 
-  late CompanyUser user;
-
-  late bool firstCreate;
   @override
   void initState() {
     super.initState();
-    // fetch user
-    firstCreate = false;
-    // if(user.id = -1) firstCreate = true;
-    user = CompanyUser();
-
-    nameController = TextEditingController(text: user.name);
-    websiteController = TextEditingController(text: user.website);
-    descController = TextEditingController(text: user.description);
-    noEmployee = user.size.toString();
-
-    setState(() {});
+    _company = client.user?.company ?? CompanyUser();
+    _nameTextController = TextEditingController()..text = _company.name;
+    _websiteTextController = TextEditingController()..text = _company.website;
+    _descriptionTextController = TextEditingController()..text = _company.description;
   }
 
-  List<Widget> buildChildren() {
-    List<Widget> builder = [];
-    if (firstCreate) {
-      builder.addAll([
-        Text("walcome",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold)),
-        Text("Tell us", style: Theme.of(context).textTheme.bodyMedium),
-      ]);
-    }
-    builder.addAll([
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text("How many",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold)),
-      ),
-      ListTile(
-        title:
-            Text("It's just me", style: Theme.of(context).textTheme.bodyMedium),
-        leading: Radio<String>(
-          value: "It's just me",
-          groupValue: noEmployee,
-          onChanged: (value) {
-            setState(() {
-              noEmployee = value!;
-            });
-          },
-        ),
-      ),
-      ListTile(
-        title: Text("2-9 employees",
-            style: Theme.of(context).textTheme.bodyMedium),
-        leading: Radio<String>(
-          value: "2-9 employees",
-          groupValue: noEmployee,
-          onChanged: (value) {
-            setState(() {
-              noEmployee = value!;
-            });
-          },
-        ),
-      ),
-      ListTile(
-        title: Text("10-99 employees",
-            style: Theme.of(context).textTheme.bodyMedium),
-        leading: Radio<String>(
-          value: "10-99 employees",
-          groupValue: noEmployee,
-          onChanged: (value) {
-            setState(() {
-              noEmployee = value!;
-            });
-          },
-        ),
-      ),
-      ListTile(
-        title: Text("100-1000 employees",
-            style: Theme.of(context).textTheme.bodyMedium),
-        leading: Radio<String>(
-          value: "100-1000 employees",
-          groupValue: noEmployee,
-          onChanged: (value) {
-            setState(() {
-              noEmployee = value!;
-            });
-          },
-        ),
-      ),
-      ListTile(
-        title: Text("More than 1000 employees",
-            style: Theme.of(context).textTheme.bodyMedium),
-        leading: Radio<String>(
-          value: "More than 1000 employees",
-          groupValue: noEmployee,
-          onChanged: (value) {
-            setState(() {
-              noEmployee = value!;
-            });
-          },
-        ),
-      ),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text("Company",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold)),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        child: TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Company name',
-          ),
-          controller: nameController,
-        ),
-      ),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text("Website",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold)),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        child: TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Website url',
-          ),
-          controller: websiteController,
-        ),
-      ),
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Text("Description",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold)),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        child: TextField(
-          minLines: 3,
-          maxLines: 5,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Describe company',
-          ),
-          controller: descController,
-        ),
-      ),
-    ]);
-    if (firstCreate) {
-      builder.add(Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                padding: const EdgeInsets.all(15)),
-            child: const Text("Continue"),
-          )));
-    } else {
-      builder.add(Align(
-        alignment: Alignment.centerRight,
-        child: Row(
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  padding: const EdgeInsets.all(15)),
-              child: const Text("Edit"),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  padding: const EdgeInsets.all(15)),
-              child: const Text("Cancel"),
-            )
-          ],
-        ),
-      ));
-    }
-    return builder;
+  @override
+  void dispose() {
+    _nameTextController.dispose();
+    _websiteTextController.dispose();
+    _descriptionTextController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Student hub"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 6),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Save'),
+    return PageScreen(
+      title: "Company profile",
+      customActions: [
+        TextButton(
+          onPressed: () => _saveChanges(context),
+          child: const Text("Save changes")
+        )
+      ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          children: [
+            const SizedBox(height: 20),
+
+            const TitleText("Name"),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Your company name',
               ),
-            )
+              controller: _nameTextController,
+            ),
+            const SizedBox(height: 30),
+
+            const TitleText("Size"),
+            ..._getCompanySizeRadioButtons(),
+            const SizedBox(height: 30),
+
+            const TitleText("Website"),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Your company landing page',
+              ),
+              controller: _websiteTextController,
+            ),
+            const SizedBox(height: 30),
+
+            const TitleText("Description"),
+            TextField(
+              maxLines: null,
+              decoration: const InputDecoration(
+                hintText: 'Describe your company',
+              ),
+              controller: _descriptionTextController,
+            ),
+            const SizedBox(height: 40),
           ],
         ),
-        body: Center(
-            child: FractionallySizedBox(
-          widthFactor: 0.9,
-          heightFactor: .9,
-          child: Column(
-            children: buildChildren(),
-          ),
-        )));
+      )
+    );
+  }
+
+  List<Widget> _getCompanySizeRadioButtons() {
+    return CompanySize.values.mapToList((size) => Padding(
+      padding: const EdgeInsets.only(left: 18.0),
+      child: ListTile(
+        leading: Radio(
+          value: size,
+          groupValue: _company.size,
+          onChanged: (value) => setState(() => _company.size = value ?? CompanySize.one),
+        ),
+        title: Text(size.description),
+      ),
+    ));
+  }
+
+  Future<void> _saveChanges(BuildContext context) async {
+    _company.name = _nameTextController.text;
+    _company.website = _websiteTextController.text;
+    _company.description = _descriptionTextController.text;
+    context.showLoadingDialog();
+
+    try {
+      await client.updateProfile(_company);
+    }
+    catch (e) {
+      if (context.mounted) {
+        context.showTextSnackBar(e.toString());
+      }
+    }
+
+    if (context.mounted) {
+      Navigator.pop(context);
+      context.showTextSnackBar(
+        "Profile saved",
+        duration: const Duration(seconds: 2)
+      );
+    }
   }
 }

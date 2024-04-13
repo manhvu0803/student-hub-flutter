@@ -12,11 +12,11 @@ enum CompanySize {
 
   static CompanySize fromFlag(int flag) {
     return switch (flag) {
-      0 => one,
       1 => small,
       2 => medium,
       3 => large,
-      _ => veryLarge
+      4 => veryLarge,
+      _ => one,
     };
   }
 }

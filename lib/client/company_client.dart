@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:student_hub_flutter/models/company_user.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:http/http.dart' as http;
-import './client.dart';
+import 'client.dart';
 
 Future<Project> createProject(Project project) async {
   _checkLogInState();
@@ -15,10 +16,7 @@ Future<Project> createProject(Project project) async {
       "description": project.description,
       "numberOfStudents": project.numberOfStudent
     }),
-    headers: {
-      "Authorization": "Bearer $token",
-      "Content-Type": "application/json"
-    }
+    headers: authJsonHeaders
   );
 
   var json = handleResponse(response);
@@ -44,6 +42,24 @@ Future<List<Project>> getProjects() async {
   );
 
   return projects;
+}
+
+Future<void> updateProfile(CompanyUser company) async {
+  _checkLogInState();
+
+  var response = await http.put(
+    Uri.parse("$baseUrl/api/profile/company/${user!.company!.id}"),
+    headers: authJsonHeaders,
+    body: jsonEncode({
+      "companyName": company.name,
+      "size": company.size.flag,
+      "website": company.website,
+      "description": company.description
+    })
+  );
+
+  handleResponse(response);
+  user!.company = company;
 }
 
 _checkLogInState() {

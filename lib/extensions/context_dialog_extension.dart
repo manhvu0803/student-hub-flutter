@@ -58,17 +58,23 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
-  void showTextSnackBar(String text) {
-    showSnackBar(Text(
-      text,
-      textAlign: TextAlign.center
-    ));
+  void showTextSnackBar(String text, {Duration? duration}) {
+    showSnackBar(
+      Text(
+        text,
+        textAlign: TextAlign.center
+      ),
+      duration: duration
+    );
   }
 
-  void showSnackBar(Widget content) {
+  void showSnackBar(Widget content, {Duration? duration}) {
     ScaffoldMessenger
       .of(this)
-      .showSnackBar(SnackBar(content: content));
+      .showSnackBar(SnackBar(
+        content: content,
+        duration: duration ?? const Duration(seconds: 4),
+      ));
   }
 
   Dialog _buildDialog(Widget child, {double insetPadding = 16, double childPadding = 24}) {

@@ -8,6 +8,7 @@ import 'package:student_hub_flutter/widgets/page_screen.dart';
 import 'package:student_hub_flutter/client/client.dart' as client;
 import 'package:student_hub_flutter/client/student_client.dart' as client;
 import 'package:student_hub_flutter/widgets/skill_button.dart';
+import '../../widgets/title_text.dart';
 import 'modify_language_dialog.dart';
 import 'skill_dialog.dart';
 
@@ -45,7 +46,7 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const _TitleText("Tech stack"),
+                const TitleText("Tech stack"),
                 const Spacer(),
                 DropdownButton(
                   value: _user.techStack,
@@ -133,10 +134,22 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
 
   Future<void> _saveChanges(BuildContext context) async {
     context.showLoadingDialog();
-    await client.updateProfile(_user);
+
+    try {
+      await client.updateProfile(_user);
+    }
+    catch (e) {
+      if (context.mounted) {
+        context.showTextSnackBar(e.toString());
+      }
+    }
 
     if (context.mounted) {
       Navigator.pop(context);
+      context.showTextSnackBar(
+        "Profile saved",
+        duration: const Duration(seconds: 2)
+      );
     }
   }
 
@@ -179,7 +192,7 @@ class _AddableTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _TitleText(title),
+        TitleText(title),
         const Spacer(),
         IconButton(
           onPressed: onAddPressed,
@@ -212,20 +225,6 @@ class _SkillListTile extends StatelessWidget {
         onPressed: onMorePressed,
         icon: const Icon(Icons.more_horiz)
       )
-    );
-  }
-}
-
-class _TitleText extends StatelessWidget {
-  final String text;
-
-  const _TitleText(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
     );
   }
 }

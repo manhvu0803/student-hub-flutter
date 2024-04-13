@@ -3,6 +3,8 @@ import 'package:student_hub_flutter/client/client.dart';
 import 'package:http/http.dart' as http;
 import 'package:student_hub_flutter/models/user.dart';
 
+String userEmail = "";
+
 Future<void> getUserInfo() async {
   if (token.isEmpty) {
     throw Exception("Hasn't logged in yet");
@@ -51,8 +53,11 @@ Future<void> signIn(String email, String password) async {
   var json = handleResponse(response);
   token = json["result"]?["token"] ?? json["token"] ?? json ?? "";
 
+  userEmail = email;
+
   await Future.wait([
     prefs.setString("token", token),
+    prefs.setString("email", userEmail),
     getUserInfo()
   ]);
 }

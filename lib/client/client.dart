@@ -2,27 +2,28 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_hub_flutter/client/student_client.dart';
-import 'account_client.dart';
 import 'package:student_hub_flutter/models/user.dart';
+import 'account_client.dart';
 
 export 'account_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
+
+String token = "";
+User? user;
+late final SharedPreferences prefs;
 
 Map<String, String> get authJsonHeaders => {
   "Content-Type": "application/json",
   "Authorization": "Bearer $token",
 };
 
-String token = "";
-User? user;
-late final SharedPreferences prefs;
-
 Future<void> init() async {
   prefs = await SharedPreferences.getInstance();
   token = prefs.getString("token") ?? "";
+  userEmail = prefs.getString("email") ?? "";
 
-  if (token.isNotEmpty) {
+  if (token.isNotEmpty && userEmail.isNotEmpty) {
     await getUserInfo();
     await Future.wait([
       getSkillSets(),
