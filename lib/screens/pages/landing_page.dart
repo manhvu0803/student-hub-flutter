@@ -19,19 +19,25 @@ class LandingPage extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)
             ),
             const SizedBox(height: 32),
-            Text(
-              "StudentHub is university market place to connect high-skilled student and company on a real-world project",
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                "StudentHub is university market place to connect high-skilled student and company on a real-world project",
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 32),
             const _UserTypeButton(Icons.school, "Student"),
             const _UserTypeButton(Icons.apartment, "Company"),
-            const SizedBox(height: 32),
-            Text(
-              "Find and onboard best-skilled student for your product. Student works to gain experience & skills from real-world projects",
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
+            const SizedBox(height: 42),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                "Find and onboard best-skilled student for your product. Student works to gain experience & skills from real-world projects",
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
             )
           ],
         ),

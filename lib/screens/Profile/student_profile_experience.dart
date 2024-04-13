@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/models/category.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
-import 'package:student_hub_flutter/screens/Profile/student_profile_files.dart';
+import 'student_profile_files.dart';
 
 class StudentProfileExperience extends StatefulWidget {
   const StudentProfileExperience({super.key, required this.studentUser});
@@ -11,27 +12,22 @@ class StudentProfileExperience extends StatefulWidget {
 }
 
 class _StudentProfileExperience extends State<StudentProfileExperience> {
-  List<Project> list = [
-    Project("name", DateTime.now(), DateTime.now(), "desc", ["SQL", "Node"])
-  ];
-  
-  List<Widget> populateSkills(List<String> skillset) {
-  
+  List<Project> list = [Project()];
+
+  List<Widget> populateSkills(List<Category> skillset) {
     List<Widget> builder = [];
-    for (String e in skillset) {
+    for (var category in skillset) {
       builder.add(Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           color: Colors.green,
         ),
-        child: Text(e),
+        child: Text(category.name),
       ));
     }
     return builder;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +79,12 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(proj.name,
+                                  Text(proj.title,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium),
                                   Text(
-                                      "${proj.timeStart.month}/${proj.timeStart.year} - ${proj.timeEnd.month}/${proj.timeEnd.year}",
+                                      "${proj.createdAt.month}/${proj.createdAt.year}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium)
@@ -102,7 +98,7 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
                                   onPressed: () {},
                                   icon: const Icon(Icons.abc)),
                             ]),
-                            Text(proj.desc),
+                            Text(proj.description),
                             Text("Skillset",
                                 style: Theme.of(context)
                                     .textTheme
@@ -110,10 +106,8 @@ class _StudentProfileExperience extends State<StudentProfileExperience> {
                                     ?.copyWith(fontWeight: FontWeight.bold)),
                             TextButton(
                                 onPressed: () {},
-                                child: SizedBox(
+                                child: const SizedBox(
                                   height: 50,
-                                  child: Wrap(
-                                      children: populateSkills(proj.skillset)),
                                 )),
                           ],
                         );

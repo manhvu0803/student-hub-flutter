@@ -3,6 +3,7 @@ import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/company_dashboard.dart';
 import 'package:student_hub_flutter/screens/views/notification_list_view.dart';
+import 'package:student_hub_flutter/screens/views/project_list_view.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,11 +19,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedTabIndex = 0;
+  int _selectedTabIndex = 1;
 
   @override
   Widget build(BuildContext context) {
-    return PageScreen(
+    return PageScreen.account(
       bottomNavigationBar: NavigationBar(
         indicatorColor: context.colorScheme.inversePrimary,
         selectedIndex: _selectedTabIndex,
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _getChildWidget() {
     return switch (_selectedTabIndex) {
-      1 => Container(),
+      1 => const ProjectListView(),
       2 => const ChatListView(),
       3 => const NotificationListView(),
       _ => widget.isStudentUser ? Container() : const CompanyDashboard(),

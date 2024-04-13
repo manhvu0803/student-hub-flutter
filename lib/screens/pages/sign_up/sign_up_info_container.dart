@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
+import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
+import 'package:student_hub_flutter/client/client.dart' as client;
 
 class SignUpInfoContainer extends StatefulWidget {
+  final bool isStudent;
+
   final void Function()? onCreateAccount;
 
   const SignUpInfoContainer({
     super.key,
+    required this.isStudent,
     this.onCreateAccount
   });
 
@@ -81,20 +87,18 @@ class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
     );
   }
 
-  void _signUp(BuildContext context) {
-    if (_agreedToTerms) {
-      print("Sign up $_fullName $_email $_password");
-      widget.onCreateAccount?.call();
+  void _signUp(BuildContext context) async {
+    if (!_agreedToTerms) {
+      context.showTextSnackBar("You are required to agree to the Terms of Service");
       return;
     }
 
-    ScaffoldMessenger
-      .of(context)
-      .showSnackBar(const SnackBar(
-        content: Text(
-          "You are required to agree to the Terms of Service",
-          textAlign: TextAlign.center,
-        )
-      ));
+    context.showRequestLoad(
+      request: () => client.signUp(_email, _password, _fullName, widget.isStudent),
+      onRequestDone: () {
+        context.pushReplacement((context) => const LoginPage());
+        context.showTextSnackBar("Please check your inbox and verify the email address");
+      }
+    );
   }
 }
