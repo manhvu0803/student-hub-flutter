@@ -1,16 +1,30 @@
 import 'dart:io';
 
-import 'package:student_hub_flutter/models/education.dart';
-import 'package:student_hub_flutter/models/project.dart';
+import './category.dart';
 
 class StudentUser {
+  static List<Category> _getSkillSet(List<dynamic> json) {
+    var skillSets = <Category>[];
+
+    for (var innerJson in json) {
+      skillSets.add(Category.fromJson(innerJson));
+    }
+
+    return skillSets;
+  }
+
+  int id = -1;
   String name = '';
-  String techStack = '';
-  List<String> skillset = List.empty();
-  List<Education> education = List.empty();
-  List<Project> projects = List.empty();
+  Category techStack = Category();
+  List<Category> skillSet = [];
   late File cv;
   late File transcript;
 
-  
+  StudentUser();
+
+  StudentUser.fromJson(Map<String, dynamic> json) :
+    id = json["id"] ?? json["Id"] ?? json["ID"],
+    name = json["name"] ?? json["Name"] ?? "",
+    techStack = Category.fromJson(json["techStack"] ?? json["TechStack"]),
+    skillSet = _getSkillSet(json["skillSets"] ?? json["SkillSets"] ?? json["skillets"] ?? json["Skillsets"]);
 }

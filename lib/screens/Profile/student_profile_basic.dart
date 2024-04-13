@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
 import 'package:student_hub_flutter/screens/Profile/student_profile_experience.dart';
+import 'package:student_hub_flutter/client/client.dart' as client;
 
 class StudentProfileBasic extends StatefulWidget {
   const StudentProfileBasic({super.key});
@@ -17,9 +18,8 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
   @override
   void initState() {
     super.initState();
-    // fetch user
-    user = StudentUser()..techStack = list[0];
-    techstackChoice = user.techStack;
+    user = client.user?.student ?? StudentUser();
+    techstackChoice = user.techStack.name;
   }
 
   @override

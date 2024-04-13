@@ -1,59 +1,28 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import './account_client.dart';
+import 'package:student_hub_flutter/models/user.dart';
+
+export './account_client.dart';
+export './company_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
 
-String? token;
+String token = "";
+User? user;
+late final SharedPreferences prefs;
 
-Future<void> signIn(String email, String password) async {
-  var response = await http.post(
-    Uri.parse("$baseUrl/api/auth/sign-in"),
-    body: jsonEncode({
-      "email": email,
-      "password": password
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  );
+Future<void> init() async {
+  prefs = await SharedPreferences.getInstance();
+  token = prefs.getString("token") ?? "";
 
-  var json = _handleResponse(response);
-  token = json["result"]["token"];
-}
-
-Future<void> signUp(String email, String password, String fullName, bool isStudent) async {
-  var response = await http.post(
-    Uri.parse("$baseUrl/api/auth/sign-up"),
-    body: jsonEncode({
-      "email": email,
-      "password": password,
-      "fullname": fullName,
-      "role": isStudent ? 0 : 1
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  );
-
-  _handleResponse(response);
-}
-
-Future<void> logOut() async {
-  if (token == null) {
-    throw Exception("Hasn't logged in yet");
+  if (token.isNotEmpty) {
+    await getUserInfo();
   }
-
-  var response = await http.post(
-    Uri.parse("$baseUrl/api/auth/logout"),
-    headers: {
-      "Authorization": "Basic $token"
-    }
-  );
-
-  _handleResponse(response);
 }
 
-Map<String, dynamic> _handleResponse(http.Response response) {
+Map<String, dynamic> handleResponse(http.Response response) {
   var json = jsonDecode(response.body) as Map<String, dynamic>;
 
   if (200 <= response.statusCode && response.statusCode < 300) {

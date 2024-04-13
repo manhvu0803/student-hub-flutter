@@ -26,8 +26,8 @@ class _CompanyProfile extends State<CompanyProfile> {
 
     nameController = TextEditingController(text: user.name);
     websiteController = TextEditingController(text: user.website);
-    descController = TextEditingController(text: user.desc);
-    noEmployee = user.noEmployee;
+    descController = TextEditingController(text: user.description);
+    noEmployee = user.size.toString();
 
     setState(() {});
   }

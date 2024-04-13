@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/screens/pages/landing_page.dart';
+import './client/client.dart' as client;
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  client.init();
 }
 
 class MyApp extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
-import 'package:student_hub_flutter/screens/Post/post_project_title.dart';
+import 'package:student_hub_flutter/screens/post_project_page.dart';
 import 'package:student_hub_flutter/screens/company/project_page.dart';
 
 class CompanyDashboard extends StatelessWidget {
