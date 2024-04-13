@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
-import 'package:student_hub_flutter/screens/Profile/profile_page.dart';
+import 'package:student_hub_flutter/screens/profile/profile_page.dart';
 
 class PageScreen extends StatelessWidget {
   final String title;

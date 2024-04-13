@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/widgets/loading_view.dart';
 
 class RefreshableFutureBuilder<T> extends StatefulWidget {
   final Widget? childWidget;
@@ -38,29 +39,23 @@ class _RefreshableFutureBuilderState<T> extends State<RefreshableFutureBuilder<T
 
   Widget _builder(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
-      return const Column(
-        children: [
-          SizedBox(height: 100),
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: CircularProgressIndicator()
-          ),
-        ],
-      );
+      return const LoadingView();
     }
 
     if (snapshot.connectionState == ConnectionState.none || (snapshot.data == null && null is! T)) {
-      return Column(
-        children: [
-          const SizedBox(height: 100),
-          const Text("There's a problem fetching data. Please try again"),
-          const SizedBox(height: 50),
-          TextButton(
-            onPressed: () => setState(() {}),
-            child: const Text("Retry")
-          )
-        ],
+      return RefreshIndicator(
+        onRefresh: () async => setState(() {}),
+        child: Column(
+          children: [
+            const SizedBox(height: 100),
+            const Text("There's a problem fetching data. Please try again"),
+            const SizedBox(height: 50),
+            TextButton(
+              onPressed: () => setState(() {}),
+              child: const Text("Retry")
+            )
+          ],
+        ),
       );
     }
 

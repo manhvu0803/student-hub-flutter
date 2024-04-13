@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/pages/landing_page.dart';
-import './client/client.dart' as client;
+import 'package:student_hub_flutter/screens/pages/home_page.dart';
+import 'package:student_hub_flutter/screens/pages/login_page.dart';
+import 'package:student_hub_flutter/widgets/loading_view.dart';
+import 'client/client.dart' as client;
+import 'widgets/page_screen.dart';
 
 void main() async {
   runApp(const MyApp());
-  client.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +24,23 @@ class MyApp extends StatelessWidget {
           fontSizeFactor: 1.05
         )
       ),
-      home: const LandingPage()
+      home: FutureBuilder(
+        future: client.init(),
+        builder: _homeBuilder
+      )
     );
+  }
+
+  Widget _homeBuilder(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.waiting) {
+      return const PageScreen(child: LoadingView());
+    }
+
+    if ((snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.done)
+      && (snapshot.hasError || client.user == null)) {
+      return const LoginPage();
+    }
+
+    return const HomePage(isStudentUser: false);
   }
 }

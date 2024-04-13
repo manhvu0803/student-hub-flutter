@@ -33,4 +33,12 @@ class Project {
     type = json["type"] ?? -1,
     proposalCount = json["countProposals"] ?? -1,
     isFavorite = json["isFavorite"] ?? false;
+
+  @override
+  bool operator==(Object other) {
+    return other is Project && id == other.id;
+  }
+
+  @override
+  int get hashCode => id;
 }

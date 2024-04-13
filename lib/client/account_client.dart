@@ -26,7 +26,7 @@ Future<void> signUp(String email, String password, String fullName, bool isStude
       "email": email,
       "password": password,
       "fullname": fullName,
-      "role": isStudent ? 0 : 1
+      "role": isStudent ? UserRole.student.flag : UserRole.company.flag
     }),
     headers: {
       "Content-Type": "application/json"

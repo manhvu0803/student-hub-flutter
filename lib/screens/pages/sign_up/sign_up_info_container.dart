@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/icon_text_field.dart';
 import 'package:student_hub_flutter/client/client.dart' as client;

@@ -1,5 +1,5 @@
 class Category {
-  int id = -1;
+  int? id;
   String name = "";
   DateTime createdAt;
   DateTime? updatedAt;
@@ -7,10 +7,18 @@ class Category {
 
   Category() : createdAt = DateTime.now();
 
-  Category.fromJson(Map<String, dynamic> json) :
+  Category.fromJson(Map<String, dynamic> json, {String? name}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    name = json["name"] ?? json["Name"],
+    name = name ?? json["name"] ?? json["Name"],
     createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
     updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
     deletedAt = DateTime.tryParse(json["deletedAt"] ?? "");
+
+  @override
+  bool operator==(Object other) {
+    return other is Category && id == other.id;
+  }
+
+  @override
+  int get hashCode => id ?? -1;
 }

@@ -38,15 +38,10 @@ Future<List<Project>> getProjects() async {
   var json = handleResponse(response);
   var projects = <Project>[];
 
-  for (var innerJson in json["result"] ?? json) {
-    try {
-      projects.add(Project.fromJson(innerJson));
-    }
-    catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
-    }
-  }
+  parseArrayJson(
+    json: json,
+    parser: (json) => projects.add(Project.fromJson(json))
+  );
 
   return projects;
 }

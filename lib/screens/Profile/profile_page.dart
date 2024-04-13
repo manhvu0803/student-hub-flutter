@@ -1,26 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/models/company_user.dart';
-import 'package:student_hub_flutter/models/student_user.dart';
-import 'package:student_hub_flutter/screens/Profile/company_profile.dart';
-import 'package:student_hub_flutter/screens/Profile/student_profile_basic.dart';
+import 'student_profile_basic.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
-/*
-column
-  active account
-  expandable (other accounts)
-    other acc1
-    acc2
-
-  Seperator
-
-  column
-    profile
-    settings
-    logout
-*/
 
   @override
   Widget build(BuildContext context) {

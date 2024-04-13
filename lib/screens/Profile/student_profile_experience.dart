@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/models/category.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
-import 'package:student_hub_flutter/screens/Profile/student_profile_files.dart';
+import 'student_profile_files.dart';
 
 class StudentProfileExperience extends StatefulWidget {
   const StudentProfileExperience({super.key, required this.studentUser});
