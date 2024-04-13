@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/category.dart';
+import 'package:student_hub_flutter/models/language.dart';
+import 'package:student_hub_flutter/models/student_user.dart';
 import 'client.dart';
 
 Map<int, Category> techStacks = {};
@@ -40,6 +45,34 @@ Future<Map<int, Category>> _getCategories(String subUrl) async {
   );
 
   return container;
+}
+
+Future<void> updateProfile(StudentUser newStudent) async {
+  _checkLogInState();
+
+  await Future.wait([
+    http.put(
+      Uri.parse("$baseUrl/api/profile/student/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "techStackId": newStudent.techStack?.id ?? 0,
+        "skillSets": newStudent.skillSet.mapToList((skill) => skill.id)
+      })
+    ),
+    http.put(
+      Uri.parse("$baseUrl/api/language/updateByStudentId/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "languages": newStudent.languages.mapToList((language) => {
+          "id": language.id,
+          "languageName": language.name,
+          "level": language.level
+        })
+      })
+    ),
+  ]);
+
+  user!.student = newStudent;
 }
 
 _checkLogInState() {

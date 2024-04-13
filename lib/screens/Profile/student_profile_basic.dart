@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
-import 'package:student_hub_flutter/models/category.dart';
+import 'package:student_hub_flutter/models/language.dart';
 import 'package:student_hub_flutter/models/student_user.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 import 'package:student_hub_flutter/client/client.dart' as client;
 import 'package:student_hub_flutter/client/student_client.dart' as client;
+import 'package:student_hub_flutter/widgets/skill_button.dart';
+import 'modify_language_dialog.dart';
+import 'skill_dialog.dart';
 
 class StudentProfileBasic extends StatefulWidget {
   const StudentProfileBasic({super.key});
@@ -15,24 +19,28 @@ class StudentProfileBasic extends StatefulWidget {
 }
 
 class _StudentProfileBasic extends State<StudentProfileBasic> {
-  late StudentUser user;
+  late StudentUser _user;
 
   @override
   void initState() {
     super.initState();
-    user = client.user?.student ?? StudentUser();
+    _user = client.user?.student ?? StudentUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return PageScreen(
       title: "Student profile",
-      useTrailingButton: false,
+      customActions: [
+        TextButton(
+          onPressed: () => _saveChanges(context),
+          child: const Text("Save changes")
+        )
+      ],
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+        child: ListView(
+          children: [
             // Tech stack
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -40,14 +48,20 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
                 const _TitleText("Tech stack"),
                 const Spacer(),
                 DropdownButton(
-                  value: user.techStack,
+                  value: _user.techStack,
                   elevation: 16,
                   underline: Container(
                     height: 2,
                     color: Colors.deepPurpleAccent,
                   ),
-                  onChanged: (value) => setState(() => user.techStack = value),
-                  items: _getTeckStackDropdownItems(context),
+                  onChanged: (value) => setState(() => _user.techStack = value),
+                  items: client.techStacks.values.mapToList((techStack) => DropdownMenuItem(
+                    value: techStack,
+                    child: Text(
+                      techStack.name,
+                      style: Theme.of(context).textTheme.bodyLarge
+                    )
+                  )),
                 )
               ]
             ),
@@ -56,80 +70,102 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
             // Skill set
             _AddableTitle(
               "Skills",
-              onAddPressed: () {},
+              onAddPressed: () => showAdaptiveDialog(
+                context: context,
+                builder: (context) => SkillDialog(
+                  chosenSkills: _user.skillSet,
+                  onDoneChoosing: (skills) => setState(() => _user.skillSet = skills)
+                )
+              ),
             ),
-            const SizedBox(height: 10),
-            Wrap(children: _getSkillButtons()),
+            Wrap(children: _user.skillSet.mapToList((skill) => SkillButton(skill.name))),
             const SizedBox(height: 30),
 
-            // Languageset
-            _AddableTitle(
+            // Languages
+            _AddableList(
               "Language",
-              onAddPressed: () {},
+              listTiles: _user.languages.mapToList((language) => _SkillListTile(
+                language.name,
+                subtitle: language.level,
+                onMorePressed: () => showAdaptiveDialog(
+                  context: context,
+                  builder: (context) => ModifyLanguageDialog(
+                    title: "Modify language skill",
+                    language: language,
+                    onDone: (newLanguage) => _modifyUserLanguage(language, newLanguage),
+                    onDelete: () => setState(() => _user.languages.remove(language)),
+                  )
+                )
+              )),
+              onAddPressed: () => showAdaptiveDialog(
+                context: context,
+                builder: (context) => ModifyLanguageDialog(
+                  title: "Add language",
+                  onDone: (newLanguage) => _modifyUserLanguage(newLanguage, newLanguage),
+                )
+              ),
             ),
-            ..._getLanguagesTiles(),
-            const Divider(),
-            const SizedBox(height: 30),
 
             // Educations
-            _AddableTitle(
+            _AddableList(
               "Education",
+              listTiles: _user.educations.mapToList((education) => _SkillListTile(
+                education,
+                onMorePressed: () => _user.educations.remove(education),
+              )),
               onAddPressed: () {},
             ),
-            ..._getEducationTiles(),
-            const Divider(),
-            const SizedBox(height: 30),
 
             // Experiences
-            _AddableTitle(
+            _AddableList(
               "Experiences",
+              listTiles: _user.experiences.mapToList((experience) => _SkillListTile(
+                experience,
+                onMorePressed: () => _user.experiences.remove(experience),
+              )),
               onAddPressed: () {},
             ),
-            ..._getExperiencesTiles(),
-            const Divider(),
           ],
         ),
       ),
     );
   }
 
-  List<DropdownMenuItem<Category>> _getTeckStackDropdownItems(BuildContext context) {
-    return client.techStacks.values.mapToList((techStack) {
-      return DropdownMenuItem(
-        value: techStack,
-        child: Text(
-          techStack.name,
-          style: Theme.of(context).textTheme.bodyLarge
-        )
-      );
+  Future<void> _saveChanges(BuildContext context) async {
+    context.showLoadingDialog();
+    await client.updateProfile(_user);
+
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+  void _modifyUserLanguage(Language oldLanguage, Language newLanguage) {
+    setState(() {
+      _user.languages.remove(oldLanguage);
+      _user.languages.add(newLanguage);
     });
   }
+}
 
-  List<Widget> _getSkillButtons() {
-    var skills = user.skillSet;
-    return skills.mapToList((skill) => _SkillButton(skill.name));
-  }
+class _AddableList extends StatelessWidget {
+  final String title;
+  final Iterable<Widget> listTiles;
+  final void Function()? onAddPressed;
 
-  List<Widget> _getLanguagesTiles() {
-    return user.languages.mapToList((language) => _SkillListTile(
-      language.name,
-      subtitle: language.level,
-      onRemovePressed: () {},
-    ));
-  }
+  _AddableList(this.title, {this.onAddPressed, Iterable<Widget>? listTiles}) :
+    listTiles = listTiles ?? [];
 
-  List<Widget> _getEducationTiles() {
-    return user.educations.mapToList((education) => _SkillListTile(
-      education,
-      onRemovePressed: () {},
-    ));
-  }
-
-  List<Widget> _getExperiencesTiles() {
-    return user.experiences.mapToList((experience) => _SkillListTile(
-      experience,
-      onRemovePressed: () {},
-    ));
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _AddableTitle(title, onAddPressed: onAddPressed),
+        ...listTiles,
+        const Divider(),
+        const SizedBox(height: 30),
+      ],
+    );
   }
 }
 
@@ -157,9 +193,9 @@ class _AddableTitle extends StatelessWidget {
 class _SkillListTile extends StatelessWidget {
   final String title;
   final String? subtitle;
-  final void Function()? onRemovePressed;
+  final void Function()? onMorePressed;
 
-  const _SkillListTile(this.title, {this.onRemovePressed, this.subtitle});
+  const _SkillListTile(this.title, {this.onMorePressed, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -173,57 +209,10 @@ class _SkillListTile extends StatelessWidget {
         child: (subtitle == null) ? null : Text(subtitle!)
       ),
       trailing: IconButton(
-        onPressed: onRemovePressed,
-        icon: const Icon(Icons.delete)
+        onPressed: onMorePressed,
+        icon: const Icon(Icons.more_horiz)
       )
     );
-  }
-}
-
-class _SkillButton extends StatefulWidget {
-  final String name;
-  final bool togglable;
-
-  const _SkillButton(this.name, {this.togglable = false});
-
-  @override
-  State<_SkillButton> createState() => _SkillButtonState();
-}
-
-class _SkillButtonState extends State<_SkillButton> {
-  bool _isEnable = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: InkWell(
-        onTap: _onTap,
-        child: Container(
-          height: 45,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: _isEnable ? context.colorScheme.tertiaryContainer : context.colorScheme.errorContainer,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.name,
-                style: Theme.of(context).textTheme.bodyMedium
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _onTap() {
-    if (widget.togglable) {
-      setState(() => _isEnable = !_isEnable);
-    }
   }
 }
 

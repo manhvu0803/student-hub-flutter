@@ -9,6 +9,11 @@ export 'account_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
 
+Map<String, String> get authJsonHeaders => {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer $token",
+};
+
 String token = "";
 User? user;
 late final SharedPreferences prefs;
