@@ -19,4 +19,10 @@ class User {
     tryLog(() => student = StudentUser.fromJson(json["student"] ?? json["Student"]));
     tryLog(() => company = CompanyUser.fromJson(json["company"] ?? json["Company"]));
   }
+
+  @override
+  int get hashCode => id;
+
+  @override
+  bool operator ==(Object other) => other is User && id == other.id;
 }

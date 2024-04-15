@@ -6,3 +6,5 @@ export 'models/company_size.dart';
 export 'models/proposal.dart';
 export 'models/student_user.dart';
 export 'models/user.dart';
+export 'models/interview.dart';
+export 'models/message.dart';

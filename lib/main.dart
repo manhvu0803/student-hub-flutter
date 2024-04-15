@@ -5,15 +5,32 @@ import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/loading_view.dart';
 import 'client.dart' as client;
 import 'widgets/page_screen.dart';
+import 'settings.dart' as settings;
 
 void main() async {
-  runApp(const MyApp());
+  runApp(const StudentHubApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StudentHubApp extends StatefulWidget {
+  const StudentHubApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<StudentHubApp> createState() => _StudentHubAppState();
+}
+
+class _StudentHubAppState extends State<StudentHubApp> {
+  @override
+  void initState() {
+    super.initState();
+    settings.addChangeListener(_onSettingsChange);
+  }
+
+  @override
+  void dispose() {
+    settings.removeListener(_onSettingsChange);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
-          brightness: Brightness.dark
+          brightness: settings.isDarkMode ? Brightness.dark : Brightness.light
         )
       ),
       home: FutureBuilder(
@@ -49,4 +66,6 @@ class MyApp extends StatelessWidget {
       child: const HomePage(isStudentUser: false)
     );
   }
+
+  void _onSettingsChange() => setState(() {});
 }
