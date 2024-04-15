@@ -1,22 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
-import 'package:student_hub_flutter/models/category.dart';
-import 'package:student_hub_flutter/models/project.dart';
-import 'package:student_hub_flutter/models/student_user.dart';
-import 'client.dart';
+import 'package:student_hub_flutter/models.dart';
+import '../client.dart';
 
 Map<int, Category> techStacks = {};
 Map<int, Category> skillSets = {};
 
 Future<Map<int, Category>> getTeckStacks() async {
-  techStacks = await _getCategories("api/techstack/getAllTechStack");
-  return techStacks;
+  return await _getCategories("api/techstack/getAllTechStack");
 }
 
 Future<Map<int, Category>> getSkillSets() async {
-  skillSets = await _getCategories("api/skillset/getAllSkillSet");
-  return skillSets;
+  return await _getCategories("api/skillset/getAllSkillSet");
 }
 
 Future<Map<int, Category>> _getCategories(String subUrl) async {
@@ -24,9 +20,7 @@ Future<Map<int, Category>> _getCategories(String subUrl) async {
 
   var response = await http.get(
     Uri.parse("$baseUrl/$subUrl"),
-    headers: {
-      "Authorization": "Bearer $token",
-    }
+    headers: authHeaders
   );
 
   var json = handleResponse(response);
@@ -92,7 +86,43 @@ Future<void> setFavorite(Project project, bool value) async {
   // TODO: Toggle favorite API
 }
 
-_checkLogInState() {
+Future<Proposal> applyForProject({
+  required int projectId,
+  required String proposal
+}) async {
+  _checkLogInState();
+
+  var response = await http.post(
+    Uri.parse("$baseUrl/api/proposal"),
+    headers: authJsonHeaders,
+    body: jsonEncode({
+      "projectId": projectId,
+      "studentId": user!.student!.id,
+      "coverLetter": proposal
+    })
+  );
+
+  var json = handleResponse(response);
+  return Proposal.fromJson(json["result"] ?? json, student: user!.student!);
+}
+
+Future<void> patchProposal(Proposal proposal) async {
+  _checkLogInState();
+
+  var response = await http.patch(
+    Uri.parse("$baseUrl/api/proposal/${proposal.id}"),
+    headers: authJsonHeaders,
+    body: jsonEncode({
+      "coverLetter": proposal.content,
+      "statusFlag": proposal.status.flag,
+      "disableFlag": proposal.isEnabled ? 0 : 1
+    })
+  );
+
+  handleResponse(response);
+}
+
+void _checkLogInState() {
   if (token.isEmpty || user == null) {
     throw Exception("Hasn't logged in yet");
   }

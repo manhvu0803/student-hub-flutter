@@ -3,8 +3,8 @@ import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/company_dashboard.dart';
 import 'package:student_hub_flutter/screens/views/notification_list_view.dart';
-import 'package:student_hub_flutter/screens/views/project_list_view.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
+import 'package:student_hub_flutter/screens/student/project_list_view.dart';
+import 'package:student_hub_flutter/widgets.dart';
 
 class HomePage extends StatefulWidget {
   final bool isStudentUser;

@@ -3,7 +3,8 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
-import 'package:student_hub_flutter/screens/post_project_page.dart';
+import 'package:student_hub_flutter/screens/company/company_project_page.dart';
+import 'package:student_hub_flutter/screens/company/post_project_page.dart';
 import 'package:student_hub_flutter/client/company_client.dart' as client;
 import 'package:student_hub_flutter/widgets/project_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
@@ -80,6 +81,7 @@ class _DashboardProjectCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8, bottom: 4.0),
       child: ProjectCard.fromProject(
         project,
+        onPressed: () => context.pushRoute((context) => CompanyProjectPage(project)),
         contentBottom: _getRequestWidget(context),
         bottom: Padding(
           padding: const EdgeInsets.only(top: 10.0),
@@ -97,7 +99,7 @@ class _DashboardProjectCard extends StatelessWidget {
   }
 
   Widget? _getRequestWidget(BuildContext context) {
-    if (project.requests.isEmpty) {
+    if (project.proposals.isEmpty) {
       return null;
     }
 
@@ -111,7 +113,7 @@ class _DashboardProjectCard extends StatelessWidget {
             "Student are looking for",
             style: context.textTheme.titleMedium,
           ),
-          ...project.requests.map((request) => Text(
+          ...project.proposals.map((request) => Text(
             " - $request",
             style: context.textTheme.bodyMedium,
           ))

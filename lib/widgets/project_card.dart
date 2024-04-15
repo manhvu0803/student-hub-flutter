@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
-import 'package:student_hub_flutter/screens/company/project_page.dart';
 
 class ProjectCard extends StatelessWidget {
   final String title;
@@ -15,6 +12,7 @@ class ProjectCard extends StatelessWidget {
   final Widget? trailing;
   final Widget? contentBottom;
   final Widget? bottom;
+  final void Function()? onPressed;
 
   const ProjectCard({
     super.key,
@@ -26,6 +24,7 @@ class ProjectCard extends StatelessWidget {
     this.bottom,
     this.leading,
     this.trailing,
+    this.onPressed,
   });
 
   ProjectCard.fromProject(Project project, {
@@ -33,7 +32,8 @@ class ProjectCard extends StatelessWidget {
     this.contentBottom,
     this.bottom,
     this.leading,
-    this.trailing
+    this.trailing,
+    this.onPressed
   }) :
     title = project.title,
     description = project.description,
@@ -45,7 +45,8 @@ class ProjectCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: InkWell(
-        onTap: () => context.pushRoute((context) => ProjectPage(projectName: title)),
+        borderRadius: BorderRadius.circular(12),
+        onTap: onPressed,
         child: Row(
           children: [
             if (leading != null) leading!,

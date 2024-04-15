@@ -3,10 +3,8 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/sign_up/sign_up_page.dart';
-import 'package:student_hub_flutter/widgets/extra_option_container.dart';
-import 'package:student_hub_flutter/widgets/icon_text_field.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
-import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/widgets.dart';
+import 'package:student_hub_flutter/client.dart' as client;
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

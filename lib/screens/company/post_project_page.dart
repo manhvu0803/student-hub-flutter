@@ -90,8 +90,8 @@ class _PostProjectTitle extends State<PostProjectPage> {
       widgets.add(ListTile(
         leading: Radio(
           value: scope,
-          groupValue: _project.projectScope,
-          onChanged: (value) => setState(() => _project.projectScope = value ?? ProjectScope.short),
+          groupValue: _project.scope,
+          onChanged: (value) => setState(() => _project.scope = value ?? ProjectScope.short),
         ),
         title: Text(
           scope.description,

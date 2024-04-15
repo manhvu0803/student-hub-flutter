@@ -28,7 +28,7 @@ class StudentUser {
 
   StudentUser.fromJson(Map<String, dynamic> json) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    name = json["name"] ?? json["Name"] ?? "",
+    name = json["name"] ?? json["Name"] ?? json["fullname"] ?? json["user"]?["fullname"] ?? "",
     techStack = Category.fromJson(json["techStack"] ?? json["TechStack"]),
     skillSet = _getSkillSet(json),
     educations = List<String>.from(json["educations"] ?? json["education"] ?? []),

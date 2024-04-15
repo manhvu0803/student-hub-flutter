@@ -3,9 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_hub_flutter/client/student_client.dart';
 import 'package:student_hub_flutter/models/user.dart';
-import 'account_client.dart';
+import 'client/account_client.dart';
 
-export 'account_client.dart';
+export 'client/account_client.dart';
+export 'client/data_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
 

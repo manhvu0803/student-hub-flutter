@@ -4,6 +4,7 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
+import 'package:student_hub_flutter/screens/student/student_project_page.dart';
 import 'package:student_hub_flutter/widgets/project_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
@@ -24,7 +25,7 @@ class _ProjectListViewState extends State<ProjectListView> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: SearchBar(
@@ -32,13 +33,13 @@ class _ProjectListViewState extends State<ProjectListView> {
               hintStyle: const MaterialStatePropertyAll(TextStyle(fontStyle: FontStyle.italic)),
               onChanged: (value) => _titleQuery = value,
               onSubmitted: (value) => setState(() => _titleQuery = value),
-              trailing: const [Padding(
-                padding: EdgeInsets.only(right: 8.0),
+              leading: const Padding(
+                padding: EdgeInsets.only(left: 8.0, top: 2),
                 child: Icon(Icons.search),
-              )],
+              ),
             )
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Expanded(
             child: RefreshableFutureBuilder(
               fetcher: () => client.searchProject(
@@ -100,18 +101,22 @@ class _ListViewProjectCardState extends State<_ListViewProjectCard> {
       padding: const EdgeInsets.only(bottom: 12.0),
       child: ProjectCard.fromProject(
         widget.project,
+        onPressed: () => context.pushRoute((context) => StudentProjectPage(_project)),
         trailing: Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: IconButton(
-            onPressed: _onToggleFavorite,
-            icon: Icon(widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline),
+            onPressed: () => _onToggleFavorite(context),
+            icon: Icon(
+              widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline,
+              color: Colors.red
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _onToggleFavorite() async {
+  void _onToggleFavorite(BuildContext context) async {
     try {
       await client.setFavorite(_project, !_project.isFavorite);
       setState(() => _project.isFavorite = !_project.isFavorite);

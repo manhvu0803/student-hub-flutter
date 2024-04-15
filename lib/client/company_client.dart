@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:student_hub_flutter/models/company_user.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:http/http.dart' as http;
-import 'client.dart';
+import '../client.dart';
 
 Future<Project> createProject(Project project) async {
   _checkLogInState();
@@ -11,7 +11,7 @@ Future<Project> createProject(Project project) async {
     Uri.parse("$baseUrl/api/project"),
     body: jsonEncode({
       "companyId": user!.company!.id,
-      "projectScopeFlag": project.projectScope,
+      "projectScopeFlag": project.scope,
       "title": project.title,
       "description": project.description,
       "numberOfStudents": project.numberOfStudent

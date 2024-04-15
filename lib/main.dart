@@ -3,7 +3,7 @@ import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/loading_view.dart';
-import 'client/client.dart' as client;
+import 'client.dart' as client;
 import 'widgets/page_screen.dart';
 
 void main() async {

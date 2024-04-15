@@ -3,19 +3,12 @@ import 'package:student_hub_flutter/widgets/account_menu_button.dart';
 
 class PageScreen extends StatelessWidget {
   final String title;
-
   final Widget child;
-
   final Widget? bottomNavigationBar;
-
   final PreferredSizeWidget? appBarBottom;
-
   final bool? hasBackButton;
-
   final Widget? floatingActionButton;
-
   final void Function()? customBackButtonCallback;
-
   final List<Widget>? actions;
 
   const PageScreen({
@@ -46,7 +39,11 @@ class PageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
+        title: Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         leading: _getBackButton(context),
         actions: actions,
         bottom: appBarBottom,
