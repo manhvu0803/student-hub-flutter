@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as chat;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' as chat_ui;
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/screens/dialog_view/schedule_interview_view.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 import 'package:student_hub_flutter/settings.dart' as settings;
 import 'package:student_hub_flutter/client.dart' as client;
@@ -64,6 +66,18 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return PageScreen(
       title: "${widget.recipient.fullName} - ${widget.masterMessage.project.title}",
+      actions: [MenuAnchor(
+        menuChildren: [
+          MenuItemButton(
+            child: const Text("Schedule meeting"),
+            onPressed: () => _showInterviewDialog(context),
+          )
+        ],
+        builder: (context, controller, child) => IconButton(
+          onPressed: () => controller.isOpen ? controller.close() : controller.open(),
+          icon: const Icon(Icons.more_vert)
+        ),
+      )],
       child: chat_ui.Chat(
         user: _owner,
         onSendPressed: (text) => onSendPressed(context, text),
@@ -100,8 +114,28 @@ class _ChatPageState extends State<ChatPage> {
       author: (message.sender.id == widget.recipient.id) ? _recipient : _owner,
       createdAt: message.createdAt.millisecondsSinceEpoch,
       id: message.id.toString(),
-      text: message.content
+      text: _getMessageContent(message)
     );
+  }
+
+  String _getMessageContent(Message message) {
+    if (message.meeting != null) {
+      var meeting = message.meeting!;
+      var buffer = StringBuffer("Meeting: ");
+      buffer.write(meeting.title);
+      buffer.write("\nFrom: ");
+      buffer.write(meeting.startTime.toDateTimeString());
+      buffer.write("\nTo: ");
+      buffer.write(meeting.endTime.toDateTimeString());
+
+      if (message.content.isNotEmpty) {
+        buffer.write(meeting.content);
+      }
+
+      return buffer.toString();
+    }
+
+    return message.content;
   }
 
   Future<void> onSendPressed(BuildContext context, chat.PartialText text) async {
@@ -126,5 +160,17 @@ class _ChatPageState extends State<ChatPage> {
         context.showTextSnackBar(e.toString());
       }
     }
+  }
+
+  void _showInterviewDialog(BuildContext context) {
+    showAdaptiveDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ScheduleInterviewView(
+          projectId: widget.masterMessage.project.id,
+          receiverId: widget.recipient.id,
+        ),
+      )
+    );
   }
 }

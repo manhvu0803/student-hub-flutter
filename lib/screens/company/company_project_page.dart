@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/project_detail_view.dart';
@@ -18,7 +17,7 @@ class CompanyProjectPage extends StatelessWidget {
       length: 4,
       child: PageScreen(
         title: project.title,
-        floatingActionButton: FloatingActionButton(onPressed: () => context.showScheduleInterviewDialog()),
+        floatingActionButton: FloatingActionButton(onPressed: () {}),
         appBarBottom: const TabBar(
           labelPadding: EdgeInsets.symmetric(horizontal: 0),
           indicatorSize: TabBarIndicatorSize.tab,

@@ -39,6 +39,7 @@ dependencies:
   flutter_chat_types: ^3.6.2
   http: ^1.2.1
   shared_preferences: ^2.2.3
+  floating_draggable_widget: ^2.1.5
 
 dev_dependencies:
   flutter_test:

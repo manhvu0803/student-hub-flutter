@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/dialog_view/schedule_interview_view.dart';
 
 extension ContextDialogExtension on BuildContext {
   void pushRoute(Widget Function(BuildContext context) builder) {
@@ -8,13 +7,6 @@ extension ContextDialogExtension on BuildContext {
 
   void pushReplacement(Widget Function(BuildContext context) builder) {
     Navigator.pushReplacement(this, MaterialPageRoute(builder: builder));
-  }
-
-  Future<T?> showScheduleInterviewDialog<T>() {
-    return showDialog<T>(
-      context: this,
-      builder: (context) => _buildDialog(const ScheduleInterviewView())
-    );
   }
 
   Future<void> showRequestLoad<T>({

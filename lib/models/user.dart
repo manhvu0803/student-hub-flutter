@@ -12,12 +12,19 @@ class User {
 
   User();
 
-  User.fromJson(Map<String, dynamic> json) :
+  User.fromJson(Map<String, dynamic> json, {this.student, this.company}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
     fullName = json["fullname"] ?? json["Fullname"] ?? json["fullName"] ?? json["FullName"]
   {
-    tryLog(() => student = StudentUser.fromJson(json["student"] ?? json["Student"]));
-    tryLog(() => company = CompanyUser.fromJson(json["company"] ?? json["Company"]));
+    var innerJson = json["student"] ?? json["Student"];
+    if (student == null && innerJson != null) {
+      tryLog(() => student = StudentUser.fromJson(innerJson));
+    }
+
+    innerJson = json["company"] ?? json["Company"];
+    if (company == null) {
+      tryLog(() => company = CompanyUser.fromJson(innerJson));
+    }
   }
 
   @override

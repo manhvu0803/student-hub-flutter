@@ -40,6 +40,7 @@ class ChatListView extends StatelessWidget {
                   title: message.project.title,
                   lastMessage: message.content,
                   lastMessageTime: message.createdAt,
+                  isLastMessageUser: message.sender.id == client.user!.id,
                   onTap: () => pushChatPage(context, message)
                 ))
               ),
@@ -65,6 +66,7 @@ class _ChatTitleCard extends StatelessWidget {
   final String lastMessage;
   final DateTime lastMessageTime;
   final void Function()? onTap;
+  final bool isLastMessageUser;
 
   const _ChatTitleCard({
     // ignore: unused_element
@@ -73,7 +75,8 @@ class _ChatTitleCard extends StatelessWidget {
     required this.title,
     required this.lastMessage,
     required this.lastMessageTime,
-    this.onTap
+    this.onTap,
+    this.isLastMessageUser = true
   });
 
   @override
@@ -113,7 +116,7 @@ class _ChatTitleCard extends StatelessWidget {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  "You: $lastMessage",
+                  "${isLastMessageUser ? "You" : "Other"}: $lastMessage",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

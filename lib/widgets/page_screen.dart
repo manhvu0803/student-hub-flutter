@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/widgets/account_menu_button.dart';
 
 class PageScreen extends StatelessWidget {
@@ -36,21 +37,26 @@ class PageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-          title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        leading: _getBackButton(context),
-        actions: actions,
-        bottom: appBarBottom,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: context.textTheme.apply(fontSizeFactor: 1.1)
       ),
-      floatingActionButton: floatingActionButton,
-      bottomNavigationBar: bottomNavigationBar,
-      body: SafeArea(child: child),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          leading: _getBackButton(context),
+          actions: actions,
+          bottom: appBarBottom,
+        ),
+        floatingActionButton: floatingActionButton,
+        bottomNavigationBar: bottomNavigationBar,
+        body: SafeArea(child: child),
+      ),
     );
   }
 

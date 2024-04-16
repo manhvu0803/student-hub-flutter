@@ -1,6 +1,9 @@
-import 'interview.dart';
+import 'package:student_hub_flutter/utils.dart';
+import 'company_user.dart';
+import 'meeting.dart';
 import 'notification.dart';
 import 'project.dart';
+import 'student_user.dart';
 import 'user.dart';
 
 class Message {
@@ -17,7 +20,7 @@ class Message {
   DateTime createdAt;
   User sender;
   User receiver;
-  Interview? interview;
+  Meeting? meeting;
   Project project;
   Notification? notification;
 
@@ -31,17 +34,24 @@ class Message {
     User? sender,
     User? receiver,
     Project? project,
-    this.notification
+    this.notification,
+    this.meeting
   }) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
     content = json["content"] ?? "",
-    sender = sender ?? User.fromJson(json["sender"]),
-    receiver = receiver ?? User.fromJson(json["receiver"]),
+    sender = sender ?? User.fromJson(json["sender"], student: StudentUser(), company: CompanyUser()),
+    receiver = receiver ?? User.fromJson(json["receiver"], student: StudentUser(), company: CompanyUser()),
     createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
     project = project ?? _getProject(json)
   {
-    if (notification == null && json["notification"] != null) {
-      notification = Notification.fromJson(json["notification"] ?? json["notifications"]);
+    var innerJson = json["notification"] ?? json["notifications"];
+    if (notification == null && innerJson != null) {
+      tryLog(() => notification = Notification.fromJson(innerJson));
+    }
+
+    innerJson = json["interview"] ?? json["meeting"];
+    if (meeting == null && innerJson != null) {
+      tryLog(() => meeting = Meeting.fromJson(innerJson));
     }
   }
 
