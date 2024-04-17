@@ -30,7 +30,7 @@ Future<List<Message>> getMessages({required String subUrl}) async {
   return list.mapToList((innerJson) => Message.fromJson(innerJson));
 }
 
-Future<Message> sendMessage({
+Future<Message?> sendMessage({
   required int projectId,
   required int recipientId,
   required String content,
@@ -51,7 +51,15 @@ Future<Message> sendMessage({
   );
 
   var json = handleResponse(response);
-  return Message.fromJson(json["result"] ?? json["results"] ?? json);
+  var innerJson = json["result"] ?? json["results"] ?? json;
+
+  if (innerJson == null
+    || (innerJson is Iterable && innerJson.isEmpty)
+    || (innerJson is Map && innerJson.isEmpty)) {
+    return null;
+  }
+
+  return Message.fromJson(innerJson);
 }
 
 void _checkLogInState() {

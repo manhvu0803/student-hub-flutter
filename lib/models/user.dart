@@ -18,7 +18,7 @@ class User {
   {
     var innerJson = json["student"] ?? json["Student"];
     if (student == null && innerJson != null) {
-      tryLog(() => student = StudentUser.fromJson(innerJson));
+      tryLog(() => student = StudentUser.fromJson(innerJson, name: fullName));
     }
 
     innerJson = json["company"] ?? json["Company"];

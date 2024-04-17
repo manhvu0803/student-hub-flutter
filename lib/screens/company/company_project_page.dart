@@ -4,7 +4,7 @@ import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/project_detail_view.dart';
 import 'package:student_hub_flutter/screens/company/project_hired_view.dart';
 import 'package:student_hub_flutter/screens/company/project_proposal_view.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
+import 'package:student_hub_flutter/widgets.dart';
 
 class CompanyProjectPage extends StatelessWidget {
   final Project project;
@@ -17,7 +17,6 @@ class CompanyProjectPage extends StatelessWidget {
       length: 4,
       child: PageScreen(
         title: project.title,
-        floatingActionButton: FloatingActionButton(onPressed: () {}),
         appBarBottom: const TabBar(
           labelPadding: EdgeInsets.symmetric(horizontal: 0),
           indicatorSize: TabBarIndicatorSize.tab,
@@ -29,26 +28,27 @@ class CompanyProjectPage extends StatelessWidget {
           ]
         ),
         actions: [
-          MenuBar(children: [
-            SubmenuButton(
-              menuChildren: [
-                MenuItemButton(
-                  onPressed: () {},
-                  child: const Text("Delete project")
-                ),
-                MenuItemButton(
-                  onPressed: () {},
-                  child: const Text("Update info")
-                )
-              ],
-              child: const Icon(Icons.more_vert),
+          MenuAnchor(
+            menuChildren: [
+              MenuItemButton(
+                onPressed: () {},
+                child: const IconText(Icons.delete, "Delete project")
+              ),
+              MenuItemButton(
+                onPressed: () {},
+                child: const IconText(Icons.edit, "Update project")
+              ),
+            ],
+            builder: (context, controller, child) => IconButton(
+              onPressed: () => controller.isOpen ? controller.close() : controller.open(),
+              icon: const Icon(Icons.more_vert)
             ),
-          ])
+          )
         ],
-        child: const TabBarView(
+        child: TabBarView(
           children: [
-            ProjectProposalView(),
-            ProjectDetailView(),
+            ProjectProposalView(project),
+            ProjectDetailView(project),
             ChatListView(),
             ProjectHiredView(),
           ],

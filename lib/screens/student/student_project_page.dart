@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/client/student_client.dart' as client;
 import 'package:student_hub_flutter/client.dart' as client;
+import 'package:student_hub_flutter/client/student_client.dart' as client;
+import 'package:student_hub_flutter/client/project_client.dart' as client;
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/durtaion_extension.dart';

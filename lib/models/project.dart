@@ -26,7 +26,7 @@ class Project {
   bool isFavorite = false;
   List<Proposal> proposals = [];
   CompanyUser? company;
-  ProjectStatus status = ProjectStatus.achieved;
+  ProjectStatus status = ProjectStatus.preparing;
 
   Project();
 

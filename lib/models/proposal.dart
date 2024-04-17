@@ -1,3 +1,4 @@
+import 'package:student_hub_flutter/utils.dart';
 import 'project.dart';
 import 'proposal_status.dart';
 import 'student_user.dart';
@@ -26,5 +27,11 @@ class Proposal {
     deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
     projectId = project?.id ?? json["projectId"],
     studentId = student?.id ?? json["studentId"],
-    content = json["coverLetter"] ?? "";
+    content = json["coverLetter"] ?? ""
+  {
+    var innerJson = json["student"];
+    if (student == null && innerJson != null) {
+      tryLog(() => student = StudentUser.fromJson(innerJson));
+    }
+  }
 }

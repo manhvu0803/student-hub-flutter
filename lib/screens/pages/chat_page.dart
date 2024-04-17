@@ -14,11 +14,11 @@ import 'package:student_hub_flutter/client/chat_client.dart' as client;
 
 class ChatPage extends StatefulWidget {
   final User recipient;
-  final Message masterMessage;
+  final Project project;
 
   const ChatPage({
     super.key,
-    required this.masterMessage,
+    required this.project,
     required this.recipient
   });
 
@@ -47,7 +47,6 @@ class _ChatPageState extends State<ChatPage> {
       role: chat.Role.user
     );
 
-    _chatMessages = [_getChatMessage(widget.masterMessage)];
     _fetchMessages();
 
     timer = Timer.periodic(
@@ -65,7 +64,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return PageScreen(
-      title: "${widget.recipient.fullName} - ${widget.masterMessage.project.title}",
+      title: "${widget.recipient.fullName} - ${widget.project.title}",
       actions: [MenuAnchor(
         menuChildren: [
           MenuItemButton(
@@ -96,14 +95,17 @@ class _ChatPageState extends State<ChatPage> {
 
     try {
       var messages = await client.getChatMessages(
-        projectId: widget.masterMessage.project.id,
+        projectId: widget.project.id,
         recipientId: widget.recipient.id
       );
 
       setState(() => _chatMessages = messages.mapToList(_getChatMessage));
     }
     catch (e) {
-      context.showTextSnackBar(e.toString());
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        context.showTextSnackBar(e.toString());
+      }
     }
 
     _isFetching = false;
@@ -150,12 +152,13 @@ class _ChatPageState extends State<ChatPage> {
 
     try {
       await client.sendMessage(
-        projectId: widget.masterMessage.project.id,
+        projectId: widget.project.id,
         recipientId: widget.recipient.id,
         content: text.text
       );
     }
-    catch (e) {
+    catch (e, stackTrace) {
+      print(stackTrace);
       if (context.mounted) {
         context.showTextSnackBar(e.toString());
       }
@@ -167,7 +170,7 @@ class _ChatPageState extends State<ChatPage> {
       context: context,
       builder: (context) => AlertDialog(
         content: ScheduleInterviewView(
-          projectId: widget.masterMessage.project.id,
+          projectId: widget.project.id,
           receiverId: widget.recipient.id,
         ),
       )

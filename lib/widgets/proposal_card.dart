@@ -33,7 +33,7 @@ class ProposalCard extends StatelessWidget {
   ProposalCard.studentProposal({
     super.key,
     required String studentName,
-    required String avatarUrl,
+    required Widget? avatar,
     required String education,
     required String specialty,
     required String evaluation,
@@ -47,19 +47,21 @@ class ProposalCard extends StatelessWidget {
   }) :
     top = StudentInfoListTile(
       studentName: studentName,
-      avatarUrl: avatarUrl,
+      avatar: avatar,
       education: education,
       specialty: specialty,
       evaluation: evaluation,
       proposal: proposal,
     ),
     middle = Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Text(
         proposal,
+        style: const TextStyle(fontSize: 16),
         maxLines: 2,
-        overflow: TextOverflow.ellipsis
-      ),
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.justify,
+      )
     );
 
   @override
@@ -70,6 +72,7 @@ class ProposalCard extends StatelessWidget {
         elevation: 4,
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _getColumnChildren()
         ),
       ),

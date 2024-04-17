@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
+import 'package:student_hub_flutter/extensions/string_extension.dart';
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/widgets.dart';
 
 class ProjectDetailView extends StatelessWidget {
-  const ProjectDetailView({super.key});
+  final Project project;
+
+  const ProjectDetailView(this.project, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,36 +17,47 @@ class ProjectDetailView extends StatelessWidget {
         children: [
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const TitleText("Info"),
+                const Divider(),
                 Text(
-                  "Student are looking for",
-                  style: context.textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
+                  project.description,
+                  textAlign: TextAlign.justify,
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  "- Clear expectation\n- Skill required\n- Project detail",
-                  style: context.textTheme.titleMedium
-                )
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 8),
-          const _DetailTile(
+          const SizedBox(height: 24),
+          _DetailTile(
             icon: Icons.calendar_month,
             title: "Scope",
-            content: "3 - 6 month",
+            content: project.scope.description,
           ),
-          const _DetailTile(
+          _DetailTile(
             icon: Icons.people,
             title: "Student required",
-            content: "6 students",
-          )
+            content: (project.numberOfStudent > 0) ? project.numberOfStudent.toString() : "Any"
+          ),
+          const SizedBox(height: 24),
+
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TitleText("Status"),
+                Divider(),
+              ],
+            ),
+          ),
+          _DetailTile(
+            icon: Icons.donut_large,
+            title: "Progress",
+            content: project.status.name.uppercaseFirstLetter
+          ),
         ],
       )
     );
@@ -67,26 +83,29 @@ class _DetailTile extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          const SizedBox(height: 8),
-          Flexible(
-            child: ListTile(
-              leading: Icon(icon, size: 30),
-              title: Text(
-                title,
-                style: titleStyle
+      child: InkWell(
+        onTap: () {},
+        child: Row(
+          children: [
+            const SizedBox(height: 8),
+            Flexible(
+              child: ListTile(
+                leading: Icon(icon, size: 30),
+                title: Text(
+                  title,
+                  style: titleStyle
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              content,
-              style: context.textTheme.bodyLarge
-            ),
-          )
-        ]
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                content,
+                style: context.textTheme.bodyLarge
+              ),
+            )
+          ]
+        ),
       ),
     );
   }

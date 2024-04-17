@@ -59,17 +59,20 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProposalCard.studentProposal(
       studentName: studentName,
-      avatarUrl: avatarUrl,
+      avatar: Image.network(avatarUrl),
       education: education,
       specialty: specialty,
       evaluation: evaluation,
       proposal: proposal,
-      bottom: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          fixedSize: const Size(130, 0)
+      bottom: Align(
+        alignment: Alignment.center,
+        child: OutlinedButton(
+          onPressed: () {},
+          style: OutlinedButton.styleFrom(
+            fixedSize: const Size(130, 0)
+          ),
+          child: const Text("Message"),
         ),
-        child: const Text("Message"),
       ),
     );
   }

@@ -53,7 +53,7 @@ class ChatListView extends StatelessWidget {
 
   pushChatPage(BuildContext context, Message message) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(
-      masterMessage: message,
+      project: message.project,
       recipient: message.getOther(client.user!),
     )));
   }
