@@ -71,6 +71,8 @@ class _DashboardProjectListView extends StatelessWidget {
 }
 
 class _DashboardProjectCard extends StatelessWidget {
+  static const int _extraInfoLimit = 2;
+
   final Project project;
 
   const _DashboardProjectCard(this.project);
@@ -88,8 +90,8 @@ class _DashboardProjectCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text("${project.proposalCount} proposal(s)"),
-              Text("${project.messageCount} message(s)"),
+              Text("${project.proposalCount} proposal${(project.proposalCount > 1) ? "s" : ""}"),
+              Text("${project.messageCount} message${(project.messageCount > 1) ? "s" : ""}"),
               Text("${project.hireCount} hired")
             ]
           ),
@@ -110,15 +112,33 @@ class _DashboardProjectCard extends StatelessWidget {
         children: [
           const SizedBox(height: 4),
           Text(
-            "Student are looking for",
+            "Student that is applying",
             style: context.textTheme.titleMedium,
           ),
-          ...project.proposals.map((request) => Text(
-            " - $request",
-            style: context.textTheme.bodyMedium,
-          ))
+          ..._getApplyingStudents(context)
         ],
       ),
     );
+  }
+
+  Iterable<Widget> _getApplyingStudents(BuildContext context) {
+    var widgets = <Widget>[];
+    var proposals = project.proposals;
+
+    for (int i = 0; i < proposals.length && i < _extraInfoLimit; i++) {
+      widgets.add(Text(
+        " - ${proposals[i].student!.name}",
+        style: context.textTheme.bodyMedium,
+      ));
+    }
+
+    if (proposals.length > _extraInfoLimit) {
+      widgets.add(Text(
+        " - ...",
+        style: context.textTheme.bodyMedium,
+      ));
+    }
+
+    return widgets;
   }
 }

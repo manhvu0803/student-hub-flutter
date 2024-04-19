@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/client/chat_client.dart' as client;
+import 'package:student_hub_flutter/models/message.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/project_detail_view.dart';
@@ -49,11 +51,24 @@ class CompanyProjectPage extends StatelessWidget {
           children: [
             ProjectProposalView(project),
             ProjectDetailView(project),
-            ChatListView(),
-            ProjectHiredView(),
+            ChatListView(
+              hasSearchBar: false,
+              chatGetter: _getChats
+            ),
+            ProjectHiredView(project),
           ],
         ),
       ),
     );
+  }
+
+  Future<List<Message>> _getChats() async {
+    var chats = await client.getAllChat(projectId: project.id);
+
+    for (var chat in chats) {
+      chat.project = project;
+    }
+
+    return chats;
   }
 }

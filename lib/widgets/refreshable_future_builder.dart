@@ -2,10 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/widgets/loading_view.dart';
 
 class RefreshableFutureBuilder<T> extends StatefulWidget {
+  static RefreshableFutureBuilder<Iterable<T>> forCollection<T>({
+    Key? key,
+    required Future<Iterable<T>> Function() fetcher,
+    required Widget Function(BuildContext context, Iterable<T> data) builder,
+    String emptyString = "No item left"
+  }) {
+    return RefreshableFutureBuilder(
+      fetcher: fetcher,
+      builder: (context, data) {
+        if (data.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                emptyString,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+
+        return builder(context, data);
+      }
+    );
+  }
+
   final Widget? childWidget;
-
   final Widget Function(BuildContext context, T data)? childBuilder;
-
   final Future<T> Function() fetcher;
 
   const RefreshableFutureBuilder({

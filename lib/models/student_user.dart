@@ -36,4 +36,6 @@ class StudentUser {
     educations = List<String>.from(json["educations"] ?? json["education"] ?? []),
     experiences = List<String>.from(json["experiences"] ?? json["experience"] ?? []),
     languages = _getLanguages(json);
+
+  String get educationString => educations.isNotEmpty ? educations[0].toString() : "No experience";
 }

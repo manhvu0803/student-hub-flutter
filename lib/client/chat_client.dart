@@ -6,8 +6,8 @@ import '../client.dart';
 import 'package:http/http.dart' as http;
 
 // Get all messages represent a unique chat thread
-Future<List<Message>> getAllChat() async {
-  return await getMessages(subUrl: "api/message/");
+Future<List<Message>> getAllChat({int? projectId}) async {
+  return await getMessages(subUrl: "api/message/${(projectId == null) ? "" : projectId.toString()}");
 }
 
 Future<List<Message>> getChatMessages({
@@ -18,7 +18,7 @@ Future<List<Message>> getChatMessages({
 }
 
 Future<List<Message>> getMessages({required String subUrl}) async {
-  _checkLogInState();
+  checkLogInStatus();
 
   var response = await http.get(
     Uri.parse("$baseUrl/$subUrl"),
@@ -36,7 +36,7 @@ Future<Message?> sendMessage({
   required String content,
   int messageFlag = 0,
 }) async {
-  _checkLogInState();
+  checkLogInStatus();
 
   var response = await http.post(
     Uri.parse("$baseUrl/api/message/sendMessage"),
@@ -60,10 +60,4 @@ Future<Message?> sendMessage({
   }
 
   return Message.fromJson(innerJson);
-}
-
-void _checkLogInState() {
-  if (token.isEmpty || user == null) {
-    throw Exception("Hasn't logged in yet");
-  }
 }

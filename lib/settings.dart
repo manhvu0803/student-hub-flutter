@@ -17,7 +17,17 @@ void _notifiyListeners() {
 bool _isDarkMode = true;
 
 bool get isDarkMode => _isDarkMode;
+
 set isDarkMode(bool value) {
   _isDarkMode = value;
+  _notifiyListeners();
+}
+
+bool _isStudent = false;
+
+bool get isStudent => _isStudent;
+
+set isStudent(bool value) {
+  _isStudent = value;
   _notifiyListeners();
 }

@@ -41,16 +41,15 @@ class _ProjectListViewState extends State<ProjectListView> {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: RefreshableFutureBuilder(
+            child: RefreshableFutureBuilder.forCollection(
+              emptyString: "No projects found",
               fetcher: () => client.searchProject(
                 projectTitle: _titleQuery,
                 page: page
               ),
-              builder: (context, data) {
-                return ListView(
-                  children: data.mapToList((project) => _ListViewProjectCard(project)),
-                );
-              }
+              builder: (context, data) => ListView(
+                children: data.mapToList((project) => _ListViewProjectCard(project)),
+              )
             ),
           ),
           Row(

@@ -50,6 +50,24 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
+  Future<void> loadWithDialog<T>(Future<T> future, {void Function(T)? onDone, void Function(dynamic)? onError}) async {
+    showLoadingDialog();
+
+    try {
+      var data = await future;
+      Navigator.pop(this);
+      onDone?.call(data);
+    }
+    catch (e) {
+      if (mounted) {
+        Navigator.pop(this);
+        showTextSnackBar(e.toString());
+      }
+
+      onError?.call(e);
+    }
+  }
+
   void showTextSnackBar(String text, {Duration? duration}) {
     showSnackBar(
       Text(

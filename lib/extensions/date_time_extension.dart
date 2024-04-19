@@ -3,9 +3,9 @@ extension DateTimeExtension on DateTime {
 
   String toIsoDateString({String seperator = "/"}) => "$year$seperator$month$seperator$day";
 
-  String to24HourString({String seperator = ":"}) => "$hour$seperator${(minute < 10) ? "0" : ""}$minute";
+  String to24HourString({String seperator = ":"}) => "$hour$seperator${(minute < 10) ? "0" : ""}$minute'";
 
-  String to12HourString({String seperator = ":"}) => "${hour % 12}$seperator${(minute < 10) ? "0" : ""}$minute ${(hour < 12) ? "AM" : "PM"}";
+  String to12HourString({String seperator = ":"}) => "${hour % 12}$seperator${(minute < 10) ? "0" : ""}$minute' ${(hour < 12) ? "AM" : "PM"}";
 
   String toDateTimeString({
     String dateSeperator = "/",

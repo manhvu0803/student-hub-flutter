@@ -16,7 +16,7 @@ Future<Map<int, Category>> getSkillSets() async {
 }
 
 Future<Map<int, Category>> _getCategories(String subUrl) async {
-  _checkLogInState();
+  checkLogInStatus(isStudent: true);
 
   var response = await http.get(
     Uri.parse("$baseUrl/$subUrl"),
@@ -41,7 +41,7 @@ Future<Map<int, Category>> _getCategories(String subUrl) async {
 }
 
 Future<void> updateProfile(StudentUser newStudent) async {
-  _checkLogInState();
+  checkLogInStatus(isStudent: true);
 
   await Future.wait([
     http.put(
@@ -69,7 +69,7 @@ Future<void> updateProfile(StudentUser newStudent) async {
 }
 
 Future<List<Project>> searchProject({String? projectTitle, int page = 1, int pageLimit = 5}) async {
-  _checkLogInState();
+  checkLogInStatus(isStudent: true);
   var urlBuilder = StringBuffer("$baseUrl/api/project?page=$page&perPage=$pageLimit");
 
   if (projectTitle != null && projectTitle.isNotEmpty) {
@@ -83,14 +83,14 @@ Future<List<Project>> searchProject({String? projectTitle, int page = 1, int pag
 }
 
 Future<void> setFavorite(Project project, bool value) async {
-  // TODO: Toggle favorite API
+  checkLogInStatus(isStudent: true);
 }
 
 Future<Proposal> applyForProject({
   required int projectId,
   required String proposal
 }) async {
-  _checkLogInState();
+  checkLogInStatus(isStudent: true);
 
   var response = await http.post(
     Uri.parse("$baseUrl/api/proposal"),
@@ -107,27 +107,25 @@ Future<Proposal> applyForProject({
 }
 
 Future<void> patchProposal(Proposal proposal) async {
-  _checkLogInState();
+  checkLogInStatus();
 
-  var response = await http.patch(
-    Uri.parse("$baseUrl/api/proposal/${proposal.id}"),
-    headers: authJsonHeaders,
-    body: jsonEncode({
+  await rawPatchProposal(
+    proposalId: proposal.id,
+    body: {
       "coverLetter": proposal.content,
       "statusFlag": proposal.status.flag,
       "disableFlag": proposal.isEnabled ? 0 : 1
-    })
+    }
   );
-
-  handleResponse(response);
 }
 
-void _checkLogInState() {
-  if (token.isEmpty || user == null) {
-    throw Exception("Hasn't logged in yet");
-  }
 
-  if (user!.company == null) {
-    throw Exception("User hasn't created a student profle");
-  }
+Future<Map<String, dynamic>> rawPatchProposal({required int proposalId, required Map<String, dynamic> body}) async {
+  var response = await http.patch(
+    Uri.parse("$baseUrl/api/proposal/$proposalId"),
+    headers: authJsonHeaders,
+    body: jsonEncode(body)
+  );
+
+  return handleResponse(response);
 }

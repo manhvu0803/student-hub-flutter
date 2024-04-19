@@ -76,3 +76,17 @@ Future<void> logOut() async {
 
   handleResponse(response);
 }
+
+void checkLogInStatus({bool isStudent = false, bool isCompany = false}) {
+  if (token.isEmpty || user == null) {
+    throw Exception("Hasn't logged in yet");
+  }
+
+  if (isStudent && (user!.student == null || user!.student!.id < 0)) {
+    throw Exception("User hasn't created a student profle");
+  }
+
+  if (isCompany && (user!.company == null || user!.company!.id < 0)) {
+    throw Exception("User hasn't created a company profle");
+  }
+}

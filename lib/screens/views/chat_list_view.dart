@@ -3,22 +3,25 @@ import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/models/message.dart';
 import 'package:student_hub_flutter/screens/pages/chat_page.dart';
 import 'package:student_hub_flutter/widgets.dart';
 import 'package:student_hub_flutter/client.dart' as client;
 import 'package:student_hub_flutter/client/chat_client.dart' as client;
 
 class ChatListView extends StatelessWidget {
-  const ChatListView({super.key});
+  final Future<List<Message>> Function()? chatGetter;
+  final bool hasSearchBar;
+
+  const ChatListView({super.key, this.chatGetter, this.hasSearchBar = true});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 12),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
+        if (hasSearchBar) const Padding(
+          padding: EdgeInsets.only(top: 12, left: 8.0, right: 8.0),
           child: SearchBar(
             leading: Padding(
               padding: EdgeInsets.only(left: 8, top: 2),
@@ -32,8 +35,9 @@ class ChatListView extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: RefreshableFutureBuilder(
-              fetcher: () => client.getAllChat(),
+            child: RefreshableFutureBuilder.forCollection(
+              emptyString: "No messages found",
+              fetcher: chatGetter ?? () => client.getAllChat(),
               builder: (context, data) => ListView(
                 children : data.mapToList((message) => _ChatTitleCard(
                   username: message.receiver.fullName,

@@ -64,7 +64,7 @@ class ProjectCard extends StatelessWidget {
       children: [
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.only(left: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -72,9 +72,13 @@ class ProjectCard extends StatelessWidget {
                 title,
                 style: context.textTheme.titleMedium,
               ),
+              const SizedBox(height: 4),
               Text(
                 _timeText,
-                style: TextStyle(color: context.textTheme.titleMedium!.color!.withAlpha(255 ~/ 1.5)),
+                style: TextStyle(
+                  color: context.textTheme.titleMedium!.color!.withAlpha(255 ~/ 1.5),
+                  fontSize: context.textTheme.bodySmall?.fontSize
+                ),
               ),
               const SizedBox(height: 4),
               Padding(

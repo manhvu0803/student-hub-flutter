@@ -43,8 +43,8 @@ class Project {
     numberOfStudent = json["numberOfStudent"] ?? -1,
     type = json["type"] ?? -1,
     proposalCount = json["countProposals"] ?? -1,
-    hireCount = json["countMessages"] ?? -1,
-    messageCount = json["countHired"] ?? -1,
+    messageCount = json["countMessages"] ?? -1,
+    hireCount = json["countHired"] ?? -1,
     isFavorite = json["isFavorite"] ?? false,
     status = ProjectStatus.fromFlag(json["typeFlag"] ?? -1),
     proposals = (json["proposals"] as List? ?? []).mapToList((innerJson) => Proposal.fromJson(innerJson))

@@ -4,7 +4,7 @@ import 'package:student_hub_flutter/models.dart';
 import '../client.dart';
 
 Future<Project> getProject(int projectId) async {
-  _checkLogInState();
+  checkLogInStatus();
 
   var response = await http.get(
     Uri.parse("$baseUrl/api/project/$projectId"),
@@ -15,17 +15,18 @@ Future<Project> getProject(int projectId) async {
   return Project.fromJson(json["result"] ?? json);
 }
 
-void _checkLogInState() {
-  if (token.isEmpty || user == null) {
-    throw Exception("Hasn't logged in yet");
-  }
-}
+Future<List<Proposal>> getProposals(int projectId, {ProposalStatus? statusFilter}) async {
+  checkLogInStatus();
 
-Future<List<Proposal>> getProposals(int projectId) async {
-  _checkLogInState();
+  var buffer = StringBuffer("$baseUrl/api/proposal/getByProjectId/$projectId?");
+
+  if (statusFilter != null) {
+    buffer.write("statusFlag=");
+    buffer.write(statusFilter.flag);
+  }
 
   var response = await http.get(
-    Uri.parse("$baseUrl/api/proposal/getByProjectId/$projectId"),
+    Uri.parse(buffer.toString()),
     headers: authHeaders
   );
 

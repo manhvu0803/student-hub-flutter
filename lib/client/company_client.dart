@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:student_hub_flutter/client/student_client.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:http/http.dart' as http;
 import '../client.dart';
 
 Future<Project> createProject(Project project) async {
-  _checkLogInState();
+  checkLogInStatus(isCompany: true);
 
   var response = await http.post(
     Uri.parse("$baseUrl/api/project"),
@@ -23,7 +24,7 @@ Future<Project> createProject(Project project) async {
 }
 
 Future<List<Project>> getProjects() async {
-  _checkLogInState();
+  checkLogInStatus(isCompany: true);
 
   var response = await http.get(
     Uri.parse("$baseUrl/api/project/company/${user!.company!.id}"),
@@ -44,7 +45,7 @@ Future<List<Project>> getProjects() async {
 }
 
 Future<void> updateProfile(CompanyUser company) async {
-  _checkLogInState();
+  checkLogInStatus(isCompany: true);
 
   var response = await http.put(
     Uri.parse("$baseUrl/api/profile/company/${user!.company!.id}"),
@@ -65,7 +66,7 @@ Future<void> scheduleMeeting(Meeting meeting, {
   required int projectId,
   required int receiverId
 }) async {
-  _checkLogInState();
+  checkLogInStatus(isCompany: true);
 
   var response = await http.post(
     Uri.parse("$baseUrl/api/interview"),
@@ -86,12 +87,12 @@ Future<void> scheduleMeeting(Meeting meeting, {
   handleResponse(response);
 }
 
-_checkLogInState() {
-  if (token.isEmpty || user == null) {
-    throw Exception("Hasn't logged in yet");
-  }
-
-  if (user!.company == null) {
-    throw Exception("User hasn't created a company profle");
-  }
+Future<void> hireStudent(int proposalId) async {
+  checkLogInStatus(isCompany: true);
+  await rawPatchProposal(
+    proposalId: proposalId,
+    body: {
+      "statusFlag": ProposalStatus.hired.flag
+    }
+  );
 }
