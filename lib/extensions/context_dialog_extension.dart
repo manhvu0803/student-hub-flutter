@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 extension ContextDialogExtension on BuildContext {
-  void pushRoute(Widget Function(BuildContext context) builder) {
-    Navigator.push(this, MaterialPageRoute(builder: builder));
+  void pushRoute(
+    Widget Function(BuildContext context) builder,
+    {void Function()? onPop}
+  ) async {
+    await Navigator.push(this, MaterialPageRoute(builder: builder));
+    onPop?.call();
   }
 
   void pushReplacement(Widget Function(BuildContext context) builder) {

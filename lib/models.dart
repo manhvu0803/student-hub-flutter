@@ -8,3 +8,4 @@ export 'models/student_user.dart';
 export 'models/user.dart';
 export 'models/meeting.dart';
 export 'models/message.dart';
+export 'models/notification.dart';

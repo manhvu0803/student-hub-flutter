@@ -56,15 +56,23 @@ class CompanyDashboard extends StatelessWidget {
   }
 }
 
-class _DashboardProjectListView extends StatelessWidget {
+class _DashboardProjectListView extends StatefulWidget {
   const _DashboardProjectListView();
 
+  @override
+  State<_DashboardProjectListView> createState() => _DashboardProjectListViewState();
+}
+
+class _DashboardProjectListViewState extends State<_DashboardProjectListView> {
   @override
   Widget build(BuildContext context) {
     return RefreshableFutureBuilder(
       fetcher: client.getProjects,
       builder: (context, data) => ListView(
-        children: data.mapToList((project) => _DashboardProjectCard(project))
+        children: data.mapToList((project) => _DashboardProjectCard(
+          project,
+          onPop: () => setState(() {}),
+        ))
       )
     );
   }
@@ -72,10 +80,10 @@ class _DashboardProjectListView extends StatelessWidget {
 
 class _DashboardProjectCard extends StatelessWidget {
   static const int _extraInfoLimit = 2;
-
   final Project project;
+  void Function()? onPop;
 
-  const _DashboardProjectCard(this.project);
+  _DashboardProjectCard(this.project, {this.onPop});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,10 @@ class _DashboardProjectCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8, bottom: 4.0),
       child: ProjectCard.fromProject(
         project,
-        onPressed: () => context.pushRoute((context) => CompanyProjectPage(project)),
+        onPressed: () => context.pushRoute(
+          (context) => CompanyProjectPage(project),
+          onPop: onPop
+        ),
         contentBottom: _getRequestWidget(context),
         bottom: Padding(
           padding: const EdgeInsets.only(top: 10.0),

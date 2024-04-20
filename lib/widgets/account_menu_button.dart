@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/screens/profile/company_profile.dart';
 import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
+import 'package:student_hub_flutter/client.dart' as client;
 
 import 'icon_text.dart';
 
@@ -28,7 +30,11 @@ class AccountMenuButton extends StatelessWidget {
         ),
         MenuItemButton(
           child: const IconText(Icons.logout, "Log out"),
-          onPressed: () {},
+          onPressed: () {
+            client.logOut();
+            Navigator.popUntil(context, (route) => route.isFirst);
+            context.pushReplacement((context) => const LoginPage());
+          },
         )
       ],
       builder: (context, controller, child) => IconButton(

@@ -1,7 +1,7 @@
 enum ProjectStatus {
-  preparing(0),
-  working(1),
-  achieved(2);
+  working(0),
+  successful(1),
+  failed(2);
 
   final int flag;
 
@@ -9,9 +9,9 @@ enum ProjectStatus {
 
   static ProjectStatus fromFlag(int flag) {
     return switch (flag) {
-      0 => preparing,
-      1 => working,
-      _ => achieved,
+      0 => working,
+      1 => successful,
+      _ => failed,
     };
   }
 }

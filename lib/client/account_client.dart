@@ -63,6 +63,10 @@ Future<void> signIn(String email, String password) async {
 }
 
 Future<void> logOut() async {
+  user = null;
+  token = "";
+  prefs.setString("token", "");
+
   if (token.isEmpty) {
     throw Exception("Hasn't logged in yet");
   }

@@ -96,3 +96,33 @@ Future<void> hireStudent(int proposalId) async {
     }
   );
 }
+
+Future<void> deleteProject(int projectId) async {
+  checkLogInStatus(isCompany: true);
+
+  var response = await http.delete(
+    Uri.parse("$baseUrl/api/project/$projectId"),
+    headers: authHeaders
+  );
+
+  handleResponse(response);
+}
+
+Future<void> updateProject(Project project) async {
+  checkLogInStatus(isCompany: true);
+
+  var response = await http.patch(
+    Uri.parse("$baseUrl/api/project/${project.id}"),
+    headers: authHeaders,
+    body: jsonEncode({
+      "projectScopeFlag": project.scope.flag,
+      "title": project.title,
+      "description": project.description,
+      "numberOfStudents": project.numberOfStudent,
+      "typeFlag": project.type,
+      "status": project.status.flag
+    })
+  );
+
+  handleResponse(response);
+}

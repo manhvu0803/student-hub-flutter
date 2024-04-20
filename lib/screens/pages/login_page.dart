@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageScreen(
+      hasBackButton: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         child: Stack(
@@ -36,8 +37,7 @@ class _LogInContainer extends StatefulWidget {
 
 class _LogInContainerState extends State<_LogInContainer> {
   String _username = "";
-
-  String _password = "";
+  String _password = client.userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +49,10 @@ class _LogInContainerState extends State<_LogInContainer> {
         ),
         const SizedBox(height: 32),
         IconTextField(
+          controller: TextEditingController()..text = client.userEmail,
           icon: Icons.person,
           onChange: (value) => _username = value,
-          hintText: "Username or email",
+          hintText: "Email",
         ),
         const SizedBox(height: 16),
         IconTextField(

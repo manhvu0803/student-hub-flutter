@@ -75,7 +75,8 @@ class _PostProjectTitle extends State<PostProjectPage> {
                   onPressed: () => _onPostProjet(context),
                   child: const Text("Post project")
                 ),
-              )
+              ),
+              const SizedBox(height: 120),
             ],
           ),
         )

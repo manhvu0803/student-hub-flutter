@@ -119,22 +119,26 @@ class _AccountTypeOption extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 2),
-        borderRadius: BorderRadius.circular(90),
+        borderRadius: BorderRadius.circular(80),
         color: (groupValue == value) ? Theme.of(context).primaryColor.withOpacity(0.25) : null
       ),
       child: InkWell(
+        borderRadius: BorderRadius.circular(80),
         onTap: () => onChanged(value),
         child: SizedBox(
           height: 90,
           child: Center(
-            child: ListTile(
-              leading: Icon(icon, size: 40),
-              title: Text(title),
-              subtitle: (subtitle == null) ? null : Text(subtitle!),
-              trailing: Radio<AccountType>(
-                value: value,
-                groupValue: groupValue,
-                onChanged: onChanged,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: ListTile(
+                leading: Icon(icon, size: 35),
+                title: Text(title),
+                subtitle: (subtitle == null) ? null : Text(subtitle!),
+                trailing: Radio<AccountType>(
+                  value: value,
+                  groupValue: groupValue,
+                  onChanged: onChanged,
+                ),
               ),
             ),
           ),

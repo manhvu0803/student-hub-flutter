@@ -25,7 +25,7 @@ class CompanySignUpPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               const SignUpInfoContainer(isStudent: false),
-              const SizedBox(height: 165),
+              const SizedBox(height: 95),
               BottomExtraOption(
                 text: "Looking for a project?",
                 buttonText: "Sign up for students",

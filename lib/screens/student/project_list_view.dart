@@ -9,7 +9,9 @@ import 'package:student_hub_flutter/widgets/project_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
 class ProjectListView extends StatefulWidget {
-  const ProjectListView({super.key});
+  final void Function()? onPop;
+
+  const ProjectListView({super.key, this.onPop});
 
   @override
   State<ProjectListView> createState() => _ProjectListViewState();
@@ -48,7 +50,7 @@ class _ProjectListViewState extends State<ProjectListView> {
                 page: page
               ),
               builder: (context, data) => ListView(
-                children: data.mapToList((project) => _ListViewProjectCard(project)),
+                children: data.mapToList((project) => _ListViewProjectCard(project, onPop: widget.onPop)),
               )
             ),
           ),
@@ -78,8 +80,9 @@ class _ProjectListViewState extends State<ProjectListView> {
 
 class _ListViewProjectCard extends StatefulWidget {
   final Project project;
+  final void Function()? onPop;
 
-  const _ListViewProjectCard(this.project);
+  const _ListViewProjectCard(this.project, {this.onPop});
 
   @override
   State<_ListViewProjectCard> createState() => _ListViewProjectCardState();
@@ -100,7 +103,10 @@ class _ListViewProjectCardState extends State<_ListViewProjectCard> {
       padding: const EdgeInsets.only(bottom: 12.0),
       child: ProjectCard.fromProject(
         widget.project,
-        onPressed: () => context.pushRoute((context) => StudentProjectPage(_project)),
+        onPressed: () => context.pushRoute(
+          (context) => StudentProjectPage(_project),
+          onPop: widget.onPop
+        ),
         trailing: Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: IconButton(

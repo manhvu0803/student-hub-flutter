@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:student_hub_flutter/client.dart' as client;
 import 'package:student_hub_flutter/client/student_client.dart' as client;
 import 'package:student_hub_flutter/client/project_client.dart' as client;
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/extensions/durtaion_extension.dart';
 import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/screens/views/project_detail_view.dart';
+import 'package:student_hub_flutter/screens/views/project_info_view.dart';
 import 'package:student_hub_flutter/widgets.dart';
 
 class StudentProjectPage extends StatefulWidget {
@@ -43,8 +45,19 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
           return Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: _ProjectInfoView(project, userProposal),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ListView(
+                  children: [
+                    const SizedBox(height: 22),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: ProjectInfoView(project),
+                    ),
+                    const SizedBox(height: 32),
+                    ProjectDetailView(project),
+                    const SizedBox(height: 200),
+                  ],
+                ),
               ),
               if (userProposal != null) _getProposalCard(context),
               if (userProposal == null) _getApplyButton(context)
@@ -175,69 +188,5 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
       Navigator.pop(context);
       Navigator.pop(context);
     }
-  }
-}
-
-class _ProjectInfoView extends StatelessWidget {
-  final Project project;
-  final Proposal? proposal;
-
-  const _ProjectInfoView(this.project, this.proposal);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(children: [
-      // Title
-      const SizedBox(height: 22),
-      Text(
-        project.title,
-        style: context.textTheme.displaySmall,
-      ),
-      const SizedBox(height: 32),
-      // Company
-      Padding(
-        padding: const EdgeInsets.only(right: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RichText(
-              text: TextSpan(
-                text: "From ",
-                style: context.textTheme.bodyLarge,
-                children: [
-                  TextSpan(
-                    text: project.company?.name ?? "unknown company",
-                    style: context.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)
-                  )
-                ]
-              ),
-            ),
-            const Spacer(),
-            Opacity(
-              opacity: 0.8,
-              child: Text("${DateTime.now().difference(project.createdAt).toShortString()} ago")
-            ),
-          ]
-        ),
-      ),
-      const SizedBox(height: 32),
-      // Description
-      const TitleText("Description"),
-      const SizedBox(height: 10),
-      Text(
-        project.description,
-        style: context.textTheme.bodyLarge,
-        textAlign: TextAlign.justify,
-      ),
-      const SizedBox(height: 32),
-      // Scope
-      const TitleText("Scope"),
-      const SizedBox(height: 12),
-      Text(
-        project.scope.description,
-        style: const TextStyle(fontSize: 18),
-      ),
-      const SizedBox(height: 32),
-    ]);
   }
 }
