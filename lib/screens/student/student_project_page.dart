@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:student_hub_flutter/client.dart' as client;
 import 'package:student_hub_flutter/client/student_client.dart' as client;
 import 'package:student_hub_flutter/client/project_client.dart' as client;
@@ -76,11 +75,11 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
         child: SizedBox(
           width: 170,
           height: 60,
-          child: FilledButton(
+          child: FloatingActionButton(
             onPressed: () => _showApplyDialog(context),
             child: const Text(
               "Apply",
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 20),
             )
           ),
         ),
@@ -137,9 +136,9 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: TextEditingController()..text = userProposal!.content,
+                controller: TextEditingController()..text = userProposal?.content ?? "",
                 decoration: const InputDecoration(
-                  hintText: "Your proposal..."
+                  hintText: "Your proposal...",
                 ),
                 maxLines: null,
                 onChanged: (value) => _proposalContent = value,

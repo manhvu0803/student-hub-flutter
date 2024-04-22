@@ -1,5 +1,5 @@
 extension IterableExtension<T> on Iterable<T> {
-  List<U> mapToList<U>(U Function(T) builder) {
+  List<U> mapToList<U>(U Function(T item) builder) {
     var list = <U>[];
 
     for (var item in this) {

@@ -14,15 +14,8 @@ class CompanyDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
       children: [
-        Center(
-          child: ElevatedButton(
-            onPressed: () => context.pushRoute((context) => const PostProjectPage()),
-            child: const Text("Post a project")
-          ),
-        ),
         const DefaultTabController(
           length: 3,
           child: Expanded(
@@ -50,6 +43,17 @@ class CompanyDashboard extends StatelessWidget {
               ]
             ),
           ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: FloatingActionButton.extended(
+              onPressed: () => context.pushRoute((context) => PostProjectPage()),
+              label: const Text("New project"),
+              icon: const Icon(Icons.add),
+            ),
+          ),
         )
       ],
     );
@@ -71,7 +75,11 @@ class _DashboardProjectListViewState extends State<_DashboardProjectListView> {
       builder: (context, data) => ListView(
         children: data.mapToList((project) => _DashboardProjectCard(
           project,
-          onPop: () => setState(() {}),
+          onPop: () {
+            if (context.mounted) {
+              setState(() {});
+            }
+          }
         ))
       )
     );
@@ -81,9 +89,9 @@ class _DashboardProjectListViewState extends State<_DashboardProjectListView> {
 class _DashboardProjectCard extends StatelessWidget {
   static const int _extraInfoLimit = 2;
   final Project project;
-  void Function()? onPop;
+  final void Function()? onPop;
 
-  _DashboardProjectCard(this.project, {this.onPop});
+  const _DashboardProjectCard(this.project, {this.onPop});
 
   @override
   Widget build(BuildContext context) {

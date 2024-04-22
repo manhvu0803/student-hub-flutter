@@ -11,6 +11,7 @@ class PageScreen extends StatelessWidget {
   final Widget? floatingActionButton;
   final void Function()? customBackButtonCallback;
   final List<Widget>? actions;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   const PageScreen({
     super.key,
@@ -21,7 +22,8 @@ class PageScreen extends StatelessWidget {
     this.hasBackButton,
     this.customBackButtonCallback,
     this.floatingActionButton,
-    this.actions
+    this.actions,
+    this.floatingActionButtonLocation
   });
 
   PageScreen.account({
@@ -33,6 +35,7 @@ class PageScreen extends StatelessWidget {
     this.hasBackButton,
     this.customBackButtonCallback,
     this.floatingActionButton,
+    this.floatingActionButtonLocation
   }) : actions = [const AccountMenuButton()];
 
   @override
@@ -54,6 +57,7 @@ class PageScreen extends StatelessWidget {
           bottom: appBarBottom,
         ),
         floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
         bottomNavigationBar: bottomNavigationBar,
         body: SafeArea(child: child),
       ),

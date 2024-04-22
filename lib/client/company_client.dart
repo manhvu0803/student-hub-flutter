@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:student_hub_flutter/client/student_client.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,7 @@ Future<Project> createProject(Project project) async {
     Uri.parse("$baseUrl/api/project"),
     body: jsonEncode({
       "companyId": user!.company!.id,
-      "projectScopeFlag": project.scope,
+      "projectScopeFlag": project.scope.flag,
       "title": project.title,
       "description": project.description,
       "numberOfStudents": project.numberOfStudent
@@ -20,7 +21,7 @@ Future<Project> createProject(Project project) async {
   );
 
   var json = handleResponse(response);
-  return Project.fromJson(json["result"]);
+  return Project.fromJson(json["result"] ?? json);
 }
 
 Future<List<Project>> getProjects() async {
@@ -111,15 +112,16 @@ Future<void> deleteProject(int projectId) async {
 Future<void> updateProject(Project project) async {
   checkLogInStatus(isCompany: true);
 
+
   var response = await http.patch(
     Uri.parse("$baseUrl/api/project/${project.id}"),
-    headers: authHeaders,
+    headers: authJsonHeaders,
     body: jsonEncode({
       "projectScopeFlag": project.scope.flag,
       "title": project.title,
       "description": project.description,
-      "numberOfStudents": project.numberOfStudent,
-      "typeFlag": project.type,
+      "numberOfStudents": max(project.numberOfStudent, 0),
+      "typeFlag": project.type.flag,
       "status": project.status.flag
     })
   );

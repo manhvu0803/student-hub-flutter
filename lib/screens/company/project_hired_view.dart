@@ -66,6 +66,7 @@ class _InfoCard extends StatelessWidget {
     this.onMessagePressed
   });
 
+  // ignore: unused_element
   _InfoCard.fromProposal(Proposal proposal, {this.avatar, this.onMessagePressed}) :
     studentName = proposal.student!.name,
     education = proposal.student!.educationString,

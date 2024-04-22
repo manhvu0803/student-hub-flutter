@@ -54,7 +54,10 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
-  Future<void> loadWithDialog<T>(Future<T> future, {void Function(T)? onDone, void Function(dynamic)? onError}) async {
+  Future<void> loadWithDialog<T>(Future<T> future, {
+    void Function(T data)? onDone,
+    void Function(dynamic error)? onError
+  }) async {
     showLoadingDialog();
 
     try {
@@ -62,10 +65,15 @@ extension ContextDialogExtension on BuildContext {
       Navigator.pop(this);
       onDone?.call(data);
     }
-    catch (e) {
+    catch (e, stackTrace) {
       if (mounted) {
         Navigator.pop(this);
         showTextSnackBar(e.toString());
+      }
+      else {
+        print("Context is unmounted, so we log this: ");
+        print(e);
+        print(stackTrace);
       }
 
       onError?.call(e);
@@ -91,6 +99,7 @@ extension ContextDialogExtension on BuildContext {
       ));
   }
 
+  // ignore: unused_element
   Dialog _buildDialog(Widget child, {double insetPadding = 16, double childPadding = 24}) {
     return Dialog(
       insetPadding: EdgeInsets.all(insetPadding),

@@ -39,6 +39,11 @@ class _StudentHubAppState extends State<StudentHubApp> {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
           brightness: settings.isDarkMode ? Brightness.dark : Brightness.light
+        ),
+        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+          hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+            fontStyle: FontStyle.italic
+          ) ?? const TextStyle(fontStyle: FontStyle.italic)
         )
       ),
       home: FutureBuilder(
