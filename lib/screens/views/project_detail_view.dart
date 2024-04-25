@@ -50,7 +50,7 @@ class ProjectDetailView extends StatelessWidget {
         _DetailTile(
           icon: Icons.people,
           title: "Student required",
-          content: (project.numberOfStudent > 0) ? project.numberOfStudent.toString() : "Any"
+          content: (project.numberOfStudents > 0) ? project.numberOfStudents.toString() : "Any"
         ),
         const SizedBox(height: 12),
         _DetailTile(

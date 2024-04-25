@@ -46,12 +46,12 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: TabBarView(
                     children: [
-                      ProjectListView(childBuilder: projectCardBuilder),
-                      ProjectListView(
+                      ProjectListView.company(childBuilder: projectCardBuilder),
+                      ProjectListView.company(
                         childBuilder: projectCardBuilder,
                         projectFilter: (project) => project.status == ProjectStatus.working
                       ),
-                      ProjectListView(
+                      ProjectListView.company(
                         childBuilder: projectCardBuilder,
                         projectFilter: (project) => project.status != ProjectStatus.working
                       ),

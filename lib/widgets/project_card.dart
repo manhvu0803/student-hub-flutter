@@ -47,11 +47,18 @@ class ProjectCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onPressed,
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (leading != null) leading!,
-            Expanded(child: _getMainColumn(context)),
-            if (trailing != null) trailing!,
+            Row(
+              children: [
+                if (leading != null) leading!,
+                Expanded(child: _getMainColumn(context)),
+                if (trailing != null) trailing!,
+              ],
+            ),
+            if (bottom != null) bottom!,
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -80,7 +87,7 @@ class ProjectCard extends StatelessWidget {
                   fontSize: context.textTheme.bodySmall?.fontSize
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Text(
@@ -94,8 +101,7 @@ class ProjectCard extends StatelessWidget {
             ]
           ),
         ),
-        if (bottom != null) bottom!,
-        const SizedBox(height: 16),
+        const SizedBox(height: 6),
       ],
     );
   }

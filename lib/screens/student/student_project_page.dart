@@ -36,6 +36,13 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
   Widget build(BuildContext context) {
     return PageScreen(
       title: "Apply for project",
+      actions: [IconButton(
+        onPressed: () => _onToggleFavorite(context),
+        icon: Icon(
+          widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline,
+          color: Colors.red
+        ),
+      )],
       child: RefreshableFutureBuilder(
         fetcher: () => client.getProject(widget.project.id),
         builder: (context, project) {
@@ -65,6 +72,19 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
         },
       ),
     );
+  }
+
+
+  void _onToggleFavorite(BuildContext context) async {
+    try {
+      await client.setFavorite(widget.project.id, !widget.project.isFavorite);
+      setState(() => widget.project.isFavorite = !widget.project.isFavorite);
+    }
+    catch (e) {
+      if (context.mounted) {
+        context.showTextSnackBar(e.toString());
+      }
+    }
   }
 
   Padding _getApplyButton(BuildContext context) {

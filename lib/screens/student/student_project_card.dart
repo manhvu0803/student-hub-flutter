@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/client/student_client.dart' as client;
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/models/project.dart';
 import 'package:student_hub_flutter/screens/student/student_project_page.dart';
@@ -34,29 +33,22 @@ class _StudentProjectCardState extends State<StudentProjectCard> {
           (context) => StudentProjectPage(_project),
           onPop: widget.onPop
         ),
-        trailing: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: IconButton(
-            onPressed: () => _onToggleFavorite(context),
-            icon: Icon(
-              widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline,
-              color: Colors.red
-            ),
+        bottom: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Text(
+            "Length: ${widget.project.scope.description} - Required ${widget.project.numberOfStudents} student(s)",
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+          ),
+        ),
+        trailing: !widget.project.isFavorite ? null : Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Icon(
+            widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline,
+            color: Colors.red
           ),
         ),
       ),
     );
-  }
-
-  void _onToggleFavorite(BuildContext context) async {
-    try {
-      await client.setFavorite(_project, !_project.isFavorite);
-      setState(() => _project.isFavorite = !_project.isFavorite);
-    }
-    catch (e) {
-      if (context.mounted) {
-        context.showTextSnackBar(e.toString());
-      }
-    }
   }
 }

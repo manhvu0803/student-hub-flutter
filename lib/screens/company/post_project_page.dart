@@ -44,7 +44,7 @@ class PostProjectPage extends StatelessWidget {
   }
 
   void _onPostProjet(BuildContext context) {
-    if ((_project.numberOfStudent) <= 0) {
+    if ((_project.numberOfStudents) <= 0) {
       context.showTextSnackBar("Please specify the number of student needed");
       return;
     }

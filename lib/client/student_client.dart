@@ -68,22 +68,73 @@ Future<void> updateProfile(StudentUser newStudent) async {
   user!.student = newStudent;
 }
 
-Future<List<Project>> searchProject({String? projectTitle, int page = 1, int pageLimit = 5}) async {
+Future<List<Project>> searchProject({
+  String? projectTitle,
+  int page = 1,
+  int pageLimit = 5,
+  int? numberOfStudents,
+  ProjectScope? scope
+}) async {
   checkLogInStatus(isStudent: true);
-  var urlBuilder = StringBuffer("$baseUrl/api/project?page=$page&perPage=$pageLimit");
+
+  var urlBuilder = StringBuffer("/api/project?page=$page&perPage=$pageLimit");
 
   if (projectTitle != null && projectTitle.isNotEmpty) {
     urlBuilder.write("&title=$projectTitle");
   }
 
-  var response = await http.get(Uri.parse(urlBuilder.toString()), headers: authHeaders);
-  var json = handleResponse(response);
-  var list = json["result"] ?? json["results"] ?? json;
-  return (list as List).mapToList((innerJson) => Project.fromJson(innerJson));
+  if ((numberOfStudents ?? -1) > 0) {
+    urlBuilder.write("&numberOfStudents=$numberOfStudents");
+  }
+
+  if (scope != null) {
+    urlBuilder.write("&projectScopeFlag=${scope.flag}");
+  }
+
+  return _getAndParseProjects(urlBuilder.toString());
 }
 
-Future<void> setFavorite(Project project, bool value) async {
+Future<List<Project>> getProjects({required ProjectType projectType}) async {
   checkLogInStatus(isStudent: true);
+  return _getAndParseProjects("/api/project/student/${user!.student!.id}?typeFlag=${projectType.flag}");
+}
+
+Future<List<Project>> getFavoriteProjects() async {
+  checkLogInStatus(isStudent: true);
+  return _getAndParseProjects(
+    "/api/favoriteProject/${user!.student!.id}",
+    makeFavorite: true
+  );
+}
+
+Future<List<Project>> _getAndParseProjects(String subUrl, {bool makeFavorite = false}) async {
+  var response = await http.get(
+    Uri.parse("$baseUrl$subUrl"),
+    headers: authHeaders
+  );
+
+  var json = handleResponse(response);
+  var list = (json["result"] ?? json) as List;
+  return list.mapToList((item) {
+    var project = Project.fromJson(item["project"] ?? item);
+    project.isFavorite = makeFavorite;
+    return project;
+});
+}
+
+Future<void> setFavorite(int projectId, bool isFavorite) async {
+  checkLogInStatus(isStudent: true);
+
+  var response = await http.patch(
+    Uri.parse("$baseUrl/api/favoriteProject/${user!.student!.id}"),
+    headers: authJsonHeaders,
+    body: jsonEncode({
+      "projectId": projectId,
+      "disableFlag": isFavorite ? 0 : 1
+    })
+  );
+
+  handleResponse(response);
 }
 
 Future<Proposal> applyForProject({
@@ -107,7 +158,7 @@ Future<Proposal> applyForProject({
 }
 
 Future<void> patchProposal(Proposal proposal) async {
-  checkLogInStatus();
+  checkLogInStatus(isStudent: true);
 
   await rawPatchProposal(
     proposalId: proposal.id,
@@ -118,7 +169,6 @@ Future<void> patchProposal(Proposal proposal) async {
     }
   );
 }
-
 
 Future<Map<String, dynamic>> rawPatchProposal({required int proposalId, required Map<String, dynamic> body}) async {
   var response = await http.patch(

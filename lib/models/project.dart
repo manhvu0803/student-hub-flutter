@@ -27,7 +27,7 @@ class Project {
   int companyId = -1;
   String companyName = "";
   ProjectScope scope = ProjectScope.short;
-  int numberOfStudent = -1;
+  int numberOfStudents = -1;
   int proposalCount = -1;
   int hireCount = -1;
   int messageCount = -1;
@@ -49,7 +49,7 @@ class Project {
     companyName = json["companyName"] ?? "",
     scope = ProjectScope.fromFlag(json["projectScopeFlag"] ?? -1),
     title = json["title"] ?? -1,
-    numberOfStudent = json["numberOfStudents"] ?? json["numberOfStudent"] ?? -1,
+    numberOfStudents = json["numberOfStudents"] ?? json["numberOfStudent"] ?? -1,
     type = ProjectType.fromFlag(json["typeFlag"] ?? json["type"] ?? json["projectType"] ?? -1),
     proposalCount = json["countProposals"] ?? -1,
     messageCount = json["countMessages"] ?? -1,
@@ -84,7 +84,7 @@ class Project {
       ..companyName = companyName
       ..scope = scope
       ..title = title
-      ..numberOfStudent =numberOfStudent
+      ..numberOfStudents =numberOfStudents
       ..type = type
       ..proposalCount = proposalCount
       ..messageCount = messageCount

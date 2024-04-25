@@ -67,13 +67,13 @@ class _EditableProjectViewState extends State<EditableProjectView> {
 
         const TitleText("Number of people"),
         TextField(
-          onChanged: (value) => _project.numberOfStudent = int.tryParse(value) ?? -1,
+          onChanged: (value) => _project.numberOfStudents = int.tryParse(value) ?? -1,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: const InputDecoration(
             hintText: "The number of students your project need"
           ),
-          controller: (_project.numberOfStudent >= 0) ? (TextEditingController()..text = _project.numberOfStudent.toString()) : null
+          controller: (_project.numberOfStudents >= 0) ? (TextEditingController()..text = _project.numberOfStudents.toString()) : null
         ),
         const SizedBox(height: 30),
 

@@ -16,7 +16,7 @@ Future<Project> createProject(Project project) async {
       "projectScopeFlag": project.scope.flag,
       "title": project.title,
       "description": project.description,
-      "numberOfStudents": project.numberOfStudent
+      "numberOfStudents": project.numberOfStudents
     }),
     headers: authJsonHeaders
   );
@@ -113,7 +113,7 @@ Future<void> updateProject(Project project) async {
       "projectScopeFlag": project.scope.flag,
       "title": project.title,
       "description": project.description,
-      "numberOfStudents": max(project.numberOfStudent, 0),
+      "numberOfStudents": max(project.numberOfStudents, 0),
       "typeFlag": project.type.flag,
       "status": project.status.flag
     })

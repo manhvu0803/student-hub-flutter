@@ -70,16 +70,20 @@ class _RefreshableFutureBuilderState<T> extends State<RefreshableFutureBuilder<T
     if (snapshot.connectionState == ConnectionState.none || (snapshot.data == null && null is! T)) {
       return RefreshIndicator(
         onRefresh: () async => setState(() {}),
-        child: Column(
-          children: [
-            const SizedBox(height: 100),
-            const Text("There's a problem fetching data. Please try again"),
-            const SizedBox(height: 50),
-            TextButton(
-              onPressed: () => setState(() {}),
-              child: const Text("Retry")
-            )
-          ],
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100),
+              const Text("There's a problem fetching data. Please try again"),
+              const SizedBox(height: 50),
+              TextButton(
+                onPressed: () => setState(() {}),
+                child: const Text("Retry")
+              )
+            ],
+          ),
         ),
       );
     }
