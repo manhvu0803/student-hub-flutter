@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
-import 'package:student_hub_flutter/models/language.dart';
-import 'package:student_hub_flutter/models/student_user.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
-import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/widgets.dart';
+import 'package:student_hub_flutter/client.dart' as client;
 import 'package:student_hub_flutter/client/student_client.dart' as client;
-import 'package:student_hub_flutter/widgets/skill_button.dart';
-import '../../widgets/title_text.dart';
 import 'modify_language_dialog.dart';
 import 'skill_dialog.dart';
 

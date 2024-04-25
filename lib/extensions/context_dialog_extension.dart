@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/screens/dialog_view/schedule_interview_view.dart';
 
 extension ContextDialogExtension on BuildContext {
-  void pushRoute(Widget Function(BuildContext context) builder) {
-    Navigator.push(this, MaterialPageRoute(builder: builder));
+  void pushRoute(
+    Widget Function(BuildContext context) builder,
+    {void Function()? onPop}
+  ) async {
+    await Navigator.push(this, MaterialPageRoute(builder: builder));
+    onPop?.call();
   }
 
   void pushReplacement(Widget Function(BuildContext context) builder) {
     Navigator.pushReplacement(this, MaterialPageRoute(builder: builder));
-  }
-
-  Future<T?> showScheduleInterviewDialog<T>() {
-    return showDialog<T>(
-      context: this,
-      builder: (context) => _buildDialog(const ScheduleInterviewView())
-    );
   }
 
   Future<void> showRequestLoad<T>({
@@ -58,6 +54,32 @@ extension ContextDialogExtension on BuildContext {
     );
   }
 
+  Future<void> loadWithDialog<T>(Future<T> future, {
+    void Function(T data)? onDone,
+    void Function(dynamic error)? onError
+  }) async {
+    showLoadingDialog();
+
+    try {
+      var data = await future;
+      Navigator.pop(this);
+      onDone?.call(data);
+    }
+    catch (e, stackTrace) {
+      if (mounted) {
+        Navigator.pop(this);
+        showTextSnackBar(e.toString());
+      }
+      else {
+        print("Context is unmounted, so we log this: ");
+        print(e);
+        print(stackTrace);
+      }
+
+      onError?.call(e);
+    }
+  }
+
   void showTextSnackBar(String text, {Duration? duration}) {
     showSnackBar(
       Text(
@@ -77,6 +99,7 @@ extension ContextDialogExtension on BuildContext {
       ));
   }
 
+  // ignore: unused_element
   Dialog _buildDialog(Widget child, {double insetPadding = 16, double childPadding = 24}) {
     return Dialog(
       insetPadding: EdgeInsets.all(insetPadding),

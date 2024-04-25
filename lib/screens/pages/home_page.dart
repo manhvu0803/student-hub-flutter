@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
+import 'package:student_hub_flutter/screens/student/student_dashboard.dart';
+import 'package:student_hub_flutter/screens/views/meeting_list_view.dart';
 import 'package:student_hub_flutter/screens/views/chat_list_view.dart';
 import 'package:student_hub_flutter/screens/company/company_dashboard.dart';
 import 'package:student_hub_flutter/screens/views/notification_list_view.dart';
-import 'package:student_hub_flutter/screens/views/project_list_view.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
+import 'package:student_hub_flutter/screens/student/project_search_list_view.dart';
+import 'package:student_hub_flutter/widgets.dart';
+import 'package:student_hub_flutter/settings.dart' as settings;
 
 class HomePage extends StatefulWidget {
-  final bool isStudentUser;
-
-  const HomePage({
-    super.key,
-    required this.isStudentUser
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedTabIndex = 1;
+  int _selectedTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    settings.addChangeListener(_onRoleChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    settings.removeListener(_onRoleChange);
+  }
+
+  void _onRoleChange() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +42,23 @@ class _HomePageState extends State<HomePage> {
         indicatorColor: context.colorScheme.inversePrimary,
         selectedIndex: _selectedTabIndex,
         onDestinationSelected: (index) => setState(() => _selectedTabIndex = index),
-        destinations: const [
-          NavigationDestination(
+        destinations: [
+          const NavigationDestination(
             icon: Icon(Icons.dashboard),
             label: "Dashboard"
           ),
-          NavigationDestination(
-            icon: Icon(Icons.list),
-            label: "Projects"
-          ),
-          NavigationDestination(
+          _get2ndDestination(),
+          const NavigationDestination(
             icon: Icon(Icons.chat_bubble),
             label: "Messages"
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.notifications),
             label: "Alerts"
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.people),
+            label: "Interviews"
           )
         ]
       ),
@@ -53,10 +68,25 @@ class _HomePageState extends State<HomePage> {
 
   Widget _getChildWidget() {
     return switch (_selectedTabIndex) {
-      1 => const ProjectListView(),
+      0 => settings.isStudent ? const StudentDashboard() : const CompanyDashboard(),
+      1 => settings.isStudent ? const ProjectSearchListView() : const ProjectSearchListView(),
       2 => const ChatListView(),
       3 => const NotificationListView(),
-      _ => widget.isStudentUser ? Container() : const CompanyDashboard(),
+      _ => const MeetingListView(),
     };
+  }
+
+  Widget _get2ndDestination() {
+    if (settings.isStudent) {
+      return const NavigationDestination(
+        icon: Icon(Icons.list),
+        label: "Projects"
+      );
+    }
+
+    return const NavigationDestination(
+      icon: Icon(Icons.school),
+      label: "Students"
+    );
   }
 }

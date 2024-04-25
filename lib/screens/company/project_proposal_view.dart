@@ -1,93 +1,118 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/client/project_client.dart' as client;
+import 'package:student_hub_flutter/client/company_client.dart' as client;
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
-import 'package:student_hub_flutter/widgets/proposal_card.dart';
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/screens/pages/chat_page.dart';
+import 'package:student_hub_flutter/widgets.dart';
 
-class ProjectProposalView extends StatelessWidget {
-  const ProjectProposalView({super.key});
+class ProjectProposalView extends StatefulWidget {
+  final Project project;
 
+  const ProjectProposalView(this.project, {super.key});
+
+  @override
+  State<ProjectProposalView> createState() => _ProjectProposalViewState();
+}
+
+class _ProjectProposalViewState extends State<ProjectProposalView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: const [
-          _HireProposalCard(
-            studentName: "Quan Nguyen",
-            avatarUrl: "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-            education: "4th year",
-            specialty: "Backend Engineer",
-            evaluation: "Excellent",
-            proposal: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          ),
-          SizedBox(height: 8),
-          _HireProposalCard(
-            studentName: "Quan Nguyen",
-            avatarUrl: "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-            education: "4th year",
-            specialty: "Backend Engineer",
-            evaluation: "Excellent",
-            proposal: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis",
-          ),
-        ],
+      child: RefreshableFutureBuilder.forCollection(
+        emptyString: "No proposal for this project",
+        fetcher: () => client.getProposals(widget.project.id, statusFilter: ProposalStatus.waiting),
+        builder: (context, data) {
+          return ListView(
+            children: data.mapToList((proposal) => _HireProposalCard.fromProposal(
+              proposal,
+              onHirePressed: () => _hire(context, proposal),
+            )),
+          );
+        },
       ),
+    );
+  }
+
+  Future<void> _hire(BuildContext context, Proposal proposal) async {
+    context.loadWithDialog(
+      client.hireStudent(proposal.id),
+      onDone: (data) {
+        context.showTextSnackBar("Hired ${proposal.student!.name}");
+        setState(() {});
+      }
     );
   }
 }
 
 class _HireProposalCard extends StatelessWidget {
-  final String studentName;
-
-  final String avatarUrl;
-
-  final String education;
-
-  final String specialty;
-
+  final Widget? avatar;
   final String evaluation;
-
-  final String proposal;
+  final Proposal proposal;
+  final void Function()? onHirePressed;
 
   const _HireProposalCard({
-    required this.studentName,
-    required this.avatarUrl,
-    required this.education,
-    required this.specialty,
+    required this.avatar,
     required this.evaluation,
-    required this.proposal
+    required this.proposal,
+    // ignore: unused_element
+    this.onHirePressed,
   });
+
+  const _HireProposalCard.fromProposal(this.proposal, {this.onHirePressed}) :
+    avatar = const CircleAvatar(child: Icon(Icons.person)),
+    evaluation = "Excellence";
 
   @override
   Widget build(BuildContext context) {
-    return ProposalCard.studentProposal(
-      studentName: studentName,
-      avatarUrl: avatarUrl,
-      education: education,
-      specialty: specialty,
-      evaluation: evaluation,
-      proposal: proposal,
-      bottom: Theme(
-        data: Theme.of(context).copyWith(
-          outlinedButtonTheme: OutlinedButtonThemeData(
-            style: OutlinedButton.styleFrom(
-              fixedSize: const Size(130, 0),
-              backgroundColor: context.colorScheme.surfaceVariant
+    return Padding(
+      padding: const EdgeInsets.only(top: 12.0, bottom: 12),
+      child: ProposalCard.studentProposal(
+        studentName: proposal.student!.name,
+        avatar: avatar,
+        education: proposal.student!.educations.isNotEmpty ? proposal.student!.educations[0].toString() : "No experience",
+        specialty: proposal.student!.techStack?.name ?? "Engineer",
+        evaluation: evaluation,
+        proposal: proposal.content,
+        bottom: Theme(
+          data: Theme.of(context).copyWith(
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                fixedSize: const Size(130, 0),
+                backgroundColor: context.colorScheme.surfaceVariant
+              )
             )
-          )
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            OutlinedButton(
-              child: const Text("Message"),
-              onPressed: () {},
-            ),
-            OutlinedButton(
-              child: const Text("Hire"),
-              onPressed: () {},
-            )
-          ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              OutlinedButton(
+                onPressed: () => _buildChatPage(context),
+                child: const Text("Message"),
+              ),
+              OutlinedButton(
+                onPressed: onHirePressed,
+                child: const Text("Hire"),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Future<void> _buildChatPage(BuildContext context) async {
+    context.loadWithDialog(
+      client.getProject(proposal.projectId),
+      onDone: (project) => context.pushRoute((context) => ChatPage(
+        project: project,
+        recipient: User()
+          ..fullName = proposal.student!.name
+          ..id = proposal.student?.id ?? proposal.studentId
+      ))
     );
   }
 }

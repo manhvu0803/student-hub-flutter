@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:student_hub_flutter/client/client.dart';
+import 'package:student_hub_flutter/client.dart';
 import 'package:http/http.dart' as http;
-import 'package:student_hub_flutter/models/user.dart';
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
+import 'package:student_hub_flutter/models.dart';
 
 String userEmail = "";
 
@@ -63,9 +64,10 @@ Future<void> signIn(String email, String password) async {
 }
 
 Future<void> logOut() async {
-  if (token.isEmpty) {
-    throw Exception("Hasn't logged in yet");
-  }
+  user = null;
+  token = "";
+  prefs.setString("token", "");
+  checkLogInStatus();
 
   var response = await http.post(
     Uri.parse("$baseUrl/api/auth/logout"),
@@ -75,4 +77,31 @@ Future<void> logOut() async {
   );
 
   handleResponse(response);
+}
+
+Future<List<Meeting>> getMeetings() async {
+  checkLogInStatus();
+
+  var response = await http.get(
+    Uri.parse("$baseUrl/api/interview/user/${user!.id}"),
+    headers: authHeaders
+  );
+
+  var json = handleResponse(response);
+  var list = (json["result"] ?? json) as List;
+  return list.mapToList((innerJson) => Meeting.fromJson(innerJson));
+}
+
+void checkLogInStatus({bool isStudent = false, bool isCompany = false}) {
+  if (token.isEmpty || user == null) {
+    throw Exception("Hasn't logged in yet");
+  }
+
+  if (isStudent && (user!.student == null || user!.student!.id < 0)) {
+    throw Exception("User hasn't created a student profle");
+  }
+
+  if (isCompany && (user!.company == null || user!.company!.id < 0)) {
+    throw Exception("User hasn't created a company profle");
+  }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
-import 'package:student_hub_flutter/models/company_user.dart';
-import 'package:student_hub_flutter/widgets/page_screen.dart';
-import 'package:student_hub_flutter/widgets/title_text.dart';
-import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/widgets.dart';
+import 'package:student_hub_flutter/client.dart' as client;
 import 'package:student_hub_flutter/client/company_client.dart' as client;
 
 class CompanyProfile extends StatefulWidget {

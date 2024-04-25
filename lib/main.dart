@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/widgets/loading_view.dart';
-import 'client/client.dart' as client;
+import 'client.dart' as client;
 import 'widgets/page_screen.dart';
+import 'settings.dart' as settings;
 
 void main() async {
-  runApp(const MyApp());
+  runApp(const StudentHubApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StudentHubApp extends StatefulWidget {
+  const StudentHubApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<StudentHubApp> createState() => _StudentHubAppState();
+}
+
+class _StudentHubAppState extends State<StudentHubApp> {
+  @override
+  void initState() {
+    super.initState();
+    settings.addChangeListener(_onSettingsChange);
+  }
+
+  @override
+  void dispose() {
+    settings.removeListener(_onSettingsChange);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +38,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
-          brightness: Brightness.dark
+          brightness: settings.isDarkMode ? Brightness.dark : Brightness.light
+        ),
+        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+          hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+            fontStyle: FontStyle.italic
+          ) ?? const TextStyle(fontStyle: FontStyle.italic)
         )
       ),
       home: FutureBuilder(
@@ -42,11 +63,8 @@ class MyApp extends StatelessWidget {
       return const LoginPage();
     }
 
-    return Theme(
-      data: Theme.of(context).copyWith(
-        textTheme: context.textTheme.apply(fontSizeFactor: 1.1)
-      ),
-      child: const HomePage(isStudentUser: false)
-    );
+    return const HomePage();
   }
+
+  void _onSettingsChange() => setState(() {});
 }

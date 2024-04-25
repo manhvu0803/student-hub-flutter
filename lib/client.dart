@@ -3,15 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_hub_flutter/client/student_client.dart';
 import 'package:student_hub_flutter/models/user.dart';
-import 'account_client.dart';
+import 'settings.dart' as settings;
+import 'client/account_client.dart';
 
-export 'account_client.dart';
+export 'client/account_client.dart';
+export 'client/notification_client.dart';
 
 const String baseUrl = "https://api.studenthub.dev";
 
 String token = "";
 User? user;
 late SharedPreferences prefs;
+int initCount = 0;
 
 Map<String, String> get authHeaders => {
   "Authorization": "Bearer $token",
@@ -22,7 +25,12 @@ Map<String, String> get authJsonHeaders => {
   "Authorization": "Bearer $token",
 };
 
-Future<void> init() async {
+Future<void> init({bool forceReinit = false}) async {
+  if (initCount > 0 && !forceReinit) {
+    return;
+  }
+
+  initCount++;
   prefs = await SharedPreferences.getInstance();
   token = prefs.getString("token") ?? "";
   userEmail = prefs.getString("email") ?? "";
@@ -33,6 +41,10 @@ Future<void> init() async {
       getSkillSets(),
       getTeckStacks()
     ]);
+  }
+
+  if (user != null) {
+    settings.init(user!);
   }
 }
 

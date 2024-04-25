@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/screens/profile/company_profile.dart';
 import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
+import 'package:student_hub_flutter/client.dart' as client;
+import 'package:student_hub_flutter/settings.dart' as settings;
 
 import 'icon_text.dart';
 
@@ -14,6 +17,10 @@ class AccountMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       menuChildren: [
+        MenuItemButton(
+          child: Text("Switch to ${settings.isStudent ? "company" : "student"}"),
+          onPressed: () => settings.isStudent = !settings.isStudent,
+        ),
         MenuItemButton(
           child: const Text("Student profile"),
           onPressed: () => context.pushRoute((context) => const StudentProfileBasic()),
@@ -28,7 +35,11 @@ class AccountMenuButton extends StatelessWidget {
         ),
         MenuItemButton(
           child: const IconText(Icons.logout, "Log out"),
-          onPressed: () {},
+          onPressed: () {
+            client.logOut();
+            Navigator.popUntil(context, (route) => route.isFirst);
+            context.pushReplacement((context) => const LoginPage());
+          },
         )
       ],
       builder: (context, controller, child) => IconButton(

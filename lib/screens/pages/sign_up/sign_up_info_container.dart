@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
-import 'package:student_hub_flutter/widgets/icon_text_field.dart';
-import 'package:student_hub_flutter/client/client.dart' as client;
+import 'package:student_hub_flutter/widgets.dart';
+import 'package:student_hub_flutter/client.dart' as client;
 
 class SignUpInfoContainer extends StatefulWidget {
   final bool isStudent;
@@ -20,14 +20,11 @@ class SignUpInfoContainer extends StatefulWidget {
   State<SignUpInfoContainer> createState() => _SignUpInfoContainerState();
 }
 
-
 class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
   String _fullName = "";
-
   String _email = "";
-
   String _password = "";
-
+  String _reTypePassword = "";
   bool _agreedToTerms = false;
 
   @override
@@ -46,17 +43,27 @@ class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
                   onChange: (value) => _fullName = value,
                 ),
                 const SizedBox(height: 16),
+
                 IconTextField(
                   icon: Icons.mail,
                   hintText: "Email",
                   onChange: (value) => _email = value,
                 ),
                 const SizedBox(height: 16),
+
                 IconTextField(
                   icon: Icons.lock,
                   hintText: "Password",
                   obscureText: true,
                   onChange: (value) => _password = value,
+                ),
+                const SizedBox(height: 16),
+
+                IconTextField(
+                  icon: Icons.lock,
+                  hintText: "Re-enter password",
+                  obscureText: true,
+                  onChange: (value) => _reTypePassword = value,
                 ),
               ],
             ),
@@ -88,6 +95,26 @@ class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
   }
 
   void _signUp(BuildContext context) async {
+    if (_fullName.isEmpty) {
+      context.showTextSnackBar("Please input your name");
+      return;
+    }
+
+    if (_email.isEmpty) {
+      context.showTextSnackBar("Please input your email");
+      return;
+    }
+
+    if (_password.length < 8) {
+      context.showTextSnackBar("Password is too short");
+      return;
+    }
+
+    if (_password != _reTypePassword) {
+      context.showTextSnackBar("Passwords doesn't match");
+      return;
+    }
+
     if (!_agreedToTerms) {
       context.showTextSnackBar("You are required to agree to the Terms of Service");
       return;
@@ -97,7 +124,7 @@ class _SignUpInfoContainerState extends State<SignUpInfoContainer> {
       request: () => client.signUp(_email, _password, _fullName, widget.isStudent),
       onRequestDone: () {
         context.pushReplacement((context) => const LoginPage());
-        context.showTextSnackBar("Please check your inbox and verify the email address");
+        context.showTextSnackBar("Account registered\nPlease check your inbox and verify the email address");
       }
     );
   }

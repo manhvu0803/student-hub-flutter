@@ -30,14 +30,14 @@ class BottomExtraOption extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
             Text(text),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             FilledButton(
               onPressed: onButtonClick ?? _getBuilder(context),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4),
                 child: Text(
-                  buttonText, style:
-                  const TextStyle(fontSize: 16)
+                  buttonText,
+                  style:const TextStyle(fontSize: 16)
                 ),
               )
             )

@@ -1,70 +1,149 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/client/company_client.dart' as client;
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/time_of_day_extension.dart';
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/widgets/horizontal_title_text_field.dart';
 
 class ScheduleInterviewView extends StatefulWidget {
-  const ScheduleInterviewView({super.key});
+  final int projectId;
+  final int receiverId;
+
+  const ScheduleInterviewView({super.key, required this.projectId, required this.receiverId});
 
   @override
   State<ScheduleInterviewView> createState() => _ScheduleInterviewViewState();
 }
 
 class _ScheduleInterviewViewState extends State<ScheduleInterviewView> {
-  DateTime? _startTime;
-
-  DateTime? _endTime;
+  final Meeting meeting = Meeting(
+    startTime: DateTime.now(),
+    endTime: DateTime.now().add(const Duration(hours: 1))
+  )..room = MeetingRoom();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: context.textTheme.titleMedium!,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text("Title"),
-          const TextField(decoration: InputDecoration(hintText: "Meeting title")),
-          const SizedBox(height: 32),
-          const Text("Start time"),
-          _TimePickerRow(
-            time: _startTime,
-            onSelectTime: (selectedTime) => setState(() => _startTime = selectedTime)
-          ),
-          const SizedBox(height: 16),
-          const Text("End time"),
-          _TimePickerRow(
-            time: _endTime,
-            onSelectTime: (selectedTime) => setState(() => _endTime = selectedTime)
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12, top: 8),
-            child: Text(
-              (_startTime == null || _endTime == null) ? "" : "Duration: ${_startTime!.difference(_endTime!).inMinutes} minutes",
-              style: context.textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.italic)
+      child: SizedBox(
+        width: 600,
+        height: 580,
+        child: ListView(
+          children: [
+            const SizedBox(height: 16),
+            const Text("Meeting title"),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: "Interview for project...",
+                hintStyle: TextStyle(fontStyle: FontStyle.italic)
+              ),
+              onChanged: (value) => meeting.title = value
             ),
-          ),
-          const SizedBox(height: 32),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel")
+            const SizedBox(height: 24),
+
+            const Text("Meeting content"),
+            TextField(
+              decoration: const InputDecoration(
+                hintText: "Detail of the meeting...",
+                hintStyle: TextStyle(fontStyle: FontStyle.italic)
               ),
-              ElevatedButton(
-                onPressed: (_startTime == null || _endTime == null) ? null : () => _sendInvite(context),
-                child: const Text("Send invite")
+              maxLines: null,
+              onChanged: (value) => meeting.content = value
+            ),
+            const SizedBox(height: 24),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Start time"),
+                  _TimePickerRow(
+                    time: meeting.startTime,
+                    onSelectTime: (selectedTime) {
+                      if (selectedTime != null) {
+                        setState(() => meeting.startTime = selectedTime);
+                      }
+                    }
+                  ),
+                  const SizedBox(height: 16),
+
+                  const Text("End time"),
+                  _TimePickerRow(
+                    time: meeting.endTime,
+                    onSelectTime: (selectedTime) {
+                      if (selectedTime != null) {
+                        setState(() => meeting.endTime = selectedTime);
+                      }
+                    }
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 8),
+                    child: Text(
+                      "Duration: ${meeting.endTime.difference(meeting.startTime).inMinutes} minutes",
+                      style: context.textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.italic)
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
               ),
-            ],
-          )
-        ],
+            ),
+
+            HorizontalTitleTextField(
+              title: "Room ID:",
+              distance: 29,
+              onChanged: (value) => meeting.room!.userDefinedId = value
+            ),
+
+            HorizontalTitleTextField(
+              title: "Room code:",
+              distance: 9,
+              onChanged: (value) => meeting.room!.code = value,
+            ),
+            const SizedBox(height: 24),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel")
+                ),
+                ElevatedButton(
+                  onPressed: () => _sendInvite(context),
+                  child: const Text("Send invite")
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  void _sendInvite(BuildContext context) {
-    Navigator.pop(context);
+  Future<void> _sendInvite(BuildContext context) async {
+    context.showLoadingDialog();
+
+    try {
+      await client.scheduleMeeting(
+        meeting,
+        projectId: widget.projectId,
+        receiverId: widget.receiverId
+      );
+    }
+    catch (e) {
+      if (context.mounted) {
+        context.showTextSnackBar(e.toString());
+      }
+    }
+
+    if (context.mounted) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
   }
 }
 
@@ -88,8 +167,8 @@ class _TimePickerRowState extends State<_TimePickerRow> {
   TimeOfDay? _timeOfDay;
 
   @override
-  void didUpdateWidget(covariant _TimePickerRow oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void initState() {
+    super.initState();
     _date = widget.time;
 
     if (widget.time != null) {
@@ -103,7 +182,7 @@ class _TimePickerRowState extends State<_TimePickerRow> {
       data: Theme.of(context).copyWith(
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            textStyle: const TextStyle(fontSize: 20)
+            textStyle: TextStyle(fontSize: context.textTheme.bodyMedium?.fontSize ?? 16)
           )
         )
       ),
