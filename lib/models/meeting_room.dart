@@ -7,7 +7,7 @@ class MeetingRoom {
   DateTime? deletedAt;
   DateTime? expireTime;
 
-  MeetingRoom() : createdAt = DateTime.now();
+  MeetingRoom({this.code = "", this.userDefinedId = ""}) : createdAt = DateTime.now();
 
   MeetingRoom.fromJson(Map<String, dynamic> json, {String? name}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],

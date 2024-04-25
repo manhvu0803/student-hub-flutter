@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:student_hub_flutter/client/student_client.dart';
+import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:http/http.dart' as http;
 import '../client.dart';
@@ -29,20 +30,12 @@ Future<List<Project>> getProjects() async {
 
   var response = await http.get(
     Uri.parse("$baseUrl/api/project/company/${user!.company!.id}"),
-    headers: {
-      "Authorization": "Bearer $token",
-    }
+    headers: authHeaders
   );
 
   var json = handleResponse(response);
-  var projects = <Project>[];
-
-  parseArrayJson(
-    json: json,
-    parser: (json) => projects.add(Project.fromJson(json))
-  );
-
-  return projects;
+  var list = (json["result"] ?? json) as List;
+  return list.mapToList((item) => Project.fromJson(item));
 }
 
 Future<void> updateProfile(CompanyUser company) async {

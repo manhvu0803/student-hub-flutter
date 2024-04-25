@@ -15,6 +15,9 @@ class Meeting {
   MeetingRoom? room;
 
   Meeting({
+    this.title = "",
+    this.content = "",
+    this.room,
     required this.startTime,
     required this.endTime
   }) : createdAt = DateTime.now();

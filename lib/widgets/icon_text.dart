@@ -6,6 +6,7 @@ class IconText extends StatelessWidget {
   final String text;
   final double distance;
   final bool reversed;
+  final TextStyle? textStyle;
 
   const IconText(
     this.icon,
@@ -15,17 +16,20 @@ class IconText extends StatelessWidget {
     this.reversed = false,
     this.distance = 5,
     this.iconSize,
+    this.textStyle
   });
 
   @override
   Widget build(BuildContext context) {
     var iconWidget = Icon(icon, size: iconSize);
+    var textWidget = Text(text, style: textStyle);
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        reversed ? Text(text) : iconWidget,
+        reversed ? textWidget : iconWidget,
         SizedBox(width: distance),
-        reversed ? iconWidget : Text(text),
+        reversed ? iconWidget : textWidget,
       ],
     );
   }

@@ -1,4 +1,10 @@
+import 'models.dart';
+
 final Set<void Function()> _callbacks = {};
+
+void init(User user) {
+  _isStudent = user.company == null;
+}
 
 void addChangeListener(void Function() callback) {
   _callbacks.add(callback);

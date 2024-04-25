@@ -63,7 +63,7 @@ class _StudentHubAppState extends State<StudentHubApp> {
       return const LoginPage();
     }
 
-    return const HomePage(isStudentUser: false);
+    return const HomePage();
   }
 
   void _onSettingsChange() => setState(() {});

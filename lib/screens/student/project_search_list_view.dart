@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/client/student_client.dart' as client;
-import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
-import 'package:student_hub_flutter/models/project.dart';
-import 'package:student_hub_flutter/screens/student/student_project_page.dart';
-import 'package:student_hub_flutter/widgets/project_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
-class ProjectListView extends StatefulWidget {
+import 'student_project_card.dart';
+
+class ProjectSearchListView extends StatefulWidget {
   final void Function()? onPop;
 
-  const ProjectListView({super.key, this.onPop});
+  const ProjectSearchListView({super.key, this.onPop});
 
   @override
-  State<ProjectListView> createState() => _ProjectListViewState();
+  State<ProjectSearchListView> createState() => _ProjectSearchListViewState();
 }
 
-class _ProjectListViewState extends State<ProjectListView> {
+class _ProjectSearchListViewState extends State<ProjectSearchListView> {
   String? _titleQuery;
   int page = 1;
 
@@ -50,7 +48,7 @@ class _ProjectListViewState extends State<ProjectListView> {
                 page: page
               ),
               builder: (context, data) => ListView(
-                children: data.mapToList((project) => _ListViewProjectCard(project, onPop: widget.onPop)),
+                children: data.mapToList((project) => StudentProjectCard(project, onPop: widget.onPop)),
               )
             ),
           ),
@@ -75,61 +73,5 @@ class _ProjectListViewState extends State<ProjectListView> {
         ],
       ),
     );
-  }
-}
-
-class _ListViewProjectCard extends StatefulWidget {
-  final Project project;
-  final void Function()? onPop;
-
-  const _ListViewProjectCard(this.project, {this.onPop});
-
-  @override
-  State<_ListViewProjectCard> createState() => _ListViewProjectCardState();
-}
-
-class _ListViewProjectCardState extends State<_ListViewProjectCard> {
-  late Project _project;
-
-  @override
-  void initState() {
-    super.initState();
-    _project = widget.project;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: ProjectCard.fromProject(
-        widget.project,
-        onPressed: () => context.pushRoute(
-          (context) => StudentProjectPage(_project),
-          onPop: widget.onPop
-        ),
-        trailing: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: IconButton(
-            onPressed: () => _onToggleFavorite(context),
-            icon: Icon(
-              widget.project.isFavorite ? Icons.favorite : Icons.favorite_outline,
-              color: Colors.red
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _onToggleFavorite(BuildContext context) async {
-    try {
-      await client.setFavorite(_project, !_project.isFavorite);
-      setState(() => _project.isFavorite = !_project.isFavorite);
-    }
-    catch (e) {
-      if (context.mounted) {
-        context.showTextSnackBar(e.toString());
-      }
-    }
   }
 }

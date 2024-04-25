@@ -76,7 +76,7 @@ class _LogInContainerState extends State<_LogInContainer> {
   void _onLogInPressed(BuildContext context) async {
     context.showRequestLoad(
       request: () => client.signIn(_username, _password),
-      onRequestDone: () => context.pushReplacement((context) => const HomePage(isStudentUser: false))
+      onRequestDone: () => context.pushReplacement((context) => const HomePage())
     );
   }
 }
