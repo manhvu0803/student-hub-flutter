@@ -47,3 +47,4 @@ linux/
 web/
 ios/
 main_*.dart
+lib/keys.dart
