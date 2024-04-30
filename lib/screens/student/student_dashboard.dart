@@ -32,7 +32,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
       child: Column(
         children: [
           TabBar(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 128),
             isScrollable: true,
             tabs: [
               const Tab(text: "Favorites"),

@@ -22,9 +22,9 @@ class Proposal {
 
   Proposal.fromJson(Map<String, dynamic> json, {this.project, this.student}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal(),
     projectId = project?.id ?? json["projectId"],
     studentId = student?.id ?? json["studentId"],
     content = json["coverLetter"] ?? ""

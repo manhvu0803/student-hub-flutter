@@ -13,10 +13,10 @@ class MeetingRoom {
     id = json["id"] ?? json["Id"] ?? json["ID"],
     code = json["meeting_room_code"] ?? json["code"] ?? "",
     userDefinedId = json["meeting_room_id"] ?? "",
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
-    expireTime = DateTime.tryParse(json["expired_at"] ?? "");
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal(),
+    expireTime = DateTime.tryParse(json["expired_at"] ?? "")?.toLocal();
 
   @override
   bool operator==(Object other) {

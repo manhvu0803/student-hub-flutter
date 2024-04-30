@@ -63,23 +63,16 @@ class _ScheduleInterviewViewState extends State<ScheduleInterviewView> {
                   const Text("Start time"),
                   _TimePickerRow(
                     time: meeting.startTime,
-                    onSelectTime: (selectedTime) {
-                      if (selectedTime != null) {
-                        setState(() => meeting.startTime = selectedTime);
-                      }
-                    }
+                    onSelectTime: _setStartTime
                   ),
                   const SizedBox(height: 16),
 
                   const Text("End time"),
                   _TimePickerRow(
                     time: meeting.endTime,
-                    onSelectTime: (selectedTime) {
-                      if (selectedTime != null) {
-                        setState(() => meeting.endTime = selectedTime);
-                      }
-                    }
+                    onSelectTime: _setEndTime
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 8),
                     child: Text(
@@ -122,6 +115,40 @@ class _ScheduleInterviewViewState extends State<ScheduleInterviewView> {
         ),
       ),
     );
+  }
+
+  void _setEndTime(DateTime? selectedTime) {
+    if (selectedTime == null) {
+      return;
+    }
+
+    setState(() {
+      meeting.endTime = selectedTime;
+
+      if (meeting.endTime.difference(meeting.startTime) < const Duration(minutes: 5)) {
+        meeting.startTime = meeting.endTime.subtract(const Duration(minutes: 5));
+      }
+    });
+  }
+
+  void _setStartTime(DateTime? selectedTime) {
+    if (selectedTime == null) {
+      return;
+    }
+
+    setState(() {
+      var now = DateTime.now();
+
+      if (now.compareTo(selectedTime!) > 0) {
+        selectedTime = DateTime.now();
+      }
+
+      meeting.startTime = selectedTime!;
+
+      if (meeting.endTime.difference(meeting.startTime) < const Duration(minutes: 5)) {
+        meeting.endTime = selectedTime!.add(const Duration(minutes: 5));
+      }
+    });
   }
 
   Future<void> _sendInvite(BuildContext context) async {
@@ -169,15 +196,15 @@ class _TimePickerRowState extends State<_TimePickerRow> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     _date = widget.time;
 
     if (widget.time != null) {
       _timeOfDay = TimeOfDay.fromDateTime(widget.time!);
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
         textButtonTheme: TextButtonThemeData(
@@ -195,7 +222,7 @@ class _TimePickerRowState extends State<_TimePickerRow> {
           const Icon(Icons.calendar_month),
           TextButton(
             onPressed: () => _pickTime(context),
-            child: Text((_timeOfDay == null) ? "__:__": _timeOfDay!.to12HString())
+            child: Text((_timeOfDay == null) ? "__:__": _timeOfDay!.to12HourString())
           ),
         ],
       ),
@@ -211,13 +238,12 @@ class _TimePickerRowState extends State<_TimePickerRow> {
       lastDate: currentDate.add(const Duration(days: 30))
     );
 
+    setState(() => _date = selectedDate);
+
     if (selectedDate != null && _timeOfDay != null) {
       var time = selectedDate.copyWith(hour: _timeOfDay!.hour, minute: _timeOfDay!.minute);
       widget.onSelectTime?.call(time);
-      return;
     }
-
-    setState(() => _date = selectedDate);
   }
 
   Future<void> _pickTime(BuildContext context) async {
@@ -226,12 +252,11 @@ class _TimePickerRowState extends State<_TimePickerRow> {
       initialTime: (_timeOfDay != null) ? _timeOfDay! : TimeOfDay.now(),
     );
 
+    setState(() => _timeOfDay = selectedTime);
+
     if (selectedTime != null && _date != null) {
       var time = _date!.copyWith(hour: selectedTime.hour, minute: selectedTime.minute);
       widget.onSelectTime?.call(time);
-      return;
     }
-
-    setState(() => _timeOfDay = selectedTime);
   }
 }

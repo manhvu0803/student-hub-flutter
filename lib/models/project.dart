@@ -41,9 +41,9 @@ class Project {
 
   Project.fromJson(Map<String, dynamic> json) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal(),
     description = json["description"] ?? json["desc"],
     companyId = _getCompanyId(json),
     companyName = json["companyName"] ?? "",

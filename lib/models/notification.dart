@@ -24,9 +24,9 @@ class Notification {
 
   Notification.fromJson(Map<String, dynamic> json, {this.sender, this.receiver, this.proposal}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal(),
     title = json["title"] ?? "",
     content = json["content"] ?? "",
     isRead = int.tryParse(json["notifyFlag"] ?? "0") == 1

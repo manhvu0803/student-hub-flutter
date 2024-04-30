@@ -70,8 +70,8 @@ Future<void> scheduleMeeting(Meeting meeting, {
     body: jsonEncode({
       "title": meeting.title,
       if (meeting.content.isNotEmpty) "content": meeting.content,
-      "startTime": meeting.startTime.toIso8601String(),
-      "endTime": meeting.endTime.toIso8601String(),
+      "startTime": meeting.startTime.toUtc().toIso8601String(),
+      "endTime": meeting.endTime.toUtc().toIso8601String(),
       "projectId": projectId,
       "senderId": user!.id,
       "receiverId": receiverId,

@@ -26,11 +26,11 @@ class Meeting {
     id = json["id"] ?? json["Id"] ?? json["ID"],
     title = json["title"] ?? "",
     content = json["content"] ?? "",
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? ""),
-    startTime = DateTime.parse(json["startTime"]),
-    endTime = DateTime.parse(json["endTime"]),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal(),
+    startTime = DateTime.parse(json["startTime"]).toLocal(),
+    endTime = DateTime.parse(json["endTime"]).toLocal(),
     isEnabled = json["disableFlag"] == 0,
     room = (json["meetingRoom"] != null) ? MeetingRoom.fromJson(json["meetingRoom"]) : null;
 

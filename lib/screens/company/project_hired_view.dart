@@ -41,7 +41,7 @@ class ProjectHiredView extends StatelessWidget {
         project: project,
         recipient: User()
           ..fullName = proposal.student!.name
-          ..id = proposal.student?.id ?? proposal.studentId
+          ..id = proposal.student!.userId
       ))
     );
   }

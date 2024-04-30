@@ -41,7 +41,7 @@ class Message {
     content = json["content"] ?? "",
     sender = sender ?? User.fromJson(json["sender"], student: StudentUser(), company: CompanyUser()),
     receiver = receiver ?? User.fromJson(json["receiver"], student: StudentUser(), company: CompanyUser()),
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
     project = project ?? _getProject(json)
   {
     var innerJson = json["notification"] ?? json["notifications"];
