@@ -4,6 +4,7 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:student_hub_flutter/screens/pages/chat_page.dart';
+import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
 import 'package:student_hub_flutter/widgets/proposal_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
@@ -77,6 +78,7 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProposalCard.studentProposal(
+      onTap: () => context.pushRoute((context) => const StudentProfileBasic()),
       studentName: studentName,
       avatar: avatar ?? const CircleAvatar(child: Icon(Icons.person)),
       education: education,

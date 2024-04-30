@@ -8,15 +8,17 @@ Map<int, Category> techStacks = {};
 Map<int, Category> skillSets = {};
 
 Future<Map<int, Category>> getTeckStacks() async {
-  return await _getCategories("api/techstack/getAllTechStack");
+  techStacks = await _getCategories("api/techstack/getAllTechStack");
+  return techStacks;
 }
 
 Future<Map<int, Category>> getSkillSets() async {
-  return await _getCategories("api/skillset/getAllSkillSet");
+  skillSets = await _getCategories("api/skillset/getAllSkillSet");
+  return skillSets;
 }
 
 Future<Map<int, Category>> _getCategories(String subUrl) async {
-  checkLogInStatus(isStudent: true);
+  checkLogInStatus();
 
   var response = await http.get(
     Uri.parse("$baseUrl/$subUrl"),
@@ -41,18 +43,21 @@ Future<Map<int, Category>> _getCategories(String subUrl) async {
 }
 
 Future<void> updateProfile(StudentUser newStudent) async {
-  checkLogInStatus(isStudent: true);
+  checkLogInStatus();
+  var requester = (user!.student == null || user!.student!.id < 0) ? http.post : http.put;
+  var id = (user!.student == null || user!.student!.id < 0) ? "" : "/${user!.student!.id}";
 
-  await Future.wait([
-    http.put(
-      Uri.parse("$baseUrl/api/profile/student/${user!.student!.id}"),
+  var results = await Future.wait([
+    requester(
+      Uri.parse("$baseUrl/api/profile/student$id"),
       headers: authJsonHeaders,
       body: jsonEncode({
         "techStackId": newStudent.techStack?.id ?? 0,
         "skillSets": newStudent.skillSet.mapToList((skill) => skill.id)
       })
     ),
-    http.put(
+
+    if (user!.student != null) http.put(
       Uri.parse("$baseUrl/api/language/updateByStudentId/${user!.student!.id}"),
       headers: authJsonHeaders,
       body: jsonEncode({
@@ -65,7 +70,8 @@ Future<void> updateProfile(StudentUser newStudent) async {
     ),
   ]);
 
-  user!.student = newStudent;
+  var json = handleResponse(results[0]);
+  user!.student = StudentUser.fromJson(json["result"] ?? json);
 }
 
 Future<List<Project>> searchProject({

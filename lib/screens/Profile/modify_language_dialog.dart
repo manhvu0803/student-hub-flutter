@@ -60,7 +60,6 @@ class _ModifyLanguageDialogState extends State<ModifyLanguageDialog> {
       onDone: () {
         _language.name = _nameTextController.text;
         _language.level = _levelTextController.text;
-        Navigator.pop(context);
         widget.onDone?.call(_language);
       },
     );

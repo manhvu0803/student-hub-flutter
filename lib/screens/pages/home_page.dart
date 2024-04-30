@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
   Widget _getChildWidget() {
     return switch (_selectedTabIndex) {
       0 => settings.isStudent ? const StudentDashboard() : const CompanyDashboard(),
-      1 => settings.isStudent ? const ProjectSearchListView() : const ProjectSearchListView(),
+      1 => const ProjectSearchListView(),
       2 => const ChatListView(),
       3 => const NotificationListView(),
       _ => const MeetingListView(),
@@ -77,16 +77,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _get2ndDestination() {
-    if (settings.isStudent) {
-      return const NavigationDestination(
-        icon: Icon(Icons.list),
-        label: "Projects"
-      );
-    }
-
     return const NavigationDestination(
-      icon: Icon(Icons.school),
-      label: "Students"
+      icon: Icon(Icons.list),
+      label: "Projects"
     );
   }
 }

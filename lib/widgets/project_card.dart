@@ -47,19 +47,22 @@ class ProjectCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onPressed,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                if (leading != null) leading!,
-                Expanded(child: _getMainColumn(context)),
-                if (trailing != null) trailing!,
-              ],
-            ),
-            if (bottom != null) bottom!,
-            const SizedBox(height: 12),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  if (leading != null) leading!,
+                  Expanded(child: _getMainColumn(context)),
+                  if (trailing != null) trailing!,
+                ],
+              ),
+              if (bottom != null) bottom!,
+              const SizedBox(height: 12),
+            ],
+          ),
         ),
       ),
     );

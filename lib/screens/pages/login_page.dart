@@ -3,6 +3,9 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/home_page.dart';
 import 'package:student_hub_flutter/screens/pages/sign_up/sign_up_page.dart';
+import 'package:student_hub_flutter/screens/profile/company_profile.dart';
+import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
+import 'package:student_hub_flutter/settings.dart' as settings;
 import 'package:student_hub_flutter/widgets.dart';
 import 'package:student_hub_flutter/client.dart' as client;
 
@@ -76,7 +79,19 @@ class _LogInContainerState extends State<_LogInContainer> {
   void _onLogInPressed(BuildContext context) async {
     context.showRequestLoad(
       request: () => client.signIn(_username, _password),
-      onRequestDone: () => context.pushReplacement((context) => const HomePage())
+      onRequestDone: () {
+        if (settings.isStudent && client.user!.student == null) {
+          context.pushReplacement((context) => const StudentProfileBasic());
+          return;
+        }
+
+        if (!settings.isStudent && client.user!.company == null) {
+          context.pushReplacement((context) => const CompanyProfile());
+          return;
+        }
+
+        context.pushReplacement((context) => const HomePage());
+      }
     );
   }
 }

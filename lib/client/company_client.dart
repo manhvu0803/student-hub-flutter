@@ -39,10 +39,12 @@ Future<List<Project>> getProjects() async {
 }
 
 Future<void> updateProfile(CompanyUser company) async {
-  checkLogInStatus(isCompany: true);
+  checkLogInStatus();
+  var requester = (user!.company == null) ? http.post : http.put;
+  var id = (user!.company == null) ? "" : "/${user!.company!.id}";
 
-  var response = await http.put(
-    Uri.parse("$baseUrl/api/profile/company/${user!.company!.id}"),
+  var response = await requester(
+    Uri.parse("$baseUrl/api/profile/company$id"),
     headers: authJsonHeaders,
     body: jsonEncode({
       "companyName": company.name,

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
+import 'package:student_hub_flutter/settings.dart' as settings;
 import 'package:student_hub_flutter/widgets/extra_option_container.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
-
 import 'company_sign_up_page.dart';
 import 'student_sign_up_page.dart';
 
@@ -31,18 +31,13 @@ class SignupPage extends StatelessWidget {
   }
 }
 
-enum AccountType {
-  company,
-  student
-}
-
 class _AccountTypeChooser extends StatefulWidget {
   @override
   State<_AccountTypeChooser> createState() => _AccountTypeChooserState();
 }
 
 class _AccountTypeChooserState extends State<_AccountTypeChooser> {
-  AccountType? _accountType;
+  bool? _isStudent;
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +52,18 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
           icon: Icons.school,
           title: "Student",
           subtitle: "I am a student ready for work",
-          value: AccountType.student,
-          groupValue: _accountType,
-          onChanged: (value) => setState(() =>_accountType = value),
+          value: true,
+          groupValue: _isStudent,
+          onChanged: _setAccountType,
         ),
         const SizedBox(height: 24),
         _AccountTypeOption(
           icon: Icons.apartment,
           title: "Company",
           subtitle: "I represent a company looking for developers",
-          value: AccountType.company,
-          groupValue: _accountType,
-          onChanged: (value) => setState(() =>_accountType = value),
+          value: false,
+          groupValue: _isStudent,
+          onChanged: _setAccountType,
         ),
         const SizedBox(height: 24),
         FilledButton(
@@ -82,8 +77,13 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
     );
   }
 
+  void _setAccountType<T>(bool? value) {
+    settings.setProfileType(isStudent: value ?? settings.isStudent);
+    setState(() => _isStudent = value);
+  }
+
   void _onCreateAccountPressed(BuildContext context) {
-    if (_accountType == AccountType.student) {
+    if (_isStudent ?? true) {
       context.pushRoute((context) => const StudentSignUpPage());
       return;
     }
@@ -92,18 +92,18 @@ class _AccountTypeChooserState extends State<_AccountTypeChooser> {
   }
 }
 
-class _AccountTypeOption extends StatelessWidget {
+class _AccountTypeOption<T> extends StatelessWidget {
   final IconData icon;
 
   final String title;
 
   final String? subtitle;
 
-  final AccountType value;
+  final T value;
 
-  final AccountType? groupValue;
+  final T? groupValue;
 
-  final void Function(AccountType?) onChanged;
+  final void Function(T?) onChanged;
 
   const _AccountTypeOption({
     required this.icon,
@@ -134,7 +134,7 @@ class _AccountTypeOption extends StatelessWidget {
                 leading: Icon(icon, size: 35),
                 title: Text(title),
                 subtitle: (subtitle == null) ? null : Text(subtitle!),
-                trailing: Radio<AccountType>(
+                trailing: Radio(
                   value: value,
                   groupValue: groupValue,
                   onChanged: onChanged,

@@ -8,11 +8,14 @@ import 'package:student_hub_flutter/settings.dart' as settings;
 
 import 'icon_text.dart';
 
-class AccountMenuButton extends StatelessWidget {
-  const AccountMenuButton({
-    super.key,
-  });
+class AccountMenuButton extends StatefulWidget {
+  const AccountMenuButton({super.key});
 
+  @override
+  State<AccountMenuButton> createState() => _AccountMenuButtonState();
+}
+
+class _AccountMenuButtonState extends State<AccountMenuButton> {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
@@ -30,8 +33,17 @@ class AccountMenuButton extends StatelessWidget {
           onPressed: () => context.pushRoute((context) => const CompanyProfile()),
         ),
         MenuItemButton(
-          child: const IconText(Icons.settings, "Settings"),
-          onPressed: () {},
+          child: Row(
+            children: [
+              const Text("Dark mode"),
+              const SizedBox(width: 4),
+              Switch(
+                onChanged: (value) => setState(() => settings.isDarkMode = value),
+                value: settings.isDarkMode,
+              ),
+            ],
+          ),
+          onPressed: () => setState(() => settings.isDarkMode = !settings.isDarkMode),
         ),
         MenuItemButton(
           child: const IconText(Icons.logout, "Log out"),

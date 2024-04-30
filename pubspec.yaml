@@ -100,3 +100,5 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   image_path: "app_icon.jpg"
+  web:
+    generate: true

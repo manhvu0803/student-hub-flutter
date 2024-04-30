@@ -48,10 +48,6 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
                 DropdownButton(
                   value: _user.techStack,
                   elevation: 16,
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
                   onChanged: (value) => setState(() => _user.techStack = value),
                   items: client.techStacks.values.mapToList((techStack) => DropdownMenuItem(
                     value: techStack,
@@ -151,6 +147,10 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
   }
 
   void _modifyUserLanguage(Language oldLanguage, Language newLanguage) {
+    if (newLanguage.name.isEmpty) {
+      return;
+    }
+
     setState(() {
       _user.languages.remove(oldLanguage);
       _user.languages.add(newLanguage);

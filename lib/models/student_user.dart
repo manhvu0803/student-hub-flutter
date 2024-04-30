@@ -17,7 +17,7 @@ class StudentUser {
   int id = -1;
   int userId = -1;
   String name = '';
-  Category? techStack = Category();
+  Category? techStack;
   List<Category> skillSet = [];
   List<String> educations = [];
   List<String> experiences = [];

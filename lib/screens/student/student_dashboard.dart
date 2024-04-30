@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/string_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:student_hub_flutter/widgets/project_list_view.dart';
 import 'package:student_hub_flutter/client/student_client.dart' as client;
@@ -27,14 +28,17 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
     return DefaultTabController(
       initialIndex: 1,
-      length: 3,
+      length: 4,
       child: Column(
         children: [
-          const TabBar(
+          TabBar(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            isScrollable: true,
             tabs: [
-              Tab(text: "Favorites"),
-              Tab(text: "Working"),
-              Tab(text: "Done"),
+              const Tab(text: "Favorites"),
+              ...ProjectType.values.map((type) => Tab(
+                text: type.name.uppercaseFirstLetter
+              )),
             ]
           ),
           Expanded(
@@ -47,14 +51,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     childBuilder: projectCardBuilder
                   ),
                   ProjectListView.student(
+                    projectType: ProjectType.preparing,
+                    childBuilder: projectCardBuilder
+                  ),
+                  ProjectListView.student(
                     projectType: ProjectType.working,
                     childBuilder: projectCardBuilder,
-                    projectFilter: (project) => project.status == ProjectStatus.working
                   ),
                   ProjectListView.student(
                     projectType: ProjectType.archived,
                     childBuilder: projectCardBuilder,
-                    projectFilter: (project) => project.status != ProjectStatus.working
                   ),
                 ]
               ),
