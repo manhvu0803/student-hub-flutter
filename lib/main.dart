@@ -34,6 +34,7 @@ class _StudentHubAppState extends State<StudentHubApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudentHub',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(

@@ -39,8 +39,8 @@ class _LogInContainer extends StatefulWidget {
 }
 
 class _LogInContainerState extends State<_LogInContainer> {
-  String _username = "";
-  String _password = client.userEmail;
+  String _username = client.userEmail;
+  String _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +71,15 @@ class _LogInContainerState extends State<_LogInContainer> {
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
             child: Text("Log in", style: TextStyle(fontSize: 18))
           )
+        ),
+        const SizedBox(height: 8),
+
+        TextButton(
+          onPressed: () => showAdaptiveDialog(
+            context: context,
+            builder: (context) => const _ResetPasswordDialog()
+          ),
+          child: const Text("Forgot your password?")
         )
       ]
     );
@@ -92,6 +101,31 @@ class _LogInContainerState extends State<_LogInContainer> {
 
         context.pushReplacement((context) => const HomePage());
       }
+    );
+  }
+}
+
+class _ResetPasswordDialog extends StatelessWidget {
+  const _ResetPasswordDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Do you want to reset yout password?"),
+      content: const Text("An email with the new password will be sent your email address"),
+      actions: [
+        TextButton(
+          onPressed: () => context.loadWithDialog(
+            client.resetPassword(),
+            onDone: (data) => Navigator.pop(context)
+          ),
+          child: const Text("OK")
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel")
+        )
+      ],
     );
   }
 }

@@ -52,8 +52,7 @@ Future<void> signIn(String email, String password) async {
   );
 
   var json = handleResponse(response);
-  token = json["result"]?["token"] ?? json["token"] ?? json ?? "";
-
+  token = json["result"]?["token"] ?? json["token"] ?? json["result"] ?? json ?? "";
   userEmail = email;
 
   await Future.wait([
@@ -79,6 +78,32 @@ Future<void> logOut() async {
   handleResponse(response);
 }
 
+Future<void> resetPassword() async {
+  checkLogInStatus();
+
+  var response = await http.put(
+    Uri.parse("$baseUrl/api/user/forgotPassword"),
+    headers: authJsonHeaders,
+  );
+
+  handleResponse(response);
+}
+
+Future<void> changePassword(String oldPassword, String newPassword) async {
+  checkLogInStatus();
+
+  var response = await http.put(
+    Uri.parse("$baseUrl/api/user/changePassword"),
+    headers: authJsonHeaders,
+    body: jsonEncode({
+      "oldPassword": oldPassword,
+      "newPassword": newPassword
+    })
+  );
+
+  handleResponse(response);
+}
+
 Future<List<Meeting>> getMeetings() async {
   checkLogInStatus();
 
@@ -89,7 +114,33 @@ Future<List<Meeting>> getMeetings() async {
 
   var json = handleResponse(response);
   var list = (json["result"] ?? json) as List;
-  return list.mapToList((innerJson) => Meeting.fromJson(innerJson));
+  var meetings = list.mapToList((innerJson) => Meeting.fromJson(innerJson));
+  var now = DateTime.now();
+
+  meetings.sort((a, b) {
+    if (a.endTime.compareTo(now) <= 0) {
+      return 1;
+    }
+
+    if (b.endTime.compareTo(now) <= 0) {
+      return -1;
+    }
+
+    var aCompare = a.startTime.compareTo(now);
+    var bCompare = b.startTime.compareTo(now);
+
+    if (aCompare <= 0 && bCompare >= 0) {
+      return -1;
+    }
+
+    if (bCompare <= 0 && aCompare >= 0) {
+      return 1;
+    }
+
+    return a.startTime.compareTo(b.startTime);
+  });
+
+  return meetings;
 }
 
 void checkLogInStatus({bool isStudent = false, bool isCompany = false}) {
@@ -104,4 +155,15 @@ void checkLogInStatus({bool isStudent = false, bool isCompany = false}) {
   if (isCompany && (user!.company == null || user!.company!.id < 0)) {
     throw Exception("User hasn't created a company profle");
   }
+}
+
+bool isLogIn({bool asStudent = false, bool asCompany = false}) {
+  try {
+    checkLogInStatus(isCompany: asCompany, isStudent: asStudent);
+  }
+  catch (e) {
+    return false;
+  }
+
+  return true;
 }

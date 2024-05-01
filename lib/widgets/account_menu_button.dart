@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/screens/pages/change_password_page.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/screens/profile/company_profile.dart';
 import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
@@ -32,6 +33,7 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
           child: const Text("Company profile"),
           onPressed: () => context.pushRoute((context) => const CompanyProfile()),
         ),
+        const Divider(),
         MenuItemButton(
           child: Row(
             children: [
@@ -44,6 +46,11 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
             ],
           ),
           onPressed: () => setState(() => settings.isDarkMode = !settings.isDarkMode),
+        ),
+        const Divider(),
+        MenuItemButton(
+          child: const IconText(Icons.password, "Change password", distance: 6,),
+          onPressed: () => context.pushReplacement((context) => const ChangePasswordPage()),
         ),
         MenuItemButton(
           child: const IconText(Icons.logout, "Log out"),

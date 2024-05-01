@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_theme_extension.dart';
 import 'package:student_hub_flutter/widgets/account_menu_button.dart';
+import 'package:student_hub_flutter/widgets/generic_settings_menu_button.dart';
 
 class PageScreen extends StatelessWidget {
   final String title;
@@ -22,11 +23,11 @@ class PageScreen extends StatelessWidget {
     this.hasBackButton,
     this.customBackButtonCallback,
     this.floatingActionButton,
-    this.actions,
+    List<Widget>? actions,
     this.floatingActionButtonLocation
-  });
+  }) : actions = actions ?? const [GenericSettingsMenuButton()];
 
-  PageScreen.account({
+  const PageScreen.account({
     super.key,
     this.title = "StudentHub",
     required this.child,
@@ -36,7 +37,7 @@ class PageScreen extends StatelessWidget {
     this.customBackButtonCallback,
     this.floatingActionButton,
     this.floatingActionButtonLocation
-  }) : actions = [const AccountMenuButton()];
+  }) : actions = const [AccountMenuButton()];
 
   @override
   Widget build(BuildContext context) {

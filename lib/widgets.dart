@@ -12,3 +12,4 @@ export 'widgets/student_info_list_tile.dart';
 export 'widgets/title_text.dart';
 export 'widgets/cancel_done_dialog.dart';
 export 'widgets/meeting_card.dart';
+export '/widgets/generic_settings_menu_button.dart';
