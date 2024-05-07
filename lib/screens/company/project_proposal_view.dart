@@ -71,12 +71,9 @@ class _HireProposalCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0, bottom: 12),
       child: ProposalCard.studentProposal(
-        studentName: proposal.student!.name,
+        proposal,
         avatar: avatar,
-        education: proposal.student!.educations.isNotEmpty ? proposal.student!.educations[0].toString() : "No experience",
-        specialty: proposal.student!.techStack?.name ?? "Engineer",
         evaluation: evaluation,
-        proposal: proposal.content,
         bottom: Theme(
           data: Theme.of(context).copyWith(
             outlinedButtonTheme: OutlinedButtonThemeData(

@@ -6,7 +6,7 @@ import 'package:student_hub_flutter/models.dart';
 
 String userEmail = "";
 
-Future<void> getUserInfo() async {
+Future<User> getUserInfo() async {
   if (token.isEmpty) {
     throw Exception("Hasn't logged in yet");
   }
@@ -20,6 +20,7 @@ Future<void> getUserInfo() async {
 
   var json = handleResponse(response);
   user = User.fromJson(json["result"] ?? json);
+  return user!;
 }
 
 Future<void> signUp(String email, String password, String fullName, bool isStudent) async {

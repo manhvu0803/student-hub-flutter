@@ -13,3 +13,6 @@ export 'widgets/title_text.dart';
 export 'widgets/cancel_done_dialog.dart';
 export 'widgets/meeting_card.dart';
 export '/widgets/generic_settings_menu_button.dart';
+export 'widgets/addable_list.dart';
+export 'widgets/addable_title.dart';
+export 'widgets/skill_list_tile.dart';

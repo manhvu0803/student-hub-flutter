@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import '../client.dart';
@@ -65,6 +66,37 @@ Future<void> updateProfile(StudentUser newStudent) async {
           "id": language.id,
           "languageName": language.name,
           "level": language.level
+        })
+      })
+    ),
+
+    if (user!.student != null) http.put(
+      Uri.parse("$baseUrl/api/education/updateByStudentId/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "education": newStudent.educations.mapToList((education) => {
+          "id": education.id,
+          "schoolName": education.schoolName,
+          "startYear": education.startYear,
+          "endYear": education.endYear
+        })
+      })
+    ),
+
+    if (user!.student != null) http.put(
+      Uri.parse("$baseUrl/api/experience/updateByStudentId/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "experience": newStudent.experiences.mapToList((experience) => {
+          "id": experience.id,
+          "title": experience.title,
+          "description": experience.description,
+          "startMonth": experience.startTime.toMonthString(seperator: "-"),
+          "endMonth": experience.endTime.toMonthString(seperator: "-"),
+          "skillSets": experience.skillSet.mapToList(
+            (skill) => skill.id,
+            afterFilter: (id) => id != null && id > 0
+          )
         })
       })
     ),

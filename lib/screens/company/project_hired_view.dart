@@ -4,7 +4,6 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import 'package:student_hub_flutter/screens/pages/chat_page.dart';
-import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
 import 'package:student_hub_flutter/widgets/proposal_card.dart';
 import 'package:student_hub_flutter/widgets/refreshable_future_builder.dart';
 
@@ -48,19 +47,13 @@ class ProjectHiredView extends StatelessWidget {
 }
 
 class _InfoCard extends StatelessWidget {
-  final String studentName;
   final Widget? avatar;
-  final String education;
-  final String specialty;
   final String evaluation;
-  final String proposal;
   final void Function()? onMessagePressed;
+  final Proposal proposal;
 
   const _InfoCard({
-    required this.studentName,
     required this.avatar,
-    required this.education,
-    required this.specialty,
     required this.evaluation,
     required this.proposal,
     // ignore: unused_element
@@ -68,23 +61,15 @@ class _InfoCard extends StatelessWidget {
   });
 
   // ignore: unused_element
-  _InfoCard.fromProposal(Proposal proposal, {this.avatar, this.onMessagePressed}) :
-    studentName = proposal.student!.name,
-    education = proposal.student!.educationString,
-    specialty = proposal.student!.techStack?.name ?? "Engineer",
-    evaluation = "Excellence",
-    proposal = proposal.content;
+  const _InfoCard.fromProposal(this.proposal, {this.avatar, this.onMessagePressed}) :
+    evaluation = "Excellence";
 
   @override
   Widget build(BuildContext context) {
     return ProposalCard.studentProposal(
-      onTap: () => context.pushRoute((context) => const StudentProfileBasic()),
-      studentName: studentName,
+      proposal,
       avatar: avatar ?? const CircleAvatar(child: Icon(Icons.person)),
-      education: education,
-      specialty: specialty,
       evaluation: evaluation,
-      proposal: proposal,
       bottom: Align(
         alignment: Alignment.center,
         child: OutlinedButton(
