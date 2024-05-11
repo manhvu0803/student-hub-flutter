@@ -89,13 +89,11 @@ class _LogInContainerState extends State<_LogInContainer> {
     context.showRequestLoad(
       request: () => client.signIn(_username, _password),
       onRequestDone: () {
-        if (settings.isStudent && client.user!.student == null) {
-          context.pushReplacement((context) => const StudentProfileBasic());
-          return;
-        }
-
-        if (!settings.isStudent && client.user!.company == null) {
-          context.pushReplacement((context) => const CompanyProfile());
+        if ((settings.isStudent && client.user!.student == null)
+          || (!settings.isStudent && client.user!.company == null)) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          context.pushRoute((context) => const HomePage());
+          context.pushRoute((context) => settings.isStudent ? const StudentProfileBasic() : const CompanyProfile());
           return;
         }
 

@@ -54,7 +54,13 @@ Future<void> updateProfile(CompanyUser company) async {
     })
   );
 
-  handleResponse(response);
+  var json = handleResponse(response);
+
+  if (user!.company == null) {
+    var responseCompany = CompanyUser.fromJson(json["result"] ?? json);
+    company.id = responseCompany.id;
+  }
+
   user!.company = company;
 }
 

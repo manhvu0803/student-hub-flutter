@@ -119,9 +119,10 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
             onMorePressed: () => showAdaptiveDialog(
               context: context,
               builder: (context) => ModifyEducationDialog(
-                title: "Add education",
+                title: "Edit education",
+                education: education,
                 onDone: (newEducation) => _modifyUserProfile(education, newEducation, _user.educations),
-                onDelete: () => _user.educations.remove(education),
+                onDelete: () => setState(() => _user.educations.remove(education)),
               ),
             ),
             subtitle: "${education.startYear} - ${education.endYear}",
@@ -147,9 +148,10 @@ class _StudentProfileBasic extends State<StudentProfileBasic> {
               onMorePressed: () => showAdaptiveDialog(
                 context: context,
                 builder: (context) => ModifyExperienceDialog(
-                  title: "Add experience",
+                  title: "Edit experience",
+                  experience: experience,
                   onDone: (newExperience) => _modifyUserProfile(experience, newExperience, _user.experiences),
-                  onDelete: () => _user.experiences.remove(experience),
+                  onDelete: () => setState(() => _user.experiences.remove(experience)),
                 ),
               ),
               subtitle: "$timeString$description",

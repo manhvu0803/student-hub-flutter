@@ -26,8 +26,6 @@ class StudentProfilePage extends StatelessWidget {
   }
 
   Widget _build(BuildContext context, User user) {
-    var student = user.student ?? this.student;
-
     return ListView(
       children: [
         // Tech stack

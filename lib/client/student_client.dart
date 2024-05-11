@@ -103,7 +103,13 @@ Future<void> updateProfile(StudentUser newStudent) async {
   ]);
 
   var json = handleResponse(results[0]);
-  user!.student = StudentUser.fromJson(json["result"] ?? json);
+
+  if (user!.student == null) {
+    var responseStudent = CompanyUser.fromJson(json["result"] ?? json);
+    newStudent.id = responseStudent.id;
+  }
+
+  user!.student = newStudent;
 }
 
 Future<List<Project>> searchProject({
