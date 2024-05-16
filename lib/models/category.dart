@@ -10,9 +10,9 @@ class Category {
   Category.fromJson(Map<String, dynamic> json, {String? name}) :
     id = json["id"] ?? json["Id"] ?? json["ID"],
     name = name ?? json["name"] ?? json["Name"],
-    createdAt = DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
-    updatedAt = DateTime.tryParse(json["updatedAt"] ?? ""),
-    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "");
+    createdAt = DateTime.tryParse(json["createdAt"] ?? "")?.toLocal() ?? DateTime.now(),
+    updatedAt = DateTime.tryParse(json["updatedAt"] ?? "")?.toLocal(),
+    deletedAt = DateTime.tryParse(json["deletedAt"] ?? "")?.toLocal();
 
   @override
   bool operator==(Object other) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/screens/pages/change_password_page.dart';
 import 'package:student_hub_flutter/screens/pages/login_page.dart';
 import 'package:student_hub_flutter/screens/profile/company_profile.dart';
 import 'package:student_hub_flutter/screens/profile/student_profile_basic.dart';
@@ -8,11 +9,14 @@ import 'package:student_hub_flutter/settings.dart' as settings;
 
 import 'icon_text.dart';
 
-class AccountMenuButton extends StatelessWidget {
-  const AccountMenuButton({
-    super.key,
-  });
+class AccountMenuButton extends StatefulWidget {
+  const AccountMenuButton({super.key});
 
+  @override
+  State<AccountMenuButton> createState() => _AccountMenuButtonState();
+}
+
+class _AccountMenuButtonState extends State<AccountMenuButton> {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
@@ -29,9 +33,24 @@ class AccountMenuButton extends StatelessWidget {
           child: const Text("Company profile"),
           onPressed: () => context.pushRoute((context) => const CompanyProfile()),
         ),
+        const Divider(),
         MenuItemButton(
-          child: const IconText(Icons.settings, "Settings"),
-          onPressed: () {},
+          child: Row(
+            children: [
+              const Text("Dark mode"),
+              const SizedBox(width: 4),
+              Switch(
+                onChanged: (value) => setState(() => settings.isDarkMode = value),
+                value: settings.isDarkMode,
+              ),
+            ],
+          ),
+          onPressed: () => setState(() => settings.isDarkMode = !settings.isDarkMode),
+        ),
+        const Divider(),
+        MenuItemButton(
+          child: const IconText(Icons.password, "Change password", distance: 6,),
+          onPressed: () => context.pushReplacement((context) => const ChangePasswordPage()),
         ),
         MenuItemButton(
           child: const IconText(Icons.logout, "Log out"),

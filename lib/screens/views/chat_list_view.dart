@@ -39,14 +39,17 @@ class ChatListView extends StatelessWidget {
               emptyString: "No messages found",
               fetcher: chatGetter ?? () => client.getAllChat(),
               builder: (context, data) => ListView(
-                children : data.mapToList((message) => _ChatTitleCard(
-                  username: message.receiver.fullName,
-                  title: message.project.title,
-                  lastMessage: message.content,
-                  lastMessageTime: message.createdAt,
-                  isLastMessageUser: message.sender.id == client.user!.id,
-                  onTap: () => pushChatPage(context, message)
-                ))
+                children : data.mapToList((message) {
+                  var other = message.getOther(client.user!);
+                  return _ChatTitleCard(
+                    username: other.fullName,
+                    title: message.project.title,
+                    lastMessage: message.content,
+                    lastMessageTime: message.createdAt,
+                    isLastMessageUser: message.sender.id == client.user!.id,
+                    onTap: () => _pushChatPage(context, message)
+                  );
+                })
               ),
             ),
           ),
@@ -55,7 +58,7 @@ class ChatListView extends StatelessWidget {
     );
   }
 
-  pushChatPage(BuildContext context, Message message) {
+  _pushChatPage(BuildContext context, Message message) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(
       project: message.project,
       recipient: message.getOther(client.user!),

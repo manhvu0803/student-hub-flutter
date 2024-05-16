@@ -76,7 +76,7 @@ class _RefreshableFutureBuilderState<T> extends State<RefreshableFutureBuilder<T
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 100),
-              const Text("There's a problem fetching data. Please try again"),
+              Text((snapshot.error != null) ? "${snapshot.error}" : "There was a problem fetching data"),
               const SizedBox(height: 50),
               TextButton(
                 onPressed: () => setState(() {}),

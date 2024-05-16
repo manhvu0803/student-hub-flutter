@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
+import 'package:student_hub_flutter/models.dart';
+import 'package:student_hub_flutter/screens/profile/student_profile_page.dart';
 import 'package:student_hub_flutter/widgets/student_info_list_tile.dart';
 
 class ProposalCard extends StatelessWidget {
   final Widget? top;
-
   final Widget? middle;
-
   final Widget? bottom;
-
   final double topPadding;
-
   final double topMiddlePadding;
-
   final double middleBottomPadding;
-
   final double bottomPadding;
+  final Proposal proposal;
 
   final void Function()? onTap;
 
@@ -28,16 +26,13 @@ class ProposalCard extends StatelessWidget {
     this.middleBottomPadding = 16,
     this.bottomPadding = 10,
     this.onTap,
+    required this.proposal,
   });
 
-  ProposalCard.studentProposal({
+  ProposalCard.studentProposal(this.proposal, {
     super.key,
-    required String studentName,
-    required Widget? avatar,
-    required String education,
-    required String specialty,
+    Widget? avatar,
     required String evaluation,
-    required String proposal,
     this.bottom,
     this.topPadding = 0,
     this.topMiddlePadding = 4,
@@ -46,17 +41,17 @@ class ProposalCard extends StatelessWidget {
     this.onTap,
   }) :
     top = StudentInfoListTile(
-      studentName: studentName,
+      studentName: proposal.student?.name ?? "Unknow",
       avatar: avatar,
-      education: education,
-      specialty: specialty,
+      education: proposal.student?.educationString ?? "No education",
+      specialty: proposal.student?.techStack?.name ?? "",
       evaluation: evaluation,
-      proposal: proposal,
+      proposal: proposal.content,
     ),
     middle = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Text(
-        proposal,
+        proposal.content,
         style: const TextStyle(fontSize: 16),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
@@ -66,11 +61,12 @@ class ProposalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Card(
-        elevation: 4,
-        color: Theme.of(context).colorScheme.secondaryContainer,
+    return Card(
+      elevation: 4,
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onTap ?? () => context.pushRoute((context) => StudentProfilePage(proposal.student!)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _getColumnChildren()

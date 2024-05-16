@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
 import '../client.dart';
@@ -8,15 +9,17 @@ Map<int, Category> techStacks = {};
 Map<int, Category> skillSets = {};
 
 Future<Map<int, Category>> getTeckStacks() async {
-  return await _getCategories("api/techstack/getAllTechStack");
+  techStacks = await _getCategories("api/techstack/getAllTechStack");
+  return techStacks;
 }
 
 Future<Map<int, Category>> getSkillSets() async {
-  return await _getCategories("api/skillset/getAllSkillSet");
+  skillSets = await _getCategories("api/skillset/getAllSkillSet");
+  return skillSets;
 }
 
 Future<Map<int, Category>> _getCategories(String subUrl) async {
-  checkLogInStatus(isStudent: true);
+  checkLogInStatus();
 
   var response = await http.get(
     Uri.parse("$baseUrl/$subUrl"),
@@ -41,18 +44,21 @@ Future<Map<int, Category>> _getCategories(String subUrl) async {
 }
 
 Future<void> updateProfile(StudentUser newStudent) async {
-  checkLogInStatus(isStudent: true);
+  checkLogInStatus();
+  var requester = (user!.student == null || user!.student!.id < 0) ? http.post : http.put;
+  var id = (user!.student == null || user!.student!.id < 0) ? "" : "/${user!.student!.id}";
 
-  await Future.wait([
-    http.put(
-      Uri.parse("$baseUrl/api/profile/student/${user!.student!.id}"),
+  var results = await Future.wait([
+    requester(
+      Uri.parse("$baseUrl/api/profile/student$id"),
       headers: authJsonHeaders,
       body: jsonEncode({
         "techStackId": newStudent.techStack?.id ?? 0,
         "skillSets": newStudent.skillSet.mapToList((skill) => skill.id)
       })
     ),
-    http.put(
+
+    if (user!.student != null) http.put(
       Uri.parse("$baseUrl/api/language/updateByStudentId/${user!.student!.id}"),
       headers: authJsonHeaders,
       body: jsonEncode({
@@ -63,7 +69,45 @@ Future<void> updateProfile(StudentUser newStudent) async {
         })
       })
     ),
+
+    if (user!.student != null) http.put(
+      Uri.parse("$baseUrl/api/education/updateByStudentId/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "education": newStudent.educations.mapToList((education) => {
+          "id": education.id,
+          "schoolName": education.schoolName,
+          "startYear": education.startYear,
+          "endYear": education.endYear
+        })
+      })
+    ),
+
+    if (user!.student != null) http.put(
+      Uri.parse("$baseUrl/api/experience/updateByStudentId/${user!.student!.id}"),
+      headers: authJsonHeaders,
+      body: jsonEncode({
+        "experience": newStudent.experiences.mapToList((experience) => {
+          "id": experience.id,
+          "title": experience.title,
+          "description": experience.description,
+          "startMonth": experience.startTime.toMonthString(seperator: "-"),
+          "endMonth": experience.endTime.toMonthString(seperator: "-"),
+          "skillSets": experience.skillSet.mapToList(
+            (skill) => skill.id,
+            afterFilter: (id) => id != null && id > 0
+          )
+        })
+      })
+    ),
   ]);
+
+  var json = handleResponse(results[0]);
+
+  if (user!.student == null) {
+    var responseStudent = CompanyUser.fromJson(json["result"] ?? json);
+    newStudent.id = responseStudent.id;
+  }
 
   user!.student = newStudent;
 }

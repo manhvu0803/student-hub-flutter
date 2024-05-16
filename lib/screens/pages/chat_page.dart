@@ -6,7 +6,7 @@ import 'package:student_hub_flutter/extensions/context_dialog_extension.dart';
 import 'package:student_hub_flutter/extensions/date_time_extension.dart';
 import 'package:student_hub_flutter/extensions/iterable_extension.dart';
 import 'package:student_hub_flutter/models.dart';
-import 'package:student_hub_flutter/screens/dialog_view/schedule_interview_view.dart';
+import 'package:student_hub_flutter/screens/views/schedule_interview_view.dart';
 import 'package:student_hub_flutter/widgets/page_screen.dart';
 import 'package:student_hub_flutter/settings.dart' as settings;
 import 'package:student_hub_flutter/client.dart' as client;
@@ -157,8 +157,7 @@ class _ChatPageState extends State<ChatPage> {
         content: text.text
       );
     }
-    catch (e, stackTrace) {
-      print(stackTrace);
+    catch (e) {
       if (context.mounted) {
         context.showTextSnackBar(e.toString());
       }

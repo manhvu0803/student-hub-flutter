@@ -36,8 +36,8 @@ class _StudentProjectCardState extends State<StudentProjectCard> {
         bottom: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Text(
-            "Length: ${widget.project.scope.description} - Required ${widget.project.numberOfStudents} student(s)",
-            maxLines: 1,
+            "Length: ${widget.project.scope.description}\nRequired ${widget.project.numberOfStudents} student(s)",
+            maxLines: 2,
             overflow: TextOverflow.fade,
           ),
         ),

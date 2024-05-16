@@ -34,8 +34,7 @@ class _ProjectSearchListViewState extends State<ProjectSearchListView> {
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Row(
               children: [
-                SizedBox(
-                  width: 295,
+                Expanded(
                   child: SearchBar(
                     hintText: "Search projects...",
                     hintStyle: const MaterialStatePropertyAll(TextStyle(fontStyle: FontStyle.italic)),

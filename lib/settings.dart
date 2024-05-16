@@ -37,3 +37,7 @@ set isStudent(bool value) {
   _isStudent = value;
   _notifiyListeners();
 }
+
+void setProfileType({required bool isStudent}) {
+  _isStudent = isStudent;
+}

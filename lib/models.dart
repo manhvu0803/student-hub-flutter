@@ -9,3 +9,5 @@ export 'models/user.dart';
 export 'models/meeting.dart';
 export 'models/message.dart';
 export 'models/notification.dart';
+export 'models/education.dart';
+export 'models/experience.dart';

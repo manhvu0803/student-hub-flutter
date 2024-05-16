@@ -114,6 +114,7 @@ class _StudentProjectPageState extends State<StudentProjectPage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 12.0, bottom: 29, left: 16, right: 16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(

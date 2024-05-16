@@ -40,26 +40,20 @@ class ProjectHiredView extends StatelessWidget {
         project: project,
         recipient: User()
           ..fullName = proposal.student!.name
-          ..id = proposal.student?.id ?? proposal.studentId
+          ..id = proposal.student!.userId
       ))
     );
   }
 }
 
 class _InfoCard extends StatelessWidget {
-  final String studentName;
   final Widget? avatar;
-  final String education;
-  final String specialty;
   final String evaluation;
-  final String proposal;
   final void Function()? onMessagePressed;
+  final Proposal proposal;
 
   const _InfoCard({
-    required this.studentName,
     required this.avatar,
-    required this.education,
-    required this.specialty,
     required this.evaluation,
     required this.proposal,
     // ignore: unused_element
@@ -67,22 +61,15 @@ class _InfoCard extends StatelessWidget {
   });
 
   // ignore: unused_element
-  _InfoCard.fromProposal(Proposal proposal, {this.avatar, this.onMessagePressed}) :
-    studentName = proposal.student!.name,
-    education = proposal.student!.educationString,
-    specialty = proposal.student!.techStack?.name ?? "Engineer",
-    evaluation = "Excellence",
-    proposal = proposal.content;
+  const _InfoCard.fromProposal(this.proposal, {this.avatar, this.onMessagePressed}) :
+    evaluation = "Excellence";
 
   @override
   Widget build(BuildContext context) {
     return ProposalCard.studentProposal(
-      studentName: studentName,
+      proposal,
       avatar: avatar ?? const CircleAvatar(child: Icon(Icons.person)),
-      education: education,
-      specialty: specialty,
       evaluation: evaluation,
-      proposal: proposal,
       bottom: Align(
         alignment: Alignment.center,
         child: OutlinedButton(

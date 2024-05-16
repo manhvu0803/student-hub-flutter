@@ -39,10 +39,12 @@ Future<List<Project>> getProjects() async {
 }
 
 Future<void> updateProfile(CompanyUser company) async {
-  checkLogInStatus(isCompany: true);
+  checkLogInStatus();
+  var requester = (user!.company == null) ? http.post : http.put;
+  var id = (user!.company == null) ? "" : "/${user!.company!.id}";
 
-  var response = await http.put(
-    Uri.parse("$baseUrl/api/profile/company/${user!.company!.id}"),
+  var response = await requester(
+    Uri.parse("$baseUrl/api/profile/company$id"),
     headers: authJsonHeaders,
     body: jsonEncode({
       "companyName": company.name,
@@ -52,7 +54,13 @@ Future<void> updateProfile(CompanyUser company) async {
     })
   );
 
-  handleResponse(response);
+  var json = handleResponse(response);
+
+  if (user!.company == null) {
+    var responseCompany = CompanyUser.fromJson(json["result"] ?? json);
+    company.id = responseCompany.id;
+  }
+
   user!.company = company;
 }
 
@@ -68,8 +76,8 @@ Future<void> scheduleMeeting(Meeting meeting, {
     body: jsonEncode({
       "title": meeting.title,
       if (meeting.content.isNotEmpty) "content": meeting.content,
-      "startTime": meeting.startTime.toIso8601String(),
-      "endTime": meeting.endTime.toIso8601String(),
+      "startTime": meeting.startTime.toUtc().toIso8601String(),
+      "endTime": meeting.endTime.toUtc().toIso8601String(),
       "projectId": projectId,
       "senderId": user!.id,
       "receiverId": receiverId,
