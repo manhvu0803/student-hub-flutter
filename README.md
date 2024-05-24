@@ -1,4 +1,6 @@
-# student_hub_flutter
+# StudentHub
+An cross-platform app for students to connect with companies and project managers
+
 ## Web version
 https://student-hub-web-one.vercel.app/
 
